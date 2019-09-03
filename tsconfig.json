@@ -7,12 +7,17 @@
     "strict": true,
     "sourceMap": true,
     "declaration": true,
+    "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "declarationDir": "dist/types",
     "outDir": "dist/lib",
-    "typeRoots": ["node_modules/@types"]
+    "typeRoots": ["node_modules/@types"],
+    "baseUrl": ".",
+    "paths": {
+      "rollup-plugin-peer-deps-external": [".sink.d.ts"]
+    }
   },
   "include": ["src"]
 }

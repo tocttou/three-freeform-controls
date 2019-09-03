@@ -1,0 +1,10 @@
+export const DEFAULT_CYLINDER_HEIGHT = 0.75;
+export const DEFAULT_CYLINDER_RADIUS = 0.15;
+export const DEFAULT_RADIAL_SEGMENTS = 32;
+
+export const DEFAULT_CONE_HEIGHT = 0.3;
+export const DEFAULT_CONE_RADIUS = 0.3;
+
+export const DEFAULT_CONTROLS_SEPARATION = 0.5;
+
+export const DEFAULT_COLOR_ARROW = "#f0ff00";
