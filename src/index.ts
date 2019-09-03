@@ -10,7 +10,7 @@ export default class FreeformControls extends THREE.Object3D {
   }
 
   public attach: (object: THREE.Mesh) => this = object => {
-    if (this.objects[object.id] !== undefined || this.controls[object.id] !== undefined) {
+    if (this.objects.hasOwnProperty(object.id)) {
       return this;
     }
 
@@ -20,7 +20,7 @@ export default class FreeformControls extends THREE.Object3D {
   };
 
   public detach = (object: THREE.Object3D) => {
-    if (this.objects[object.id] === undefined) {
+    if (!this.objects.hasOwnProperty(object.id)) {
       throw new Error("object should be attached first");
     }
 
