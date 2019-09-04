@@ -18,9 +18,10 @@ export default {
       name: camelCase(libraryName),
       format: "umd",
       sourcemap: true,
-      globals: { three: "THREE" }
+      globals: { three: "THREE" },
+      exports: "named"
     },
-    { file: pkg.module, format: "es", sourcemap: true }
+    { file: pkg.module, format: "es", sourcemap: true, exports: "named" }
   ],
   external: [],
   watch: {

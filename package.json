@@ -83,6 +83,7 @@
     "@commitlint/config-conventional": "^8.1.0",
     "@types/jest": "^24.0.18",
     "@types/lodash.camelcase": "^4.3.6",
+    "@types/nanoevents": "^1.0.0",
     "@types/node": "^12.7.3",
     "@types/rollup-plugin-json": "^3.0.2",
     "@types/rollup-plugin-sourcemaps": "^0.4.2",
@@ -120,5 +121,8 @@
   },
   "peerDependencies": {
     "three": ">= 0.102.0"
+  },
+  "dependencies": {
+    "nanoevents": "^2.0.0"
   }
 }

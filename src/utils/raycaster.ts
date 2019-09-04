@@ -1,9 +1,16 @@
 import * as THREE from "three";
+import { emitter } from "./emmiter";
+
+export enum RAYCASTER_EVENTS {
+  DRAG_START = "DRAG_START",
+  DRAG_STOP = "DRAG_STOP"
+}
 
 export default class Raycaster extends THREE.Raycaster {
   private mouse = new THREE.Vector2();
   private activeControl: THREE.Object3D | null = null;
   private activePlane: THREE.Plane | null = null;
+  private point = new THREE.Vector3();
 
   constructor(
     public camera: THREE.Camera,
@@ -48,14 +55,16 @@ export default class Raycaster extends THREE.Raycaster {
       return;
     }
     this.setRayDirection(event);
-    const point = new THREE.Vector3();
-    this.ray.intersectPlane(this.activePlane, point);
-    console.log(point);
+    this.ray.intersectPlane(this.activePlane, this.point);
+    emitter.emit(RAYCASTER_EVENTS.DRAG_START, { point: this.point, control: this.activeControl });
   };
 
   private mouseUpListener = () => {
     this.domElement.removeEventListener("mousemove", this.mouseMoveListener);
     this.domElement.addEventListener("mousedown", this.mouseDownListener, false);
+    this.activeControl = null;
+    this.activePlane = null;
+    emitter.emit(RAYCASTER_EVENTS.DRAG_STOP, { point: this.point, control: this.activeControl });
   };
 
   private resolveControlGroup = (intersectedObject: THREE.Intersection | undefined) => {
