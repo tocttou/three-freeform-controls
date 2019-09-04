@@ -1,6 +1,6 @@
 import * as THREE from "three";
-import Cone from "./cone";
-import Cylinder from "./cylinder";
+import Cone from "../primitives/cone";
+import Cylinder from "../primitives/cylinder";
 import {
   DEFAULT_COLOR_ARROW,
   DEFAULT_CONE_HEIGHT,
@@ -9,7 +9,7 @@ import {
   DEFAULT_CYLINDER_RADIUS
 } from "../utils/constants";
 
-export default class Arrow extends THREE.Group {
+export default class Translation extends THREE.Group {
   private readonly cone: Cone;
   private readonly cylinder: Cylinder;
   constructor(color = DEFAULT_COLOR_ARROW) {

@@ -1,7 +1,7 @@
 import * as THREE from "three";
-import Arrow from "../primitives/arrow";
+import Translation from "./translation";
 import { DEFAULT_CONTROLS_SEPARATION } from "../utils/constants";
-import Ring from "../primitives/ring";
+import Rotation from "./rotation";
 
 export default class Controls extends THREE.Group {
   private objectWorldPosition = new THREE.Vector3();
@@ -14,54 +14,54 @@ export default class Controls extends THREE.Group {
     super();
 
     this.computeObjectBounds();
-    this.addArrows();
-    this.addRings();
+    this.addTranslation();
+    this.addRotation();
   }
 
-  private addArrows = () => {
-    const arrowXP = new Arrow("red");
-    const arrowYP = new Arrow("green");
-    const arrowZP = new Arrow("blue");
+  private addTranslation = () => {
+    const translationXP = new Translation("red");
+    const translationYP = new Translation("green");
+    const translationZP = new Translation("blue");
 
-    const arrowXN = new Arrow("red");
-    const arrowYN = new Arrow("green");
-    const arrowZN = new Arrow("blue");
+    const translationXN = new Translation("red");
+    const translationYN = new Translation("green");
+    const translationZN = new Translation("blue");
 
-    arrowXP.translateX(this.maxBox.x);
-    arrowYP.translateY(this.maxBox.y);
-    arrowZP.translateZ(this.maxBox.z);
+    translationXP.translateX(this.maxBox.x);
+    translationYP.translateY(this.maxBox.y);
+    translationZP.translateZ(this.maxBox.z);
 
-    arrowXN.translateX(this.minBox.x);
-    arrowYN.translateY(this.minBox.y);
-    arrowZN.translateZ(this.minBox.z);
+    translationXN.translateX(this.minBox.x);
+    translationYN.translateY(this.minBox.y);
+    translationZN.translateZ(this.minBox.z);
 
-    arrowXP.rotateZ(-Math.PI / 2);
-    arrowZP.rotateX(Math.PI / 2);
+    translationXP.rotateZ(-Math.PI / 2);
+    translationZP.rotateX(Math.PI / 2);
 
-    arrowXN.rotateZ(Math.PI / 2);
-    arrowYN.rotateX(Math.PI);
-    arrowZN.rotateX(-Math.PI / 2);
+    translationXN.rotateZ(Math.PI / 2);
+    translationYN.rotateX(Math.PI);
+    translationZN.rotateX(-Math.PI / 2);
 
-    this.add(arrowXP);
-    this.add(arrowYP);
-    this.add(arrowZP);
+    this.add(translationXP);
+    this.add(translationYP);
+    this.add(translationZP);
 
-    this.add(arrowXN);
-    this.add(arrowYN);
-    this.add(arrowZN);
+    this.add(translationXN);
+    this.add(translationYN);
+    this.add(translationZN);
   };
 
-  private addRings = () => {
-    const ringX = new Ring("red");
-    const ringY = new Ring("green");
-    const ringZ = new Ring("blue");
+  private addRotation = () => {
+    const rotationX = new Rotation("red");
+    const rotationY = new Rotation("green");
+    const rotationZ = new Rotation("blue");
 
-    ringX.rotateY(Math.PI / 2);
-    ringY.rotateX(Math.PI / 2);
+    rotationX.rotateY(Math.PI / 2);
+    rotationY.rotateX(Math.PI / 2);
 
-    this.add(ringX);
-    this.add(ringY);
-    this.add(ringZ);
+    this.add(rotationX);
+    this.add(rotationY);
+    this.add(rotationZ);
   };
 
   private computeObjectBounds = () => {
