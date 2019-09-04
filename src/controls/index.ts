@@ -12,6 +12,10 @@ enum HANDLE_NAMES {
 export default class Controls extends THREE.Group {
   private objectWorldPosition = new THREE.Vector3();
   private objectTargetQuaternion = new THREE.Quaternion();
+  private handleTargetQuaternion = new THREE.Quaternion();
+  private handleTargetEuler = new THREE.Euler();
+  private touch1 = new THREE.Vector3();
+  private touch2 = new THREE.Vector3();
   private minBox = new THREE.Vector3();
   private maxBox = new THREE.Vector3();
   private dragStartPoint = new THREE.Vector3();
@@ -124,15 +128,30 @@ export default class Controls extends THREE.Group {
         this.position.z += point.z - this.dragIncrementalStartPoint.z;
       }
     } else {
-      const v1 = new THREE.Vector3()
+      this.touch1
         .copy(this.dragStartPoint)
         .sub(this.position)
         .normalize();
-      const v2 = new THREE.Vector3()
+      this.touch2
         .copy(point)
         .sub(this.position)
         .normalize();
-      this.objectTargetQuaternion.setFromUnitVectors(v1, v2);
+      this.objectTargetQuaternion.setFromUnitVectors(this.touch1, this.touch2);
+
+      this.touch1 // touch1 can be reused
+        .copy(this.dragIncrementalStartPoint)
+        .sub(this.position)
+        .normalize();
+      this.handleTargetQuaternion.setFromUnitVectors(this.touch1, this.touch2);
+      this.handleTargetEuler.setFromQuaternion(this.handleTargetQuaternion);
+
+      if (handle.name === HANDLE_NAMES.X) {
+        handle.rotation.x += this.handleTargetEuler.x;
+      } else if (handle.name === HANDLE_NAMES.Y) {
+        handle.rotation.z += -this.handleTargetEuler.y;
+      } else if (handle.name === HANDLE_NAMES.Z) {
+        handle.rotation.z += this.handleTargetEuler.z;
+      }
     }
 
     this.dragIncrementalStartPoint.copy(point);
