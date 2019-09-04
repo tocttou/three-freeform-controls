@@ -74,4 +74,12 @@ export default class Raycaster extends THREE.Raycaster {
 
     return intersectedObject.object.parent;
   };
+
+  public destroy = () => {
+    this.activePlane = null;
+    this.activeControl = null;
+    this.domElement.removeEventListener("mousedown", this.mouseDownListener);
+    this.domElement.removeEventListener("mousemove", this.mouseMoveListener);
+    this.domElement.removeEventListener("mouseup", this.mouseUpListener);
+  };
 }

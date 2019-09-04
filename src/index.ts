@@ -1,13 +1,13 @@
 import * as THREE from "three";
 import Controls from "./controls";
 import Raycaster, { RAYCASTER_EVENTS } from "./utils/raycaster";
-import { emitter } from "./utils/emmiter";
+import { emitter, unbindAll } from "./utils/emmiter";
 
 export { RAYCASTER_EVENTS };
 
 export default class FreeformControls extends THREE.Object3D {
   private objects: { [id: number]: THREE.Object3D } = {};
-  private controls: { [id: number]: THREE.Object3D } = {};
+  private controls: { [id: number]: THREE.Group } = {};
   private objectsControlsMap: { [id: number]: number } = {};
   private eventListeners: { [event in RAYCASTER_EVENTS]: Array<() => void> } = {
     [RAYCASTER_EVENTS.DRAG_START]: [],
@@ -51,26 +51,67 @@ export default class FreeformControls extends THREE.Object3D {
     if (!this.objects.hasOwnProperty(object.id)) {
       throw new Error("object should be attached first");
     }
+    const controlsId = this.objectsControlsMap[object.id];
+    const controls = this.controls[controlsId];
+    this.remove(controls);
+    this.dispose(controls);
 
     delete this.objects[object.id];
-    // TODO: run detachment function
+    delete this.controls[controlsId];
+    delete this.objectsControlsMap[object.id];
   };
 
   private addControls = (object: THREE.Mesh) => {
     const controls = new Controls(object);
-    this.controls[object.id] = controls;
+    this.controls[controls.id] = controls;
     this.add(controls);
     return controls.id;
   };
 
-  listen = (event: RAYCASTER_EVENTS, callback: () => void): void => {
+  public listen = (event: RAYCASTER_EVENTS, callback: () => void): void => {
     this.eventListeners[event].push(callback);
   };
 
-  removeListen = (event: RAYCASTER_EVENTS, callback: () => void): void => {
+  public removeListen = (event: RAYCASTER_EVENTS, callback: () => void): void => {
     const index = this.eventListeners[event].findIndex(callback);
     if (index !== -1) {
       this.eventListeners[event].splice(index, 1);
     }
+  };
+
+  private dispose = (object: THREE.Object3D) => {
+    if (object instanceof THREE.Mesh) {
+      object.geometry.dispose();
+      if (Array.isArray(object.material)) {
+        object.material.map(material => material.dispose());
+      } else {
+        object.material.dispose();
+      }
+    }
+    while (object.children.length > 0) {
+      object.children.map(child => {
+        this.dispose(child);
+        object.remove(child);
+      });
+    }
+  };
+
+  public destroy = () => {
+    unbindAll();
+
+    const scene = this.parent;
+    if (scene !== null) {
+      scene.remove(this);
+    }
+    this.dispose(this);
+
+    this.rayCaster.destroy();
+    this.objects = {};
+    this.controls = {};
+    this.objectsControlsMap = {};
+    this.eventListeners = {
+      [RAYCASTER_EVENTS.DRAG_START]: [],
+      [RAYCASTER_EVENTS.DRAG_STOP]: []
+    };
   };
 }

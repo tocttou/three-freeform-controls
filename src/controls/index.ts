@@ -10,7 +10,7 @@ export default class Controls extends THREE.Group {
   private minBox = new THREE.Vector3();
   private maxBox = new THREE.Vector3();
 
-  constructor(private object: THREE.Mesh) {
+  constructor(public object: THREE.Mesh) {
     super();
 
     this.computeObjectBounds();
