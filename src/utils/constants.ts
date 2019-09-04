@@ -7,7 +7,7 @@ export const DEFAULT_CONE_RADIUS = 0.3;
 
 export const DEFAULT_RING_INNER_RADIUS = 1;
 export const DEFAULT_RING_OUTER_RADIUS = 1.25;
-export const DEFAULT_RING_THETA_SEGMENTS = 96;
+export const DEFAULT_RING_THETA_SEGMENTS = 64;
 
 export const DEFAULT_CONTROLS_SEPARATION = 0.5;
 
