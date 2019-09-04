@@ -42,6 +42,14 @@ export default class Controls extends THREE.Group {
     translationYN.rotateX(Math.PI);
     translationZN.rotateX(-Math.PI / 2);
 
+    translationXP.up = new THREE.Vector3(0, 1, 0);
+    translationYP.up = new THREE.Vector3(0, 0, 1);
+    translationZP.up = new THREE.Vector3(0, 1, 0);
+
+    translationXN.up = new THREE.Vector3(0, 1, 0);
+    translationYN.up = new THREE.Vector3(0, 0, 1);
+    translationZN.up = new THREE.Vector3(0, 1, 0);
+
     this.add(translationXP);
     this.add(translationYP);
     this.add(translationZP);
@@ -55,6 +63,10 @@ export default class Controls extends THREE.Group {
     const rotationX = new Rotation("red");
     const rotationY = new Rotation("green");
     const rotationZ = new Rotation("blue");
+
+    rotationX.up = new THREE.Vector3(1, 0, 0);
+    rotationY.up = new THREE.Vector3(0, 1, 0);
+    rotationZ.up = new THREE.Vector3(0, 0, 1);
 
     rotationX.rotateY(Math.PI / 2);
     rotationY.rotateX(Math.PI / 2);

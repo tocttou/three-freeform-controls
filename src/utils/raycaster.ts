@@ -2,6 +2,8 @@ import * as THREE from "three";
 
 export default class Raycaster extends THREE.Raycaster {
   private mouse = new THREE.Vector2();
+  private activeControl: THREE.Object3D | null = null;
+  private activePlane: THREE.Plane | null = null;
 
   constructor(
     public camera: THREE.Camera,
@@ -14,23 +16,41 @@ export default class Raycaster extends THREE.Raycaster {
   }
 
   private mouseDownListener = (event: MouseEvent) => {
+    this.setRayDirection(event);
+
+    const objects = Object.values(this.controls);
+    this.activeControl = this.resolveControlGroup(this.intersectObjects(objects, true)[0]);
+
+    if (this.activeControl !== null) {
+      this.activePlane = new THREE.Plane();
+      this.activePlane.setFromNormalAndCoplanarPoint(
+        this.activeControl.up,
+        this.activeControl.position
+      );
+
+      this.domElement.removeEventListener("mousedown", this.mouseDownListener);
+      this.domElement.addEventListener("mousemove", this.mouseMoveListener, false);
+    } else {
+      this.activePlane = null;
+    }
+  };
+
+  private setRayDirection = (event: MouseEvent) => {
     const rect = this.domElement.getBoundingClientRect();
     const { clientHeight, clientWidth } = this.domElement;
     this.mouse.x = ((event.clientX - rect.left) / clientWidth) * 2 - 1;
     this.mouse.y = -((event.clientY - rect.top) / clientHeight) * 2 + 1;
     this.setFromCamera(this.mouse, this.camera);
-
-    const objects = Object.values(this.controls);
-    const control = this.resolveControlGroup(this.intersectObjects(objects, true)[0]);
-
-    if (control !== null) {
-      this.domElement.removeEventListener("mousedown", this.mouseDownListener);
-      this.domElement.addEventListener("mousemove", this.mouseMoveListener, false);
-    }
   };
 
   private mouseMoveListener = (event: MouseEvent) => {
-    console.log(event.clientX, event.clientY);
+    if (this.activeControl === null || this.activePlane === null) {
+      return;
+    }
+    this.setRayDirection(event);
+    const point = new THREE.Vector3();
+    this.ray.intersectPlane(this.activePlane, point);
+    console.log(point);
   };
 
   private mouseUpListener = () => {
