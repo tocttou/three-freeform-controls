@@ -25,7 +25,7 @@ export default class Arrow extends THREE.Group {
     );
 
     this.cylinder.translateY(DEFAULT_CYLINDER_HEIGHT / 2);
-    this.cone.translateY(DEFAULT_CYLINDER_HEIGHT);
+    this.cone.translateY(DEFAULT_CYLINDER_HEIGHT + DEFAULT_CONE_HEIGHT / 2);
 
     this.add(this.cone);
     this.add(this.cylinder);

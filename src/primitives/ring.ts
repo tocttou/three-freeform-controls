@@ -1,6 +1,7 @@
 import * as THREE from "three";
 import {
   DEFAULT_COLOR_RING,
+  DEFAULT_CONTROLS_OPACITY,
   DEFAULT_RING_INNER_RADIUS,
   DEFAULT_RING_OUTER_RADIUS,
   DEFAULT_RING_THETA_SEGMENTS
@@ -15,5 +16,7 @@ export default class Ring extends THREE.Mesh {
       DEFAULT_RING_THETA_SEGMENTS
     );
     this.material = new THREE.MeshBasicMaterial({ color, side: THREE.DoubleSide });
+    this.material.transparent = true;
+    this.material.opacity = DEFAULT_CONTROLS_OPACITY;
   }
 }
