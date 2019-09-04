@@ -3,12 +3,20 @@ import Translation from "./translation";
 import { DEFAULT_CONTROLS_SEPARATION } from "../utils/constants";
 import Rotation from "./rotation";
 
+enum HANDLE_NAMES {
+  X = "x_handle",
+  Y = "y_handle",
+  Z = "z_handle"
+}
+
 export default class Controls extends THREE.Group {
   private objectWorldPosition = new THREE.Vector3();
   private objectWorldQuaternion = new THREE.Quaternion();
   private objectWorldScale = new THREE.Vector3();
   private minBox = new THREE.Vector3();
   private maxBox = new THREE.Vector3();
+  private dragStartPoint = new THREE.Vector3();
+  public isBeingDragged = false;
 
   constructor(public object: THREE.Mesh) {
     super();
@@ -26,6 +34,14 @@ export default class Controls extends THREE.Group {
     const translationXN = new Translation("red");
     const translationYN = new Translation("green");
     const translationZN = new Translation("blue");
+
+    translationXP.name = HANDLE_NAMES.X;
+    translationYP.name = HANDLE_NAMES.Y;
+    translationZP.name = HANDLE_NAMES.Z;
+
+    translationXN.name = HANDLE_NAMES.X;
+    translationYN.name = HANDLE_NAMES.Y;
+    translationZN.name = HANDLE_NAMES.Z;
 
     translationXP.translateX(this.maxBox.x);
     translationYP.translateY(this.maxBox.y);
@@ -87,7 +103,27 @@ export default class Controls extends THREE.Group {
     this.maxBox.addScalar(DEFAULT_CONTROLS_SEPARATION);
   };
 
-  updateMatrixWorld(force?: boolean): void {
+  processDragStart = (args: { point: THREE.Vector3 }) => {
+    const { point } = args;
+    this.dragStartPoint = point;
+  };
+
+  processHandle = (args: { point: THREE.Vector3; handle: Rotation | Translation }) => {
+    const { point, handle } = args;
+    if (handle instanceof Translation) {
+      if (handle.name === HANDLE_NAMES.X) {
+        this.position.x += point.x - this.dragStartPoint.x;
+      } else if (handle.name === HANDLE_NAMES.Y) {
+        this.position.y += point.y - this.dragStartPoint.y;
+      } else if (handle.name === HANDLE_NAMES.Z) {
+        this.position.z += point.z - this.dragStartPoint.z;
+      }
+    }
+
+    this.dragStartPoint.copy(point);
+  };
+
+  updateMatrixWorld = (force?: boolean) => {
     this.object.updateMatrixWorld(force);
 
     this.object.matrixWorld.decompose(
@@ -96,7 +132,11 @@ export default class Controls extends THREE.Group {
       this.objectWorldScale
     );
 
-    this.position.copy(this.objectWorldPosition);
+    if (this.isBeingDragged) {
+      this.object.position.copy(this.position);
+    } else {
+      this.position.copy(this.objectWorldPosition);
+    }
     super.updateMatrixWorld(force);
-  }
+  };
 }

@@ -11,6 +11,7 @@ export default class FreeformControls extends THREE.Object3D {
   private objectsControlsMap: { [id: number]: number } = {};
   private eventListeners: { [event in RAYCASTER_EVENTS]: Array<() => void> } = {
     [RAYCASTER_EVENTS.DRAG_START]: [],
+    [RAYCASTER_EVENTS.DRAG]: [],
     [RAYCASTER_EVENTS.DRAG_STOP]: []
   };
   private rayCaster: Raycaster;
@@ -23,13 +24,35 @@ export default class FreeformControls extends THREE.Object3D {
   }
 
   private listenToEvents = () => {
-    emitter.on(RAYCASTER_EVENTS.DRAG_START, () => {
+    emitter.on(RAYCASTER_EVENTS.DRAG_START, ({ point, handle }) => {
+      if (handle === null) {
+        return;
+      }
+      const controls = handle.parent as Controls;
+      controls.isBeingDragged = true;
+      controls.processDragStart({ point });
       this.eventListeners[RAYCASTER_EVENTS.DRAG_START].map(callback => {
         callback();
       });
     });
 
-    emitter.on(RAYCASTER_EVENTS.DRAG_STOP, () => {
+    emitter.on(RAYCASTER_EVENTS.DRAG, ({ point, handle }) => {
+      if (handle === null) {
+        return;
+      }
+      const controls = handle.parent as Controls;
+      controls.processHandle({ point, handle });
+      this.eventListeners[RAYCASTER_EVENTS.DRAG].map(callback => {
+        callback();
+      });
+    });
+
+    emitter.on(RAYCASTER_EVENTS.DRAG_STOP, ({ handle }) => {
+      if (handle === null) {
+        return;
+      }
+      const controls = handle.parent as Controls;
+      controls.isBeingDragged = false;
       this.eventListeners[RAYCASTER_EVENTS.DRAG_STOP].map(callback => {
         callback();
       });
@@ -111,6 +134,7 @@ export default class FreeformControls extends THREE.Object3D {
     this.objectsControlsMap = {};
     this.eventListeners = {
       [RAYCASTER_EVENTS.DRAG_START]: [],
+      [RAYCASTER_EVENTS.DRAG]: [],
       [RAYCASTER_EVENTS.DRAG_STOP]: []
     };
   };

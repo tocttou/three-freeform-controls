@@ -1,14 +1,18 @@
 import * as THREE from "three";
 import { emitter } from "./emmiter";
+import Translation from "../controls/translation";
+import Rotation from "../controls/rotation";
+import Controls from "../controls";
 
 export enum RAYCASTER_EVENTS {
   DRAG_START = "DRAG_START",
+  DRAG = "DRAG",
   DRAG_STOP = "DRAG_STOP"
 }
 
 export default class Raycaster extends THREE.Raycaster {
   private mouse = new THREE.Vector2();
-  private activeControl: THREE.Object3D | null = null;
+  private activeHandle: Translation | Rotation | null = null;
   private activePlane: THREE.Plane | null = null;
   private point = new THREE.Vector3();
 
@@ -26,16 +30,23 @@ export default class Raycaster extends THREE.Raycaster {
     this.setRayDirection(event);
 
     const objects = Object.values(this.controls);
-    this.activeControl = this.resolveControlGroup(this.intersectObjects(objects, true)[0]);
+    this.activeHandle = this.resolveControlGroup(this.intersectObjects(objects, true)[0]);
 
-    if (this.activeControl !== null) {
+    if (this.activeHandle !== null) {
       this.activePlane = new THREE.Plane();
       this.activePlane.setFromNormalAndCoplanarPoint(
-        this.activeControl.up,
-        this.activeControl.position
+        this.activeHandle.up,
+        (this.activeHandle.parent as Controls).position
       );
 
+      const initialIntersectionPoint = new THREE.Vector3();
+      this.ray.intersectPlane(this.activePlane, initialIntersectionPoint);
+
       this.domElement.removeEventListener("mousedown", this.mouseDownListener);
+      emitter.emit(RAYCASTER_EVENTS.DRAG_START, {
+        point: initialIntersectionPoint,
+        handle: this.activeHandle
+      });
       this.domElement.addEventListener("mousemove", this.mouseMoveListener, false);
     } else {
       this.activePlane = null;
@@ -51,20 +62,20 @@ export default class Raycaster extends THREE.Raycaster {
   };
 
   private mouseMoveListener = (event: MouseEvent) => {
-    if (this.activeControl === null || this.activePlane === null) {
+    if (this.activeHandle === null || this.activePlane === null) {
       return;
     }
     this.setRayDirection(event);
     this.ray.intersectPlane(this.activePlane, this.point);
-    emitter.emit(RAYCASTER_EVENTS.DRAG_START, { point: this.point, control: this.activeControl });
+    emitter.emit(RAYCASTER_EVENTS.DRAG, { point: this.point, handle: this.activeHandle });
   };
 
   private mouseUpListener = () => {
     this.domElement.removeEventListener("mousemove", this.mouseMoveListener);
     this.domElement.addEventListener("mousedown", this.mouseDownListener, false);
-    this.activeControl = null;
+    emitter.emit(RAYCASTER_EVENTS.DRAG_STOP, { point: this.point, handle: this.activeHandle });
+    this.activeHandle = null;
     this.activePlane = null;
-    emitter.emit(RAYCASTER_EVENTS.DRAG_STOP, { point: this.point, control: this.activeControl });
   };
 
   private resolveControlGroup = (intersectedObject: THREE.Intersection | undefined) => {
@@ -72,12 +83,12 @@ export default class Raycaster extends THREE.Raycaster {
       return null;
     }
 
-    return intersectedObject.object.parent;
+    return intersectedObject.object.parent as (Translation | Rotation);
   };
 
   public destroy = () => {
     this.activePlane = null;
-    this.activeControl = null;
+    this.activeHandle = null;
     this.domElement.removeEventListener("mousedown", this.mouseDownListener);
     this.domElement.removeEventListener("mousemove", this.mouseMoveListener);
     this.domElement.removeEventListener("mouseup", this.mouseUpListener);
