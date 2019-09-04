@@ -11,11 +11,11 @@ enum HANDLE_NAMES {
 
 export default class Controls extends THREE.Group {
   private objectWorldPosition = new THREE.Vector3();
-  private objectWorldQuaternion = new THREE.Quaternion();
-  private objectWorldScale = new THREE.Vector3();
+  private objectTargetQuaternion = new THREE.Quaternion();
   private minBox = new THREE.Vector3();
   private maxBox = new THREE.Vector3();
   private dragStartPoint = new THREE.Vector3();
+  private dragIncrementalStartPoint = new THREE.Vector3();
   public isBeingDragged = false;
 
   constructor(public object: THREE.Mesh) {
@@ -80,6 +80,10 @@ export default class Controls extends THREE.Group {
     const rotationY = new Rotation("green");
     const rotationZ = new Rotation("blue");
 
+    rotationX.name = HANDLE_NAMES.X;
+    rotationY.name = HANDLE_NAMES.Y;
+    rotationZ.name = HANDLE_NAMES.Z;
+
     rotationX.up = new THREE.Vector3(1, 0, 0);
     rotationY.up = new THREE.Vector3(0, 1, 0);
     rotationZ.up = new THREE.Vector3(0, 0, 1);
@@ -105,35 +109,43 @@ export default class Controls extends THREE.Group {
 
   processDragStart = (args: { point: THREE.Vector3 }) => {
     const { point } = args;
-    this.dragStartPoint = point;
+    this.dragStartPoint.copy(point);
+    this.dragIncrementalStartPoint.copy(point);
   };
 
   processHandle = (args: { point: THREE.Vector3; handle: Rotation | Translation }) => {
     const { point, handle } = args;
     if (handle instanceof Translation) {
       if (handle.name === HANDLE_NAMES.X) {
-        this.position.x += point.x - this.dragStartPoint.x;
+        this.position.x += point.x - this.dragIncrementalStartPoint.x;
       } else if (handle.name === HANDLE_NAMES.Y) {
-        this.position.y += point.y - this.dragStartPoint.y;
+        this.position.y += point.y - this.dragIncrementalStartPoint.y;
       } else if (handle.name === HANDLE_NAMES.Z) {
-        this.position.z += point.z - this.dragStartPoint.z;
+        this.position.z += point.z - this.dragIncrementalStartPoint.z;
       }
+    } else {
+      const v1 = new THREE.Vector3()
+        .copy(this.dragStartPoint)
+        .sub(this.position)
+        .normalize();
+      const v2 = new THREE.Vector3()
+        .copy(point)
+        .sub(this.position)
+        .normalize();
+      this.objectTargetQuaternion.setFromUnitVectors(v1, v2);
     }
 
-    this.dragStartPoint.copy(point);
+    this.dragIncrementalStartPoint.copy(point);
   };
 
   updateMatrixWorld = (force?: boolean) => {
     this.object.updateMatrixWorld(force);
 
-    this.object.matrixWorld.decompose(
-      this.objectWorldPosition,
-      this.objectWorldQuaternion,
-      this.objectWorldScale
-    );
+    this.object.getWorldPosition(this.objectWorldPosition);
 
     if (this.isBeingDragged) {
       this.object.position.copy(this.position);
+      this.object.quaternion.copy(this.objectTargetQuaternion);
     } else {
       this.position.copy(this.objectWorldPosition);
     }
