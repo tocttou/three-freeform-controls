@@ -9,6 +9,8 @@ export const DEFAULT_RING_INNER_RADIUS = 1;
 export const DEFAULT_RING_OUTER_RADIUS = 1.25;
 export const DEFAULT_RING_THETA_SEGMENTS = 16;
 
+export const DEFAULT_OCTAHEDRON_RADIUS = 0.1;
+
 export const DEFAULT_CONTROLS_SEPARATION = 0.5;
 
 export const DEFAULT_COLOR_ARROW = "#f0ff00";

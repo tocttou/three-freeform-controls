@@ -3,6 +3,7 @@ import { emitter } from "./emmiter";
 import Translation from "../controls/translation";
 import Rotation from "../controls/rotation";
 import Controls from "../controls";
+import Pick from "../controls/pick";
 
 export enum RAYCASTER_EVENTS {
   DRAG_START = "DRAG_START",
@@ -12,6 +13,7 @@ export enum RAYCASTER_EVENTS {
 
 export default class Raycaster extends THREE.Raycaster {
   private mouse = new THREE.Vector2();
+  private cameraPosition = new THREE.Vector3();
   private activeHandle: Translation | Rotation | null = null;
   private activePlane: THREE.Plane | null = null;
   private point = new THREE.Vector3();
@@ -34,13 +36,23 @@ export default class Raycaster extends THREE.Raycaster {
 
     if (this.activeHandle !== null) {
       this.activePlane = new THREE.Plane();
+
+      const normal =
+        this.activeHandle instanceof Pick
+          ? this.getEyePlaneNormal(this.activeHandle)
+          : this.activeHandle.up;
+
       this.activePlane.setFromNormalAndCoplanarPoint(
-        this.activeHandle.up,
+        normal,
         (this.activeHandle.parent as Controls).position
       );
 
       const initialIntersectionPoint = new THREE.Vector3();
-      this.ray.intersectPlane(this.activePlane, initialIntersectionPoint);
+      if (this.activeHandle instanceof Pick) {
+        this.activeHandle.getWorldPosition(initialIntersectionPoint);
+      } else {
+        this.ray.intersectPlane(this.activePlane, initialIntersectionPoint);
+      }
 
       this.domElement.removeEventListener("mousedown", this.mouseDownListener);
       emitter.emit(RAYCASTER_EVENTS.DRAG_START, {
@@ -51,6 +63,11 @@ export default class Raycaster extends THREE.Raycaster {
     } else {
       this.activePlane = null;
     }
+  };
+
+  private getEyePlaneNormal = (object: THREE.Object3D) => {
+    this.cameraPosition.copy(this.camera.position);
+    return this.cameraPosition.sub(object.position);
   };
 
   private setRayDirection = (event: MouseEvent) => {
