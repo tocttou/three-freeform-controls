@@ -15,6 +15,11 @@ export const DEFAULT_PLANE_WIDTH = 0.75;
 export const DEFAULT_PLANE_HEIGHT = 0.75;
 export const DEFAULT_PLANE_SEGMENTS = 32;
 
+export enum PICK_PLANE_OPACITY {
+  ACTIVE = 1,
+  INACTIVE = 0.3
+}
+
 export const DEFAULT_TRANSLATION_CONTROLS_SEPARATION = 0.5;
 
 export const DEFAULT_COLOR_ARROW = "#f0ff00";

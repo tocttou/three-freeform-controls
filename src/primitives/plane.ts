@@ -3,7 +3,8 @@ import {
   DEFAULT_COLOR_RING,
   DEFAULT_PLANE_HEIGHT,
   DEFAULT_PLANE_SEGMENTS,
-  DEFAULT_PLANE_WIDTH
+  DEFAULT_PLANE_WIDTH,
+  PICK_PLANE_OPACITY
 } from "../utils/constants";
 
 export default class Plane extends THREE.Mesh {
@@ -20,6 +21,6 @@ export default class Plane extends THREE.Mesh {
       side: THREE.DoubleSide,
       transparent: true
     });
-    this.material.opacity = 0.3;
+    this.material.opacity = PICK_PLANE_OPACITY.INACTIVE;
   }
 }

@@ -2,9 +2,10 @@ import * as THREE from "three";
 import { emitter } from "./emmiter";
 import Translation from "../controls/translation";
 import Rotation from "../controls/rotation";
-import Controls from "../controls";
+import Controls, { IHandle } from "../controls";
 import Pick from "../controls/pick";
 import PickPlane from "../controls/pick-plane";
+import { PICK_PLANE_OPACITY } from "./constants";
 
 export enum RAYCASTER_EVENTS {
   DRAG_START = "DRAG_START",
@@ -15,7 +16,7 @@ export enum RAYCASTER_EVENTS {
 export default class Raycaster extends THREE.Raycaster {
   private mouse = new THREE.Vector2();
   private cameraPosition = new THREE.Vector3();
-  private activeHandle: Translation | Rotation | null = null;
+  private activeHandle: IHandle | null = null;
   private activePlane: THREE.Plane | null = null;
   private point = new THREE.Vector3();
 
@@ -44,7 +45,7 @@ export default class Raycaster extends THREE.Raycaster {
           : this.activeHandle.up;
 
       if (this.activeHandle instanceof PickPlane) {
-        this.setPickPlaneOpacity(1);
+        this.setPickPlaneOpacity(PICK_PLANE_OPACITY.ACTIVE);
       }
 
       this.activePlane.setFromNormalAndCoplanarPoint(
@@ -98,7 +99,7 @@ export default class Raycaster extends THREE.Raycaster {
     emitter.emit(RAYCASTER_EVENTS.DRAG_STOP, { point: this.point, handle: this.activeHandle });
 
     if (this.activeHandle instanceof PickPlane) {
-      this.setPickPlaneOpacity(0.3);
+      this.setPickPlaneOpacity(PICK_PLANE_OPACITY.INACTIVE);
     }
 
     this.activeHandle = null;
@@ -126,7 +127,7 @@ export default class Raycaster extends THREE.Raycaster {
       return null;
     }
 
-    return intersectedObject.object.parent as (Translation | Rotation);
+    return intersectedObject.object.parent as IHandle;
   };
 
   public destroy = () => {
