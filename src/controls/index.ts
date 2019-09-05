@@ -14,6 +14,7 @@ export default class Controls extends THREE.Group {
   private objectTargetQuaternion = new THREE.Quaternion();
   private handleTargetQuaternion = new THREE.Quaternion();
   private handleTargetEuler = new THREE.Euler();
+  private _q = new THREE.Quaternion();
   private touch1 = new THREE.Vector3();
   private touch2 = new THREE.Vector3();
   private minBox = new THREE.Vector3();
@@ -28,6 +29,9 @@ export default class Controls extends THREE.Group {
     this.computeObjectBounds();
     this.addTranslation();
     this.addRotation();
+
+    (window as any).cube = object;
+    (window as any).THREE = THREE;
   }
 
   private addTranslation = () => {
@@ -136,20 +140,25 @@ export default class Controls extends THREE.Group {
         .copy(point)
         .sub(this.position)
         .normalize();
-      this.objectTargetQuaternion.setFromUnitVectors(this.touch1, this.touch2);
 
-      this.touch1 // touch1 can be reused
+      const temp = new THREE.Vector3() // touch1 can be reused
         .copy(this.dragIncrementalStartPoint)
         .sub(this.position)
         .normalize();
-      this.handleTargetQuaternion.setFromUnitVectors(this.touch1, this.touch2);
+      this.handleTargetQuaternion.setFromUnitVectors(temp, this.touch2);
       this.handleTargetEuler.setFromQuaternion(this.handleTargetQuaternion);
 
       if (handle.name === HANDLE_NAMES.X) {
+        this._q.setFromAxisAngle(handle.up, this.handleTargetEuler.x);
+        this.objectTargetQuaternion.premultiply(this._q);
         handle.rotation.x += this.handleTargetEuler.x;
       } else if (handle.name === HANDLE_NAMES.Y) {
+        this._q.setFromAxisAngle(handle.up, this.handleTargetEuler.y);
+        this.objectTargetQuaternion.premultiply(this._q);
         handle.rotation.z += -this.handleTargetEuler.y;
       } else if (handle.name === HANDLE_NAMES.Z) {
+        this._q.setFromAxisAngle(handle.up, this.handleTargetEuler.z);
+        this.objectTargetQuaternion.premultiply(this._q);
         handle.rotation.z += this.handleTargetEuler.z;
       }
     }
