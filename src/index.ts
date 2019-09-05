@@ -29,8 +29,7 @@ export default class FreeformControls extends THREE.Object3D {
         return;
       }
       const controls = handle.parent as Controls;
-      controls.isBeingDragged = true;
-      controls.processDragStart({ point });
+      controls.processDragStart({ point, handle });
       this.eventListeners[RAYCASTER_EVENTS.DRAG_START].map(callback => {
         callback();
       });
@@ -52,7 +51,8 @@ export default class FreeformControls extends THREE.Object3D {
         return;
       }
       const controls = handle.parent as Controls;
-      controls.isBeingDragged = false;
+      controls.isBeingDraggedTranslation = false;
+      controls.isBeingDraggedRotation = false;
       this.eventListeners[RAYCASTER_EVENTS.DRAG_STOP].map(callback => {
         callback();
       });

@@ -25,7 +25,8 @@ export default class Controls extends THREE.Group {
   private maxBox = new THREE.Vector3();
   private dragStartPoint = new THREE.Vector3();
   private dragIncrementalStartPoint = new THREE.Vector3();
-  public isBeingDragged = false;
+  public isBeingDraggedTranslation = false;
+  public isBeingDraggedRotation = false;
 
   constructor(public object: THREE.Mesh) {
     super();
@@ -117,10 +118,12 @@ export default class Controls extends THREE.Group {
     this.maxBox.addScalar(DEFAULT_CONTROLS_SEPARATION);
   };
 
-  processDragStart = (args: { point: THREE.Vector3 }) => {
-    const { point } = args;
+  processDragStart = (args: { point: THREE.Vector3; handle: Rotation | Translation }) => {
+    const { point, handle } = args;
     this.dragStartPoint.copy(point);
     this.dragIncrementalStartPoint.copy(point);
+    this.isBeingDraggedTranslation = handle instanceof Translation;
+    this.isBeingDraggedRotation = handle instanceof Rotation;
   };
 
   processHandle = (args: { point: THREE.Vector3; handle: Rotation | Translation }) => {
@@ -180,8 +183,9 @@ export default class Controls extends THREE.Group {
     }
     this.objectTargetPosition.copy(this.position).sub(this.objectParentWorldPosition);
 
-    if (this.isBeingDragged) {
+    if (this.isBeingDraggedTranslation) {
       this.object.position.copy(this.objectTargetPosition);
+    } else if (this.isBeingDraggedRotation) {
       this.object.quaternion.copy(this.objectTargetQuaternion);
     } else {
       this.position.copy(this.objectWorldPosition);
