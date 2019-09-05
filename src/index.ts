@@ -182,4 +182,10 @@ export default class FreeformControls extends THREE.Object3D {
     this.getControlsForObject(object).showZR(visibility);
   public showPickT = (object: THREE.Object3D, visibility = true) =>
     this.getControlsForObject(object).showPickT(visibility);
+  public showPickPlaneXYT = (object: THREE.Object3D, visibility = true) =>
+    this.getControlsForObject(object).showPickPlaneXYT(visibility);
+  public showPickPlaneYZT = (object: THREE.Object3D, visibility = true) =>
+    this.getControlsForObject(object).showPickPlaneYZT(visibility);
+  public showPickPlaneZXT = (object: THREE.Object3D, visibility = true) =>
+    this.getControlsForObject(object).showPickPlaneZXT(visibility);
 }
