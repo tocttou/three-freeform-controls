@@ -10,11 +10,15 @@ enum HANDLE_NAMES {
 }
 
 export default class Controls extends THREE.Group {
-  private objectWorldPosition = new THREE.Vector3();
-  private objectTargetQuaternion = new THREE.Quaternion();
   private handleTargetQuaternion = new THREE.Quaternion();
   private handleTargetEuler = new THREE.Euler();
-  private _q = new THREE.Quaternion();
+  private objectWorldPosition = new THREE.Vector3();
+  private objectTargetPosition = new THREE.Vector3();
+  private objectTargetQuaternion = new THREE.Quaternion();
+  private objectParentWorldPosition = new THREE.Vector3();
+  private objectParentWorldQuaternion = new THREE.Quaternion();
+  private objectParentWorldScale = new THREE.Vector3();
+  private deltaQuaternion = new THREE.Quaternion();
   private touch1 = new THREE.Vector3();
   private touch2 = new THREE.Vector3();
   private minBox = new THREE.Vector3();
@@ -147,18 +151,18 @@ export default class Controls extends THREE.Group {
       this.handleTargetEuler.setFromQuaternion(this.handleTargetQuaternion);
 
       if (handle.name === HANDLE_NAMES.X) {
-        this._q.setFromAxisAngle(handle.up, this.handleTargetEuler.x);
+        this.deltaQuaternion.setFromAxisAngle(handle.up, this.handleTargetEuler.x);
         handle.rotation.x += this.handleTargetEuler.x;
       } else if (handle.name === HANDLE_NAMES.Y) {
-        this._q.setFromAxisAngle(handle.up, this.handleTargetEuler.y);
+        this.deltaQuaternion.setFromAxisAngle(handle.up, this.handleTargetEuler.y);
         handle.rotation.z += -this.handleTargetEuler.y;
       } else if (handle.name === HANDLE_NAMES.Z) {
-        this._q.setFromAxisAngle(handle.up, this.handleTargetEuler.z);
+        this.deltaQuaternion.setFromAxisAngle(handle.up, this.handleTargetEuler.z);
         handle.rotation.z += this.handleTargetEuler.z;
       }
     }
 
-    this.objectTargetQuaternion.premultiply(this._q);
+    this.objectTargetQuaternion.premultiply(this.deltaQuaternion);
     this.dragIncrementalStartPoint.copy(point);
   };
 
@@ -166,15 +170,25 @@ export default class Controls extends THREE.Group {
     this.object.updateMatrixWorld(force);
 
     this.object.getWorldPosition(this.objectWorldPosition);
+    const parent = this.object.parent;
+    if (parent !== null) {
+      parent.matrixWorld.decompose(
+        this.objectParentWorldPosition,
+        this.objectParentWorldQuaternion,
+        this.objectParentWorldScale
+      );
+    }
+    this.objectTargetPosition.copy(this.position).sub(this.objectParentWorldPosition);
 
     if (this.isBeingDragged) {
-      this.object.position.copy(this.position);
+      this.object.position.copy(this.objectTargetPosition);
       this.object.quaternion.copy(this.objectTargetQuaternion);
     } else {
       this.position.copy(this.objectWorldPosition);
     }
 
     this.object.getWorldQuaternion(this.objectTargetQuaternion);
+
     super.updateMatrixWorld(force);
   };
 }
