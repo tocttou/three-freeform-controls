@@ -10,6 +10,15 @@ enum HANDLE_NAMES {
 }
 
 export default class Controls extends THREE.Group {
+  private readonly translationXP: Translation;
+  private readonly translationYP: Translation;
+  private readonly translationZP: Translation;
+  private readonly translationXN: Translation;
+  private readonly translationYN: Translation;
+  private readonly translationZN: Translation;
+  private readonly rotationX: Rotation;
+  private readonly rotationY: Rotation;
+  private readonly rotationZ: Rotation;
   private handleTargetQuaternion = new THREE.Quaternion();
   private handleTargetEuler = new THREE.Euler();
   private objectWorldPosition = new THREE.Vector3();
@@ -32,78 +41,79 @@ export default class Controls extends THREE.Group {
     super();
 
     this.computeObjectBounds();
-    this.addTranslation();
-    this.addRotation();
+
+    this.translationXP = new Translation("red");
+    this.translationYP = new Translation("green");
+    this.translationZP = new Translation("blue");
+
+    this.translationXN = new Translation("red");
+    this.translationYN = new Translation("green");
+    this.translationZN = new Translation("blue");
+
+    this.rotationX = new Rotation("red");
+    this.rotationY = new Rotation("green");
+    this.rotationZ = new Rotation("blue");
+
+    this.setupTranslation();
+    this.setupRotation();
   }
 
-  private addTranslation = () => {
-    const translationXP = new Translation("red");
-    const translationYP = new Translation("green");
-    const translationZP = new Translation("blue");
+  private setupTranslation = () => {
+    this.translationXP.name = HANDLE_NAMES.X;
+    this.translationYP.name = HANDLE_NAMES.Y;
+    this.translationZP.name = HANDLE_NAMES.Z;
 
-    const translationXN = new Translation("red");
-    const translationYN = new Translation("green");
-    const translationZN = new Translation("blue");
+    this.translationXN.name = HANDLE_NAMES.X;
+    this.translationYN.name = HANDLE_NAMES.Y;
+    this.translationZN.name = HANDLE_NAMES.Z;
 
-    translationXP.name = HANDLE_NAMES.X;
-    translationYP.name = HANDLE_NAMES.Y;
-    translationZP.name = HANDLE_NAMES.Z;
+    this.translationXP.translateX(this.maxBox.x);
+    this.translationYP.translateY(this.maxBox.y);
+    this.translationZP.translateZ(this.maxBox.z);
 
-    translationXN.name = HANDLE_NAMES.X;
-    translationYN.name = HANDLE_NAMES.Y;
-    translationZN.name = HANDLE_NAMES.Z;
+    this.translationXN.translateX(this.minBox.x);
+    this.translationYN.translateY(this.minBox.y);
+    this.translationZN.translateZ(this.minBox.z);
 
-    translationXP.translateX(this.maxBox.x);
-    translationYP.translateY(this.maxBox.y);
-    translationZP.translateZ(this.maxBox.z);
+    this.translationXP.rotateZ(-Math.PI / 2);
+    this.translationZP.rotateX(Math.PI / 2);
 
-    translationXN.translateX(this.minBox.x);
-    translationYN.translateY(this.minBox.y);
-    translationZN.translateZ(this.minBox.z);
+    this.translationXN.rotateZ(Math.PI / 2);
+    this.translationYN.rotateX(Math.PI);
+    this.translationZN.rotateX(-Math.PI / 2);
 
-    translationXP.rotateZ(-Math.PI / 2);
-    translationZP.rotateX(Math.PI / 2);
+    this.translationXP.up = new THREE.Vector3(0, 1, 0);
+    this.translationYP.up = new THREE.Vector3(0, 0, 1);
+    this.translationZP.up = new THREE.Vector3(0, 1, 0);
 
-    translationXN.rotateZ(Math.PI / 2);
-    translationYN.rotateX(Math.PI);
-    translationZN.rotateX(-Math.PI / 2);
+    this.translationXN.up = new THREE.Vector3(0, 1, 0);
+    this.translationYN.up = new THREE.Vector3(0, 0, 1);
+    this.translationZN.up = new THREE.Vector3(0, 1, 0);
 
-    translationXP.up = new THREE.Vector3(0, 1, 0);
-    translationYP.up = new THREE.Vector3(0, 0, 1);
-    translationZP.up = new THREE.Vector3(0, 1, 0);
+    this.add(this.translationXP);
+    this.add(this.translationYP);
+    this.add(this.translationZP);
 
-    translationXN.up = new THREE.Vector3(0, 1, 0);
-    translationYN.up = new THREE.Vector3(0, 0, 1);
-    translationZN.up = new THREE.Vector3(0, 1, 0);
-
-    this.add(translationXP);
-    this.add(translationYP);
-    this.add(translationZP);
-
-    this.add(translationXN);
-    this.add(translationYN);
-    this.add(translationZN);
+    this.add(this.translationXN);
+    this.add(this.translationYN);
+    this.add(this.translationZN);
   };
 
-  private addRotation = () => {
-    const rotationX = new Rotation("red");
-    const rotationY = new Rotation("green");
-    const rotationZ = new Rotation("blue");
+  private setupRotation = () => {
+    this.rotationX.name = HANDLE_NAMES.X;
+    this.rotationY.name = HANDLE_NAMES.Y;
+    this.rotationZ.name = HANDLE_NAMES.Z;
 
-    rotationX.name = HANDLE_NAMES.X;
-    rotationY.name = HANDLE_NAMES.Y;
-    rotationZ.name = HANDLE_NAMES.Z;
+    this.rotationX.up = new THREE.Vector3(1, 0, 0);
+    this.rotationY.up = new THREE.Vector3(0, 1, 0);
+    this.rotationZ.up = new THREE.Vector3(0, 0, 1);
 
-    rotationX.up = new THREE.Vector3(1, 0, 0);
-    rotationY.up = new THREE.Vector3(0, 1, 0);
-    rotationZ.up = new THREE.Vector3(0, 0, 1);
+    this.rotationX.rotateY(Math.PI / 2);
+    this.rotationY.rotateX(Math.PI / 2);
 
-    rotationX.rotateY(Math.PI / 2);
-    rotationY.rotateX(Math.PI / 2);
-
-    this.add(rotationX);
-    this.add(rotationY);
-    this.add(rotationZ);
+    this.add(this.rotationX);
+    this.add(this.rotationY);
+    this.add(this.rotationZ);
   };
 
   private computeObjectBounds = () => {
@@ -178,6 +188,33 @@ export default class Controls extends THREE.Group {
       object.position.copy(this.objectTargetPosition);
       parent.attach(object);
     }
+  };
+
+  public showXT = (visibility = true) => {
+    this.translationXP.visible = visibility;
+    this.translationXN.visible = visibility;
+  };
+
+  public showYT = (visibility = true) => {
+    this.translationYP.visible = visibility;
+    this.translationYN.visible = visibility;
+  };
+
+  public showZT = (visibility = true) => {
+    this.translationZP.visible = visibility;
+    this.translationZN.visible = visibility;
+  };
+
+  public showXR = (visibility = true) => {
+    this.rotationX.visible = visibility;
+  };
+
+  public showYR = (visibility = true) => {
+    this.rotationY.visible = visibility;
+  };
+
+  public showZR = (visibility = true) => {
+    this.rotationZ.visible = visibility;
   };
 
   updateMatrixWorld = (force?: boolean) => {

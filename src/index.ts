@@ -7,9 +7,11 @@ export { RAYCASTER_EVENTS };
 
 export default class FreeformControls extends THREE.Object3D {
   private objects: { [id: number]: THREE.Object3D } = {};
-  private controls: { [id: number]: THREE.Group } = {};
-  private objectsControlsMap: { [id: number]: number } = {};
-  private eventListeners: { [event in RAYCASTER_EVENTS]: Array<() => void> } = {
+  private controls: { [id: number]: Controls } = {};
+  private objectsControlsMap: { [id: number]: number | undefined } = {};
+  private eventListeners: {
+    [event in RAYCASTER_EVENTS]: Array<(object: THREE.Object3D | null) => void>;
+  } = {
     [RAYCASTER_EVENTS.DRAG_START]: [],
     [RAYCASTER_EVENTS.DRAG]: [],
     [RAYCASTER_EVENTS.DRAG_STOP]: []
@@ -28,10 +30,13 @@ export default class FreeformControls extends THREE.Object3D {
       if (handle === null) {
         return;
       }
-      const controls = handle.parent as Controls;
+      const controls = handle.parent as Controls | null;
+      if (controls === null) {
+        return;
+      }
       controls.processDragStart({ point, handle });
       this.eventListeners[RAYCASTER_EVENTS.DRAG_START].map(callback => {
-        callback();
+        callback(controls.object);
       });
     });
 
@@ -39,10 +44,13 @@ export default class FreeformControls extends THREE.Object3D {
       if (handle === null) {
         return;
       }
-      const controls = handle.parent as Controls;
+      const controls = handle.parent as Controls | null;
+      if (controls === null) {
+        return;
+      }
       controls.processHandle({ point, handle });
       this.eventListeners[RAYCASTER_EVENTS.DRAG].map(callback => {
-        callback();
+        callback(controls.object);
       });
     });
 
@@ -50,11 +58,14 @@ export default class FreeformControls extends THREE.Object3D {
       if (handle === null) {
         return;
       }
-      const controls = handle.parent as Controls;
+      const controls = handle.parent as Controls | null;
+      if (controls === null) {
+        return;
+      }
       controls.isBeingDraggedTranslation = false;
       controls.isBeingDraggedRotation = false;
       this.eventListeners[RAYCASTER_EVENTS.DRAG_STOP].map(callback => {
-        callback();
+        callback(controls.object);
       });
     });
   };
@@ -74,13 +85,15 @@ export default class FreeformControls extends THREE.Object3D {
     if (!this.objects.hasOwnProperty(object.id)) {
       throw new Error("object should be attached first");
     }
-    const controlsId = this.objectsControlsMap[object.id];
-    const controls = this.controls[controlsId];
+    const controls = this.getControlsForObject(object);
     this.remove(controls);
+    this.eventListeners[RAYCASTER_EVENTS.DRAG_STOP].map(callback => {
+      callback(controls.object);
+    });
     this.dispose(controls);
 
     delete this.objects[object.id];
-    delete this.controls[controlsId];
+    delete this.controls[controls.id];
     delete this.objectsControlsMap[object.id];
   };
 
@@ -127,6 +140,12 @@ export default class FreeformControls extends THREE.Object3D {
       scene.remove(this);
     }
     this.dispose(this);
+    Object.values(this.controls).map(control => {
+      this.dispose(control);
+    });
+    this.eventListeners[RAYCASTER_EVENTS.DRAG_STOP].map(callback => {
+      callback(null);
+    });
 
     this.rayCaster.destroy();
     this.objects = {};
@@ -138,4 +157,27 @@ export default class FreeformControls extends THREE.Object3D {
       [RAYCASTER_EVENTS.DRAG_STOP]: []
     };
   };
+
+  private getControlsForObject = (object: THREE.Object3D) => {
+    const controlsId = this.objectsControlsMap[object.id];
+    if (controlsId === undefined) {
+      throw new Error(
+        "object has not been attached - please call freeFormControls.attach(object) first"
+      );
+    }
+    return this.controls[controlsId];
+  };
+
+  public showXT = (object: THREE.Object3D, visibility = true) =>
+    this.getControlsForObject(object).showXT(visibility);
+  public showYT = (object: THREE.Object3D, visibility = true) =>
+    this.getControlsForObject(object).showYT(visibility);
+  public showZT = (object: THREE.Object3D, visibility = true) =>
+    this.getControlsForObject(object).showZT(visibility);
+  public showXR = (object: THREE.Object3D, visibility = true) =>
+    this.getControlsForObject(object).showXR(visibility);
+  public showYR = (object: THREE.Object3D, visibility = true) =>
+    this.getControlsForObject(object).showYR(visibility);
+  public showZR = (object: THREE.Object3D, visibility = true) =>
+    this.getControlsForObject(object).showZR(visibility);
 }
