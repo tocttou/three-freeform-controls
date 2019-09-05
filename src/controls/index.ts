@@ -184,6 +184,9 @@ export default class Controls extends THREE.Group {
   ) => {
     if (parent !== null && this.parent !== null && this.parent.parent !== null) {
       const scene = this.parent.parent;
+      if (scene.type !== "Scene") {
+        throw new Error("freeform controls must be attached to the scene");
+      }
       scene.attach(object);
       object.position.copy(this.objectTargetPosition);
       parent.attach(object);
