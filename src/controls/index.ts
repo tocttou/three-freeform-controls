@@ -31,7 +31,6 @@ export default class Controls extends THREE.Group {
   constructor(public object: THREE.Mesh) {
     super();
 
-    this.matrixAutoUpdate = true;
     this.computeObjectBounds();
     this.addTranslation();
     this.addRotation();
@@ -169,6 +168,18 @@ export default class Controls extends THREE.Group {
     this.dragIncrementalStartPoint.copy(point);
   };
 
+  private detachObjectUpdatePositionAttach = (
+    parent: THREE.Object3D | null,
+    object: THREE.Object3D
+  ) => {
+    if (parent !== null && this.parent !== null && this.parent.parent !== null) {
+      const scene = this.parent.parent;
+      scene.attach(object);
+      object.position.copy(this.objectTargetPosition);
+      parent.attach(object);
+    }
+  };
+
   updateMatrixWorld = (force?: boolean) => {
     this.object.updateMatrixWorld(force);
 
@@ -182,13 +193,14 @@ export default class Controls extends THREE.Group {
       );
     }
     this.objectParentWorldQuaternion.inverse();
-    this.objectTargetPosition.copy(this.position).sub(this.objectParentWorldPosition);
+    this.objectTargetPosition.copy(this.position);
     this.objectTargetQuaternion.premultiply(this.objectParentWorldQuaternion);
 
     if (this.isBeingDraggedTranslation) {
-      this.object.position.copy(this.objectTargetPosition);
+      this.detachObjectUpdatePositionAttach(parent, this.object);
     } else if (this.isBeingDraggedRotation) {
       this.object.quaternion.copy(this.objectTargetQuaternion);
+      this.detachObjectUpdatePositionAttach(parent, this.object);
     } else {
       this.position.copy(this.objectWorldPosition);
     }
