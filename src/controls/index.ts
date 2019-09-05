@@ -181,7 +181,9 @@ export default class Controls extends THREE.Group {
         this.objectParentWorldScale
       );
     }
+    this.objectParentWorldQuaternion.inverse();
     this.objectTargetPosition.copy(this.position).sub(this.objectParentWorldPosition);
+    this.objectTargetQuaternion.premultiply(this.objectParentWorldQuaternion);
 
     if (this.isBeingDraggedTranslation) {
       this.object.position.copy(this.objectTargetPosition);
