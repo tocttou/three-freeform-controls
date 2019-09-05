@@ -15,7 +15,7 @@ enum HANDLE_NAMES {
   PICK_PLANE_ZX = "pick_plane_zx_handle"
 }
 
-type IHandle = Rotation | Translation | Pick | PickPlane;
+export type IHandle = Rotation | Translation | Pick | PickPlane;
 
 export default class Controls extends THREE.Group {
   private readonly pick: Pick;

@@ -3,7 +3,7 @@ import Plane from "../primitives/plane";
 import { DEFAULT_COLOR_PLANE } from "../utils/constants";
 
 export default class PickPlane extends THREE.Group {
-  private readonly plane: Plane;
+  public readonly plane: Plane;
 
   constructor(color = DEFAULT_COLOR_PLANE) {
     super();

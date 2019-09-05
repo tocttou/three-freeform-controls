@@ -4,6 +4,7 @@ import Translation from "../controls/translation";
 import Rotation from "../controls/rotation";
 import Controls from "../controls";
 import Pick from "../controls/pick";
+import PickPlane from "../controls/pick-plane";
 
 export enum RAYCASTER_EVENTS {
   DRAG_START = "DRAG_START",
@@ -41,6 +42,10 @@ export default class Raycaster extends THREE.Raycaster {
         this.activeHandle instanceof Pick
           ? this.getEyePlaneNormal(this.activeHandle)
           : this.activeHandle.up;
+
+      if (this.activeHandle instanceof PickPlane) {
+        this.setPickPlaneOpacity(1);
+      }
 
       this.activePlane.setFromNormalAndCoplanarPoint(
         normal,
@@ -91,9 +96,30 @@ export default class Raycaster extends THREE.Raycaster {
     this.domElement.removeEventListener("mousemove", this.mouseMoveListener);
     this.domElement.addEventListener("mousedown", this.mouseDownListener, false);
     emitter.emit(RAYCASTER_EVENTS.DRAG_STOP, { point: this.point, handle: this.activeHandle });
+
+    if (this.activeHandle instanceof PickPlane) {
+      this.setPickPlaneOpacity(0.3);
+    }
+
     this.activeHandle = null;
     this.activePlane = null;
   };
+
+  private setPickPlaneOpacity(opacity: number) {
+    if (!(this.activeHandle instanceof PickPlane)) {
+      return;
+    }
+    const material = this.activeHandle.plane.material;
+    if (Array.isArray(material)) {
+      material.map(m => {
+        m.opacity = opacity;
+        m.needsUpdate = true;
+      });
+    } else {
+      material.opacity = opacity;
+      material.needsUpdate = true;
+    }
+  }
 
   private resolveControlGroup = (intersectedObject: THREE.Intersection | undefined) => {
     if (intersectedObject === undefined) {

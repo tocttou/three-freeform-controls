@@ -18,7 +18,8 @@ export default class Plane extends THREE.Mesh {
       color,
       depthTest: false,
       side: THREE.DoubleSide,
-      wireframe: true
+      transparent: true
     });
+    this.material.opacity = 0.3;
   }
 }
