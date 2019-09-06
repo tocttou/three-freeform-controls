@@ -49,7 +49,7 @@ export default class Controls extends THREE.Group {
   public isBeingDraggedTranslation = false;
   public isBeingDraggedRotation = false;
 
-  constructor(public object: THREE.Mesh) {
+  constructor(public object: THREE.Object3D) {
     super();
 
     this.computeObjectBounds();
@@ -159,12 +159,19 @@ export default class Controls extends THREE.Group {
   };
 
   private computeObjectBounds = () => {
-    this.object.geometry.computeBoundingBox();
-    const {
-      boundingBox: { min, max }
-    } = this.object.geometry;
-    this.minBox.copy(min);
-    this.maxBox.copy(max);
+    if (this.object.type === "Mesh") {
+      const geometry = (this.object as THREE.Mesh).geometry;
+      geometry.computeBoundingBox();
+      const {
+        boundingBox: { min, max }
+      } = geometry;
+      this.minBox.copy(min);
+      this.maxBox.copy(max);
+    } else {
+      this.minBox.copy(new THREE.Vector3(-0.5, -0.5, -0.5));
+      this.maxBox.copy(new THREE.Vector3(0.5, 0.5, 0.5));
+    }
+
     this.minBox.addScalar(-DEFAULT_TRANSLATION_CONTROLS_SEPARATION);
     this.maxBox.addScalar(DEFAULT_TRANSLATION_CONTROLS_SEPARATION);
   };

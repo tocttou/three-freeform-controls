@@ -70,7 +70,7 @@ export default class FreeformControls extends THREE.Object3D {
     });
   };
 
-  public attach: (object: THREE.Mesh) => this = object => {
+  public attach: (object: THREE.Object3D) => this = object => {
     if (this.objects.hasOwnProperty(object.id)) {
       return this;
     }
@@ -97,7 +97,7 @@ export default class FreeformControls extends THREE.Object3D {
     delete this.objectsControlsMap[object.id];
   };
 
-  private addControls = (object: THREE.Mesh) => {
+  private addControls = (object: THREE.Object3D) => {
     const controls = new Controls(object);
     this.controls[controls.id] = controls;
     this.add(controls);
