@@ -16,7 +16,9 @@ export default class FreeformControls extends THREE.Object3D {
   private controls: { [id: number]: Controls } = {};
   private objectsControlsMap: { [id: number]: number | undefined } = {};
   private eventListeners: {
-    [event in RAYCASTER_EVENTS]: Array<(object: THREE.Object3D | null) => void>;
+    [event in RAYCASTER_EVENTS]: Array<
+      (object: THREE.Object3D | null, handleName: string | null) => void
+    >;
   } = {
     [RAYCASTER_EVENTS.DRAG_START]: [],
     [RAYCASTER_EVENTS.DRAG]: [],
@@ -46,7 +48,7 @@ export default class FreeformControls extends THREE.Object3D {
       }
       controls.processDragStart({ point, handle });
       this.eventListeners[RAYCASTER_EVENTS.DRAG_START].map(callback => {
-        callback(controls.object);
+        callback(controls.object, handle.name);
       });
     });
 
@@ -60,7 +62,7 @@ export default class FreeformControls extends THREE.Object3D {
       }
       controls.processHandle({ point, handle });
       this.eventListeners[RAYCASTER_EVENTS.DRAG].map(callback => {
-        callback(controls.object);
+        callback(controls.object, handle.name);
       });
     });
 
@@ -75,7 +77,7 @@ export default class FreeformControls extends THREE.Object3D {
       controls.isBeingDraggedTranslation = false;
       controls.isBeingDraggedRotation = false;
       this.eventListeners[RAYCASTER_EVENTS.DRAG_STOP].map(callback => {
-        callback(controls.object);
+        callback(controls.object, handle.name);
       });
     });
   };
@@ -98,7 +100,7 @@ export default class FreeformControls extends THREE.Object3D {
     const controls = this.getControlsForObject(object);
     this.remove(controls);
     this.eventListeners[RAYCASTER_EVENTS.DRAG_STOP].map(callback => {
-      callback(controls.object);
+      callback(controls.object, null);
     });
     this.dispose(controls);
 
@@ -154,7 +156,7 @@ export default class FreeformControls extends THREE.Object3D {
       this.dispose(control);
     });
     this.eventListeners[RAYCASTER_EVENTS.DRAG_STOP].map(callback => {
-      callback(null);
+      callback(null, null);
     });
 
     this.rayCaster.destroy();
