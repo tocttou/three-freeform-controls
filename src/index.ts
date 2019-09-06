@@ -5,6 +5,12 @@ import { emitter, unbindAll } from "./utils/emmiter";
 
 export { RAYCASTER_EVENTS };
 
+export interface ISeparationT {
+  x: number;
+  y: number;
+  z: number;
+}
+
 export default class FreeformControls extends THREE.Object3D {
   private objects: { [id: number]: THREE.Object3D } = {};
   private controls: { [id: number]: Controls } = {};
@@ -18,7 +24,11 @@ export default class FreeformControls extends THREE.Object3D {
   };
   private rayCaster: Raycaster;
 
-  constructor(private camera: THREE.Camera, private domElement: HTMLElement) {
+  constructor(
+    private camera: THREE.Camera,
+    private domElement: HTMLElement,
+    private separationT?: ISeparationT
+  ) {
     super();
     this.rayCaster = new Raycaster(this.camera, this.domElement, this.controls);
 
@@ -98,7 +108,7 @@ export default class FreeformControls extends THREE.Object3D {
   };
 
   private addControls = (object: THREE.Object3D) => {
-    const controls = new Controls(object);
+    const controls = new Controls(object, this.separationT);
     this.controls[controls.id] = controls;
     this.add(controls);
     return controls.id;

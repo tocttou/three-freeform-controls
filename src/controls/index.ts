@@ -4,6 +4,7 @@ import { DEFAULT_TRANSLATION_CONTROLS_SEPARATION } from "../utils/constants";
 import Rotation from "./rotation";
 import Pick from "./pick";
 import PickPlane from "./pick-plane";
+import { ISeparationT } from "../index";
 
 enum HANDLE_NAMES {
   X = "x_handle",
@@ -49,7 +50,7 @@ export default class Controls extends THREE.Group {
   public isBeingDraggedTranslation = false;
   public isBeingDraggedRotation = false;
 
-  constructor(public object: THREE.Object3D) {
+  constructor(public object: THREE.Object3D, private separationT?: ISeparationT) {
     super();
 
     this.computeObjectBounds();
@@ -159,7 +160,11 @@ export default class Controls extends THREE.Group {
   };
 
   private computeObjectBounds = () => {
-    if (this.object.type === "Mesh") {
+    if (this.separationT !== undefined) {
+      const { x, y, z } = this.separationT;
+      this.minBox.copy(new THREE.Vector3(-x / 2, -y / 2, -z / 2));
+      this.maxBox.copy(new THREE.Vector3(x / 2, y / 2, z / 2));
+    } else if (this.object.type === "Mesh") {
       const geometry = (this.object as THREE.Mesh).geometry;
       geometry.computeBoundingBox();
       const {
@@ -167,13 +172,13 @@ export default class Controls extends THREE.Group {
       } = geometry;
       this.minBox.copy(min);
       this.maxBox.copy(max);
-    } else {
-      this.minBox.copy(new THREE.Vector3(-0.5, -0.5, -0.5));
-      this.maxBox.copy(new THREE.Vector3(0.5, 0.5, 0.5));
-    }
 
-    this.minBox.addScalar(-DEFAULT_TRANSLATION_CONTROLS_SEPARATION);
-    this.maxBox.addScalar(DEFAULT_TRANSLATION_CONTROLS_SEPARATION);
+      this.minBox.addScalar(-DEFAULT_TRANSLATION_CONTROLS_SEPARATION);
+      this.maxBox.addScalar(DEFAULT_TRANSLATION_CONTROLS_SEPARATION);
+    } else {
+      this.minBox.copy(new THREE.Vector3(-1, -1, -1));
+      this.maxBox.copy(new THREE.Vector3(1, 1, 1));
+    }
   };
 
   processDragStart = (args: { point: THREE.Vector3; handle: IHandle }) => {
