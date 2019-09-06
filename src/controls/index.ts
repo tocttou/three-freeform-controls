@@ -6,7 +6,7 @@ import Pick from "./pick";
 import PickPlane from "./pick-plane";
 import { ISeparationT } from "../index";
 
-enum HANDLE_NAMES {
+export enum HANDLE_NAMES {
   X = "x_handle",
   Y = "y_handle",
   Z = "z_handle",

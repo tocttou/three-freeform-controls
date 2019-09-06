@@ -1,9 +1,9 @@
 import * as THREE from "three";
-import Controls from "./controls";
+import Controls, { HANDLE_NAMES } from "./controls";
 import Raycaster, { RAYCASTER_EVENTS } from "./utils/raycaster";
 import { emitter, unbindAll } from "./utils/emmiter";
 
-export { RAYCASTER_EVENTS };
+export { RAYCASTER_EVENTS, HANDLE_NAMES };
 
 export interface ISeparationT {
   x: number;
@@ -200,4 +200,10 @@ export default class FreeformControls extends THREE.Object3D {
     this.getControlsForObject(object).showPickPlaneZXT(visibility);
   public showAll = (object: THREE.Object3D, visibility = true) =>
     this.getControlsForObject(object).showAll(visibility);
+
+  public setUserData = (object: THREE.Object3D, userData: { [key: string]: any }) => {
+    const controls = this.getControlsForObject(object);
+    controls.userData = userData;
+  };
+  public getUserData = (object: THREE.Object3D) => this.getControlsForObject(object).userData;
 }
