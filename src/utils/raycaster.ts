@@ -1,7 +1,5 @@
 import * as THREE from "three";
 import { emitter } from "./emmiter";
-import Translation from "../controls/translation";
-import Rotation from "../controls/rotation";
 import Controls, { IHandle } from "../controls";
 import Pick from "../controls/pick";
 import PickPlane from "../controls/pick-plane";

@@ -299,6 +299,22 @@ export default class Controls extends THREE.Group {
     this.pickPlaneZX.visible = visibility;
   };
 
+  public showAll = (visibility = true) => {
+    this.showXT(visibility);
+    this.showYT(visibility);
+    this.showZT(visibility);
+
+    this.showXR(visibility);
+    this.showYR(visibility);
+    this.showZR(visibility);
+
+    this.showPickT(visibility);
+
+    this.showPickPlaneXYT(visibility);
+    this.showPickPlaneYZT(visibility);
+    this.showPickPlaneZXT(visibility);
+  };
+
   updateMatrixWorld = (force?: boolean) => {
     this.object.updateMatrixWorld(force);
 
