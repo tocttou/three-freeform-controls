@@ -7,9 +7,12 @@ import PickPlane from "./pick-plane";
 import { ISeparationT } from "../index";
 
 export enum HANDLE_NAMES {
-  X = "x_handle",
-  Y = "y_handle",
-  Z = "z_handle",
+  XT = "xt_handle",
+  YT = "yt_handle",
+  ZT = "zt_handle",
+  XR = "xr_handle",
+  YR = "yr_handle",
+  ZR = "zr_handle",
   PICK = "pick_handle",
   PICK_PLANE_XY = "pick_plane_xy_handle",
   PICK_PLANE_YZ = "pick_plane_yz_handle",
@@ -102,13 +105,13 @@ export default class Controls extends THREE.Group {
   };
 
   private setupTranslation = () => {
-    this.translationXP.name = HANDLE_NAMES.X;
-    this.translationYP.name = HANDLE_NAMES.Y;
-    this.translationZP.name = HANDLE_NAMES.Z;
+    this.translationXP.name = HANDLE_NAMES.XT;
+    this.translationYP.name = HANDLE_NAMES.YT;
+    this.translationZP.name = HANDLE_NAMES.ZT;
 
-    this.translationXN.name = HANDLE_NAMES.X;
-    this.translationYN.name = HANDLE_NAMES.Y;
-    this.translationZN.name = HANDLE_NAMES.Z;
+    this.translationXN.name = HANDLE_NAMES.XT;
+    this.translationYN.name = HANDLE_NAMES.YT;
+    this.translationZN.name = HANDLE_NAMES.ZT;
 
     this.translationXP.translateX(this.maxBox.x);
     this.translationYP.translateY(this.maxBox.y);
@@ -143,9 +146,9 @@ export default class Controls extends THREE.Group {
   };
 
   private setupRotation = () => {
-    this.rotationX.name = HANDLE_NAMES.X;
-    this.rotationY.name = HANDLE_NAMES.Y;
-    this.rotationZ.name = HANDLE_NAMES.Z;
+    this.rotationX.name = HANDLE_NAMES.XR;
+    this.rotationY.name = HANDLE_NAMES.YR;
+    this.rotationZ.name = HANDLE_NAMES.ZR;
 
     this.rotationX.up = new THREE.Vector3(1, 0, 0);
     this.rotationY.up = new THREE.Vector3(0, 1, 0);
@@ -193,11 +196,11 @@ export default class Controls extends THREE.Group {
   processHandle = (args: { point: THREE.Vector3; handle: IHandle }) => {
     const { point, handle } = args;
     if (handle instanceof Translation || handle instanceof Pick || handle instanceof PickPlane) {
-      if (handle.name === HANDLE_NAMES.X) {
+      if (handle.name === HANDLE_NAMES.XT) {
         this.position.x += point.x - this.dragIncrementalStartPoint.x;
-      } else if (handle.name === HANDLE_NAMES.Y) {
+      } else if (handle.name === HANDLE_NAMES.YT) {
         this.position.y += point.y - this.dragIncrementalStartPoint.y;
-      } else if (handle.name === HANDLE_NAMES.Z) {
+      } else if (handle.name === HANDLE_NAMES.ZT) {
         this.position.z += point.z - this.dragIncrementalStartPoint.z;
       } else if (handle.name === HANDLE_NAMES.PICK) {
         this.position.x += point.x - this.dragIncrementalStartPoint.x;
@@ -230,13 +233,13 @@ export default class Controls extends THREE.Group {
       this.handleTargetQuaternion.setFromUnitVectors(this.touch1, this.touch2);
       this.handleTargetEuler.setFromQuaternion(this.handleTargetQuaternion);
 
-      if (handle.name === HANDLE_NAMES.X) {
+      if (handle.name === HANDLE_NAMES.XR) {
         this.deltaQuaternion.setFromAxisAngle(handle.up, this.handleTargetEuler.x);
         handle.rotation.x += this.handleTargetEuler.x;
-      } else if (handle.name === HANDLE_NAMES.Y) {
+      } else if (handle.name === HANDLE_NAMES.YR) {
         this.deltaQuaternion.setFromAxisAngle(handle.up, this.handleTargetEuler.y);
         handle.rotation.z += -this.handleTargetEuler.y;
-      } else if (handle.name === HANDLE_NAMES.Z) {
+      } else if (handle.name === HANDLE_NAMES.ZR) {
         this.deltaQuaternion.setFromAxisAngle(handle.up, this.handleTargetEuler.z);
         handle.rotation.z += this.handleTargetEuler.z;
       }
