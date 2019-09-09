@@ -3,12 +3,17 @@
 [![Build Status](https://travis-ci.org/tocttou/three-freeform-controls.svg?branch=master)](https://travis-ci.org/tocttou/three-freeform-controls)
 [![Greenkeeper badge](https://badges.greenkeeper.io/tocttou/three-freeform-controls.svg)](https://greenkeeper.io/)
 
+![demo](three.gif)
+
 Todo list:
 
-- [ ] Release
 - [ ] Documentation
 - [ ] Examples
-- [ ] Rotation around arbitrary axes
+- [ ] Stable Release
+- [ ] Tests
+- [ ] Mode: Rotation around arbitrary axes
+- [ ] Mode: Inherit orientation from object
+- [ ] Eye plane rotation controls
 - [x] Translation controls
 - [x] Rotation controls
 - [x] Free pick controls
