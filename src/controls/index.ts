@@ -36,14 +36,12 @@ export default class Controls extends THREE.Group {
   private readonly rotationY: Rotation;
   private readonly rotationZ: Rotation;
   private handleTargetQuaternion = new THREE.Quaternion();
-  private handleTargetEuler = new THREE.Euler();
   private objectWorldPosition = new THREE.Vector3();
   private objectTargetPosition = new THREE.Vector3();
   private objectTargetQuaternion = new THREE.Quaternion();
   private objectParentWorldPosition = new THREE.Vector3();
   private objectParentWorldQuaternion = new THREE.Quaternion();
   private objectParentWorldScale = new THREE.Vector3();
-  private deltaQuaternion = new THREE.Quaternion();
   private touch1 = new THREE.Vector3();
   private touch2 = new THREE.Vector3();
   private minBox = new THREE.Vector3();
@@ -132,9 +130,9 @@ export default class Controls extends THREE.Group {
     this.translationYP.up = new THREE.Vector3(0, 0, 1);
     this.translationZP.up = new THREE.Vector3(0, 1, 0);
 
-    this.translationXN.up = new THREE.Vector3(0, 1, 0);
-    this.translationYN.up = new THREE.Vector3(0, 0, 1);
-    this.translationZN.up = new THREE.Vector3(0, 1, 0);
+    this.translationXN.up = new THREE.Vector3(0, -1, 0);
+    this.translationYN.up = new THREE.Vector3(0, 0, -1);
+    this.translationZN.up = new THREE.Vector3(0, -1, 0);
 
     this.add(this.translationXP);
     this.add(this.translationYP);
@@ -232,21 +230,10 @@ export default class Controls extends THREE.Group {
         .sub(this.position)
         .normalize();
       this.handleTargetQuaternion.setFromUnitVectors(this.touch1, this.touch2);
-      this.handleTargetEuler.setFromQuaternion(this.handleTargetQuaternion);
-
-      if (handle.name === HANDLE_NAMES.XR) {
-        this.deltaQuaternion.setFromAxisAngle(handle.up, this.handleTargetEuler.x);
-        handle.rotation.x += this.handleTargetEuler.x;
-      } else if (handle.name === HANDLE_NAMES.YR) {
-        this.deltaQuaternion.setFromAxisAngle(handle.up, this.handleTargetEuler.y);
-        handle.rotation.z += -this.handleTargetEuler.y;
-      } else if (handle.name === HANDLE_NAMES.ZR) {
-        this.deltaQuaternion.setFromAxisAngle(handle.up, this.handleTargetEuler.z);
-        handle.rotation.z += this.handleTargetEuler.z;
-      }
+      handle.quaternion.premultiply(this.handleTargetQuaternion);
     }
 
-    this.objectTargetQuaternion.premultiply(this.deltaQuaternion);
+    this.objectTargetQuaternion.premultiply(this.handleTargetQuaternion);
     this.dragIncrementalStartPoint.copy(point);
   };
 
