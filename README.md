@@ -9,7 +9,6 @@ Todo list:
 
 - [ ] Documentation
 - [ ] Examples
-- [ ] Stable Release
 - [ ] Tests
 - [ ] Mode: Rotation around arbitrary axes
 - [ ] Mode: Inherit orientation from object

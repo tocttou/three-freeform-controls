@@ -21,7 +21,7 @@ export default class Raycaster extends THREE.Raycaster {
   constructor(
     public camera: THREE.Camera,
     private domElement: HTMLElement,
-    private controls: { [id: string]: THREE.Object3D }
+    private controls: { [id: string]: Controls }
   ) {
     super();
     this.domElement.addEventListener("mousedown", this.mouseDownListener, false);
@@ -31,8 +31,13 @@ export default class Raycaster extends THREE.Raycaster {
   private mouseDownListener = (event: MouseEvent) => {
     this.setRayDirection(event);
 
-    const objects = Object.values(this.controls);
-    this.activeHandle = this.resolveControlGroup(this.intersectObjects(objects, true)[0]);
+    const interactiveObjects: THREE.Object3D[] = [];
+    Object.values(this.controls).map(controls => {
+      interactiveObjects.push(...controls.getInteractiveObjects());
+    });
+    this.activeHandle = this.resolveControlGroup(
+      this.intersectObjects(interactiveObjects, true)[0]
+    );
 
     if (this.activeHandle !== null) {
       this.activePlane = new THREE.Plane();

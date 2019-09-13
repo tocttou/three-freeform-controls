@@ -155,6 +155,7 @@ export default class Controls extends THREE.Group {
     this.rotationZ.up = new THREE.Vector3(0, 0, 1);
 
     this.rotationX.rotateY(Math.PI / 2);
+    this.rotationX.rotateZ(Math.PI);
     this.rotationY.rotateX(Math.PI / 2);
 
     this.add(this.rotationX);
@@ -322,6 +323,24 @@ export default class Controls extends THREE.Group {
     this.showPickPlaneYZT(visibility);
     this.showPickPlaneZXT(visibility);
   };
+
+  public getInteractiveObjects(): THREE.Object3D[] {
+    return [
+      ...this.translationXP.getInteractiveObjects(),
+      ...this.translationYP.getInteractiveObjects(),
+      ...this.translationZP.getInteractiveObjects(),
+      ...this.translationXN.getInteractiveObjects(),
+      ...this.translationYN.getInteractiveObjects(),
+      ...this.translationZN.getInteractiveObjects(),
+      ...this.rotationX.getInteractiveObjects(),
+      ...this.rotationY.getInteractiveObjects(),
+      ...this.rotationZ.getInteractiveObjects(),
+      ...this.pick.getInteractiveObjects(),
+      ...this.pickPlaneXY.getInteractiveObjects(),
+      ...this.pickPlaneYZ.getInteractiveObjects(),
+      ...this.pickPlaneZX.getInteractiveObjects()
+    ];
+  }
 
   updateMatrixWorld = (force?: boolean) => {
     this.object.updateMatrixWorld(force);
