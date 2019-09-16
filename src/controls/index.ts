@@ -299,6 +299,9 @@ export default class Controls extends THREE.Group {
     const handles = Object.values(this.handleNamesMap);
     const interactiveObjects: THREE.Object3D[] = [];
     handles.map(handle => {
+      if (!handle!.visible) {
+        return;
+      }
       interactiveObjects.push(...handle!.getInteractiveObjects());
     });
     return interactiveObjects;

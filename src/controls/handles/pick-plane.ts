@@ -1,6 +1,10 @@
 import * as THREE from "three";
 import Plane from "../../primitives/plane";
-import { DEFAULT_COLOR_PLANE, DEFAULT_PLANE_HEIGHT, DEFAULT_PLANE_WIDTH } from "../../utils/constants";
+import {
+  DEFAULT_COLOR_PLANE,
+  DEFAULT_PLANE_HEIGHT,
+  DEFAULT_PLANE_WIDTH
+} from "../../utils/constants";
 import HandlesGroup from "./index";
 import Line from "../../primitives/line";
 

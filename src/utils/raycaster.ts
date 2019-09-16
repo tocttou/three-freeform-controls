@@ -33,9 +33,6 @@ export default class Raycaster extends THREE.Raycaster {
 
     const interactiveObjects: THREE.Object3D[] = [];
     Object.values(this.controls).map(controls => {
-      if (!controls.visible) {
-        return;
-      }
       interactiveObjects.push(...controls.getInteractiveObjects());
     });
     this.activeHandle = this.resolveControlGroup(
