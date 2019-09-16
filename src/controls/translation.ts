@@ -6,12 +6,13 @@ import {
   DEFAULT_CONE_RADIUS,
   DEFAULT_LINE_HEIGHT
 } from "../utils/constants";
-import ControlsGroup from "./controls-group";
+import HandlesGroup from "./handles-group";
 import Line from "../primitives/line";
 
-export default class Translation extends ControlsGroup {
+export default class Translation extends HandlesGroup {
   private readonly cone: Cone;
   private readonly line: Line;
+  public parallel = new THREE.Vector3(0, 1, 0);
 
   constructor(color = DEFAULT_COLOR_ARROW) {
     super();

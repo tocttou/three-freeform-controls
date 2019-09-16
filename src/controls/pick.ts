@@ -1,8 +1,8 @@
 import * as THREE from "three";
 import Octahedron from "../primitives/octahedron";
-import ControlsGroup from "./controls-group";
+import HandlesGroup from "./handles-group";
 
-export default class Pick extends ControlsGroup {
+export default class Pick extends HandlesGroup {
   private readonly octahedron: Octahedron;
 
   constructor() {

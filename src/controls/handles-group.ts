@@ -1,5 +1,5 @@
 import * as THREE from "three";
 
-export default abstract class ControlsGroup extends THREE.Group {
+export default abstract class HandlesGroup extends THREE.Group {
   public abstract getInteractiveObjects(): THREE.Object3D[];
 }

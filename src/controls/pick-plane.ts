@@ -1,10 +1,10 @@
 import * as THREE from "three";
 import Plane from "../primitives/plane";
 import { DEFAULT_COLOR_PLANE, DEFAULT_PLANE_HEIGHT, DEFAULT_PLANE_WIDTH } from "../utils/constants";
-import ControlsGroup from "./controls-group";
+import HandlesGroup from "./handles-group";
 import Line from "../primitives/line";
 
-export default class PickPlane extends ControlsGroup {
+export default class PickPlane extends HandlesGroup {
   public readonly plane: Plane;
   public readonly boundary: Line;
   public readonly crossX: Line;

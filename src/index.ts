@@ -1,9 +1,9 @@
 import * as THREE from "three";
-import Controls, { HANDLE_NAMES } from "./controls";
+import Controls, { DEFAULT_HANDLE_GROUP_NAMES } from "./controls";
 import Raycaster, { RAYCASTER_EVENTS } from "./utils/raycaster";
 import { emitter, unbindAll } from "./utils/emmiter";
 
-export { RAYCASTER_EVENTS, HANDLE_NAMES };
+export { RAYCASTER_EVENTS, DEFAULT_HANDLE_GROUP_NAMES };
 
 export interface ISeparationT {
   x: number;
@@ -180,26 +180,12 @@ export default class FreeformControls extends THREE.Object3D {
     return this.controls[controlsId];
   };
 
-  public showXT = (object: THREE.Object3D, visibility = true) =>
-    this.getControlsForObject(object).showXT(visibility);
-  public showYT = (object: THREE.Object3D, visibility = true) =>
-    this.getControlsForObject(object).showYT(visibility);
-  public showZT = (object: THREE.Object3D, visibility = true) =>
-    this.getControlsForObject(object).showZT(visibility);
-  public showXR = (object: THREE.Object3D, visibility = true) =>
-    this.getControlsForObject(object).showXR(visibility);
-  public showYR = (object: THREE.Object3D, visibility = true) =>
-    this.getControlsForObject(object).showYR(visibility);
-  public showZR = (object: THREE.Object3D, visibility = true) =>
-    this.getControlsForObject(object).showZR(visibility);
-  public showPickT = (object: THREE.Object3D, visibility = true) =>
-    this.getControlsForObject(object).showPickT(visibility);
-  public showPickPlaneXYT = (object: THREE.Object3D, visibility = true) =>
-    this.getControlsForObject(object).showPickPlaneXYT(visibility);
-  public showPickPlaneYZT = (object: THREE.Object3D, visibility = true) =>
-    this.getControlsForObject(object).showPickPlaneYZT(visibility);
-  public showPickPlaneZXT = (object: THREE.Object3D, visibility = true) =>
-    this.getControlsForObject(object).showPickPlaneZXT(visibility);
+  public showByNames = (object: THREE.Object3D, handleNames: string[], visibility = true) => {
+    handleNames.map(handleName =>
+      this.getControlsForObject(object).showByName(handleName, visibility)
+    );
+  };
+
   public showAll = (object: THREE.Object3D, visibility = true) =>
     this.getControlsForObject(object).showAll(visibility);
 

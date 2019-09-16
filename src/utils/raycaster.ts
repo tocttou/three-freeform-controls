@@ -39,7 +39,7 @@ export default class Raycaster extends THREE.Raycaster {
       this.intersectObjects(interactiveObjects, true)[0]
     );
 
-    if (this.activeHandle !== null) {
+    if (this.activeHandle !== null && this.activeHandle.visible) {
       this.activePlane = new THREE.Plane();
 
       const normal =

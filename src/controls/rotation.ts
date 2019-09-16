@@ -5,10 +5,10 @@ import {
   DEFAULT_RING_RADIUS
 } from "../utils/constants";
 import Line from "../primitives/line";
-import ControlsGroup from "./controls-group";
+import HandlesGroup from "./handles-group";
 import Octahedron from "../primitives/octahedron";
 
-export default class Rotation extends ControlsGroup {
+export default class Rotation extends HandlesGroup {
   private readonly ring: Line;
   private readonly handlebar: Octahedron;
 

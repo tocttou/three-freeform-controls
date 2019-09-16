@@ -6,10 +6,13 @@ import Pick from "./pick";
 import PickPlane from "./pick-plane";
 import { ISeparationT } from "../index";
 
-export enum HANDLE_NAMES {
-  XT = "xt_handle",
-  YT = "yt_handle",
-  ZT = "zt_handle",
+export enum DEFAULT_HANDLE_GROUP_NAMES {
+  XPT = "xpt_handle",
+  YPT = "ypt_handle",
+  ZPT = "zpt_handle",
+  XNT = "xnt_handle",
+  YNT = "ynt_handle",
+  ZNT = "znt_handle",
   XR = "xr_handle",
   YR = "yr_handle",
   ZR = "zr_handle",
@@ -42,12 +45,14 @@ export default class Controls extends THREE.Group {
   private objectParentWorldPosition = new THREE.Vector3();
   private objectParentWorldQuaternion = new THREE.Quaternion();
   private objectParentWorldScale = new THREE.Vector3();
+  private deltaPosition = new THREE.Vector3();
   private touch1 = new THREE.Vector3();
   private touch2 = new THREE.Vector3();
   private minBox = new THREE.Vector3();
   private maxBox = new THREE.Vector3();
   private dragStartPoint = new THREE.Vector3();
   private dragIncrementalStartPoint = new THREE.Vector3();
+  private handleNamesMap: { [name: string]: IHandle } = {};
   public isBeingDraggedTranslation = false;
   public isBeingDraggedRotation = false;
 
@@ -81,9 +86,9 @@ export default class Controls extends THREE.Group {
   }
 
   private setupPickPlane = () => {
-    this.pickPlaneXY.name = HANDLE_NAMES.PICK_PLANE_XY;
-    this.pickPlaneYZ.name = HANDLE_NAMES.PICK_PLANE_YZ;
-    this.pickPlaneZX.name = HANDLE_NAMES.PICK_PLANE_ZX;
+    this.pickPlaneXY.name = DEFAULT_HANDLE_GROUP_NAMES.PICK_PLANE_XY;
+    this.pickPlaneYZ.name = DEFAULT_HANDLE_GROUP_NAMES.PICK_PLANE_YZ;
+    this.pickPlaneZX.name = DEFAULT_HANDLE_GROUP_NAMES.PICK_PLANE_ZX;
 
     this.pickPlaneYZ.up = new THREE.Vector3(1, 0, 0);
     this.pickPlaneZX.up = new THREE.Vector3(0, 1, 0);
@@ -92,24 +97,31 @@ export default class Controls extends THREE.Group {
     this.pickPlaneYZ.rotateY(Math.PI / 2);
     this.pickPlaneZX.rotateX(Math.PI / 2);
 
+    this.handleNamesMap[this.pickPlaneXY.name] = this.pickPlaneXY;
+    this.handleNamesMap[this.pickPlaneYZ.name] = this.pickPlaneYZ;
+    this.handleNamesMap[this.pickPlaneZX.name] = this.pickPlaneZX;
+
     this.add(this.pickPlaneXY);
     this.add(this.pickPlaneYZ);
     this.add(this.pickPlaneZX);
   };
 
   private setupPick = () => {
-    this.pick.name = HANDLE_NAMES.PICK;
+    this.pick.name = DEFAULT_HANDLE_GROUP_NAMES.PICK;
+
+    this.handleNamesMap[this.pick.name] = this.pick;
+
     this.add(this.pick);
   };
 
   private setupTranslation = () => {
-    this.translationXP.name = HANDLE_NAMES.XT;
-    this.translationYP.name = HANDLE_NAMES.YT;
-    this.translationZP.name = HANDLE_NAMES.ZT;
+    this.translationXP.name = DEFAULT_HANDLE_GROUP_NAMES.XPT;
+    this.translationYP.name = DEFAULT_HANDLE_GROUP_NAMES.YPT;
+    this.translationZP.name = DEFAULT_HANDLE_GROUP_NAMES.ZPT;
 
-    this.translationXN.name = HANDLE_NAMES.XT;
-    this.translationYN.name = HANDLE_NAMES.YT;
-    this.translationZN.name = HANDLE_NAMES.ZT;
+    this.translationXN.name = DEFAULT_HANDLE_GROUP_NAMES.XNT;
+    this.translationYN.name = DEFAULT_HANDLE_GROUP_NAMES.YNT;
+    this.translationZN.name = DEFAULT_HANDLE_GROUP_NAMES.ZNT;
 
     this.translationXP.translateX(this.maxBox.x);
     this.translationYP.translateY(this.maxBox.y);
@@ -134,6 +146,22 @@ export default class Controls extends THREE.Group {
     this.translationYN.up = new THREE.Vector3(0, 0, -1);
     this.translationZN.up = new THREE.Vector3(0, -1, 0);
 
+    this.translationXP.parallel = new THREE.Vector3(1, 0, 0);
+    this.translationYP.parallel = new THREE.Vector3(0, 1, 0);
+    this.translationZP.parallel = new THREE.Vector3(0, 0, 1);
+
+    this.translationXN.parallel = new THREE.Vector3(-1, 0, 0);
+    this.translationYN.parallel = new THREE.Vector3(0, -1, 0);
+    this.translationZN.parallel = new THREE.Vector3(0, 0, -1);
+
+    this.handleNamesMap[this.translationXP.name] = this.translationXP;
+    this.handleNamesMap[this.translationYP.name] = this.translationYP;
+    this.handleNamesMap[this.translationZP.name] = this.translationZP;
+
+    this.handleNamesMap[this.translationXN.name] = this.translationXN;
+    this.handleNamesMap[this.translationYN.name] = this.translationYN;
+    this.handleNamesMap[this.translationZN.name] = this.translationZN;
+
     this.add(this.translationXP);
     this.add(this.translationYP);
     this.add(this.translationZP);
@@ -144,9 +172,9 @@ export default class Controls extends THREE.Group {
   };
 
   private setupRotation = () => {
-    this.rotationX.name = HANDLE_NAMES.XR;
-    this.rotationY.name = HANDLE_NAMES.YR;
-    this.rotationZ.name = HANDLE_NAMES.ZR;
+    this.rotationX.name = DEFAULT_HANDLE_GROUP_NAMES.XR;
+    this.rotationY.name = DEFAULT_HANDLE_GROUP_NAMES.YR;
+    this.rotationZ.name = DEFAULT_HANDLE_GROUP_NAMES.ZR;
 
     this.rotationX.up = new THREE.Vector3(1, 0, 0);
     this.rotationY.up = new THREE.Vector3(0, 1, 0);
@@ -155,6 +183,10 @@ export default class Controls extends THREE.Group {
     this.rotationX.rotateY(Math.PI / 2);
     this.rotationX.rotateZ(Math.PI);
     this.rotationY.rotateX(Math.PI / 2);
+
+    this.handleNamesMap[this.rotationX.name] = this.rotationX;
+    this.handleNamesMap[this.rotationY.name] = this.rotationY;
+    this.handleNamesMap[this.rotationZ.name] = this.rotationZ;
 
     this.add(this.rotationX);
     this.add(this.rotationY);
@@ -194,28 +226,14 @@ export default class Controls extends THREE.Group {
 
   processHandle = (args: { point: THREE.Vector3; handle: IHandle }) => {
     const { point, handle } = args;
-    if (handle instanceof Translation || handle instanceof Pick || handle instanceof PickPlane) {
-      if (handle.name === HANDLE_NAMES.XT) {
-        this.position.x += point.x - this.dragIncrementalStartPoint.x;
-      } else if (handle.name === HANDLE_NAMES.YT) {
-        this.position.y += point.y - this.dragIncrementalStartPoint.y;
-      } else if (handle.name === HANDLE_NAMES.ZT) {
-        this.position.z += point.z - this.dragIncrementalStartPoint.z;
-      } else if (handle.name === HANDLE_NAMES.PICK) {
-        this.position.x += point.x - this.dragIncrementalStartPoint.x;
-        this.position.y += point.y - this.dragIncrementalStartPoint.y;
-        this.position.z += point.z - this.dragIncrementalStartPoint.z;
-      } else if (handle.name === HANDLE_NAMES.PICK_PLANE_XY) {
-        this.position.x += point.x - this.dragIncrementalStartPoint.x;
-        this.position.y += point.y - this.dragIncrementalStartPoint.y;
-      } else if (handle.name === HANDLE_NAMES.PICK_PLANE_YZ) {
-        this.position.y += point.y - this.dragIncrementalStartPoint.y;
-        this.position.z += point.z - this.dragIncrementalStartPoint.z;
-      } else if (handle.name === HANDLE_NAMES.PICK_PLANE_ZX) {
-        this.position.x += point.x - this.dragIncrementalStartPoint.x;
-        this.position.z += point.z - this.dragIncrementalStartPoint.z;
-      }
-    } else {
+    if (handle instanceof Translation) {
+      this.deltaPosition.copy(point).sub(this.dragIncrementalStartPoint);
+      const delta = this.deltaPosition.dot(handle.parallel.normalize());
+      this.deltaPosition.copy(handle.parallel.normalize()).multiplyScalar(delta);
+      this.position.add(this.deltaPosition);
+    } else if (handle instanceof Pick || handle instanceof PickPlane) {
+      this.position.add(point).sub(this.dragIncrementalStartPoint);
+    } else if (handle instanceof Rotation) {
       this.touch1
         .copy(this.dragStartPoint)
         .sub(this.position)
@@ -252,63 +270,16 @@ export default class Controls extends THREE.Group {
     }
   };
 
-  public showXT = (visibility = true) => {
-    this.translationXP.visible = visibility;
-    this.translationXN.visible = visibility;
-  };
-
-  public showYT = (visibility = true) => {
-    this.translationYP.visible = visibility;
-    this.translationYN.visible = visibility;
-  };
-
-  public showZT = (visibility = true) => {
-    this.translationZP.visible = visibility;
-    this.translationZN.visible = visibility;
-  };
-
-  public showXR = (visibility = true) => {
-    this.rotationX.visible = visibility;
-  };
-
-  public showYR = (visibility = true) => {
-    this.rotationY.visible = visibility;
-  };
-
-  public showZR = (visibility = true) => {
-    this.rotationZ.visible = visibility;
-  };
-
-  public showPickT = (visibility = true) => {
-    this.pick.visible = visibility;
-  };
-
-  public showPickPlaneXYT = (visibility = true) => {
-    this.pickPlaneXY.visible = visibility;
-  };
-
-  public showPickPlaneYZT = (visibility = true) => {
-    this.pickPlaneYZ.visible = visibility;
-  };
-
-  public showPickPlaneZXT = (visibility = true) => {
-    this.pickPlaneZX.visible = visibility;
+  public showByName = (handleName: string, visibility = true) => {
+    const handle = this.handleNamesMap[handleName];
+    handle.visible = visibility;
   };
 
   public showAll = (visibility = true) => {
-    this.showXT(visibility);
-    this.showYT(visibility);
-    this.showZT(visibility);
-
-    this.showXR(visibility);
-    this.showYR(visibility);
-    this.showZR(visibility);
-
-    this.showPickT(visibility);
-
-    this.showPickPlaneXYT(visibility);
-    this.showPickPlaneYZT(visibility);
-    this.showPickPlaneZXT(visibility);
+    const handles = Object.values(this.handleNamesMap);
+    handles.map(handle => {
+      handle.visible = visibility;
+    });
   };
 
   public getInteractiveObjects(): THREE.Object3D[] {
