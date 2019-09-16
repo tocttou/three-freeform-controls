@@ -12,7 +12,7 @@ export interface ISeparationT {
   z: number;
 }
 
-export enum DEFAULT_HANDLE_GROUP_NAMES {
+export enum DEFAULT_HANDLE_GROUP_NAME {
   XPT = "xpt_handle",
   YPT = "ypt_handle",
   ZPT = "zpt_handle",
@@ -26,6 +26,11 @@ export enum DEFAULT_HANDLE_GROUP_NAMES {
   PICK_PLANE_XY = "pick_plane_xy_handle",
   PICK_PLANE_YZ = "pick_plane_yz_handle",
   PICK_PLANE_ZX = "pick_plane_zx_handle"
+}
+
+export enum ATTACH_MODE {
+  FIXED = "fixed",
+  INHERIT = "inherit"
 }
 
 export default class Controls extends THREE.Group {
@@ -50,6 +55,7 @@ export default class Controls extends THREE.Group {
   private objectParentWorldQuaternion = new THREE.Quaternion();
   private objectParentWorldScale = new THREE.Vector3();
   private deltaPosition = new THREE.Vector3();
+  private normalizedHandleParallelVectorCache = new THREE.Vector3();
   private touch1 = new THREE.Vector3();
   private touch2 = new THREE.Vector3();
   private minBox = new THREE.Vector3();
@@ -60,7 +66,11 @@ export default class Controls extends THREE.Group {
   public isBeingDraggedTranslation = false;
   public isBeingDraggedRotation = false;
 
-  constructor(public object: THREE.Object3D, private separationT?: ISeparationT) {
+  constructor(
+    public object: THREE.Object3D,
+    private separationT?: ISeparationT,
+    private attachMode: ATTACH_MODE = ATTACH_MODE.FIXED
+  ) {
     super();
 
     this.computeObjectBounds();
@@ -90,9 +100,9 @@ export default class Controls extends THREE.Group {
   }
 
   private setupDefaultPickPlane = () => {
-    this.pickPlaneXY.name = DEFAULT_HANDLE_GROUP_NAMES.PICK_PLANE_XY;
-    this.pickPlaneYZ.name = DEFAULT_HANDLE_GROUP_NAMES.PICK_PLANE_YZ;
-    this.pickPlaneZX.name = DEFAULT_HANDLE_GROUP_NAMES.PICK_PLANE_ZX;
+    this.pickPlaneXY.name = DEFAULT_HANDLE_GROUP_NAME.PICK_PLANE_XY;
+    this.pickPlaneYZ.name = DEFAULT_HANDLE_GROUP_NAME.PICK_PLANE_YZ;
+    this.pickPlaneZX.name = DEFAULT_HANDLE_GROUP_NAME.PICK_PLANE_ZX;
 
     this.pickPlaneYZ.up = new THREE.Vector3(1, 0, 0);
     this.pickPlaneZX.up = new THREE.Vector3(0, 1, 0);
@@ -121,7 +131,7 @@ export default class Controls extends THREE.Group {
   };
 
   private setupDefaultPick = () => {
-    this.pick.name = DEFAULT_HANDLE_GROUP_NAMES.PICK;
+    this.pick.name = DEFAULT_HANDLE_GROUP_NAME.PICK;
 
     this.handleNamesMap[this.pick.name] = this.pick;
 
@@ -129,13 +139,13 @@ export default class Controls extends THREE.Group {
   };
 
   private setupDefaultTranslation = () => {
-    this.translationXP.name = DEFAULT_HANDLE_GROUP_NAMES.XPT;
-    this.translationYP.name = DEFAULT_HANDLE_GROUP_NAMES.YPT;
-    this.translationZP.name = DEFAULT_HANDLE_GROUP_NAMES.ZPT;
+    this.translationXP.name = DEFAULT_HANDLE_GROUP_NAME.XPT;
+    this.translationYP.name = DEFAULT_HANDLE_GROUP_NAME.YPT;
+    this.translationZP.name = DEFAULT_HANDLE_GROUP_NAME.ZPT;
 
-    this.translationXN.name = DEFAULT_HANDLE_GROUP_NAMES.XNT;
-    this.translationYN.name = DEFAULT_HANDLE_GROUP_NAMES.YNT;
-    this.translationZN.name = DEFAULT_HANDLE_GROUP_NAMES.ZNT;
+    this.translationXN.name = DEFAULT_HANDLE_GROUP_NAME.XNT;
+    this.translationYN.name = DEFAULT_HANDLE_GROUP_NAME.YNT;
+    this.translationZN.name = DEFAULT_HANDLE_GROUP_NAME.ZNT;
 
     this.translationXP.translateX(this.maxBox.x);
     this.translationYP.translateY(this.maxBox.y);
@@ -186,9 +196,9 @@ export default class Controls extends THREE.Group {
   };
 
   private setupDefaultRotation = () => {
-    this.rotationX.name = DEFAULT_HANDLE_GROUP_NAMES.XR;
-    this.rotationY.name = DEFAULT_HANDLE_GROUP_NAMES.YR;
-    this.rotationZ.name = DEFAULT_HANDLE_GROUP_NAMES.ZR;
+    this.rotationX.name = DEFAULT_HANDLE_GROUP_NAME.XR;
+    this.rotationY.name = DEFAULT_HANDLE_GROUP_NAME.YR;
+    this.rotationZ.name = DEFAULT_HANDLE_GROUP_NAME.ZR;
 
     this.rotationX.up = new THREE.Vector3(1, 0, 0);
     this.rotationY.up = new THREE.Vector3(0, 1, 0);
@@ -244,8 +254,11 @@ export default class Controls extends THREE.Group {
     const { point, handle } = args;
     if (handle instanceof TranslationGroup) {
       this.deltaPosition.copy(point).sub(this.dragIncrementalStartPoint);
-      const delta = this.deltaPosition.dot(handle.parallel.normalize());
-      this.deltaPosition.copy(handle.parallel.normalize()).multiplyScalar(delta);
+      this.normalizedHandleParallelVectorCache
+        .copy(handle.parallel.normalize())
+        .applyQuaternion(this.quaternion);
+      const delta = this.deltaPosition.dot(this.normalizedHandleParallelVectorCache);
+      this.deltaPosition.copy(this.normalizedHandleParallelVectorCache).multiplyScalar(delta);
       this.position.add(this.deltaPosition);
     } else if (handle instanceof PickGroup || handle instanceof PickPlaneGroup) {
       this.position.add(point).sub(this.dragIncrementalStartPoint);
@@ -263,8 +276,11 @@ export default class Controls extends THREE.Group {
         .copy(this.dragIncrementalStartPoint)
         .sub(this.position)
         .normalize();
+
       this.handleTargetQuaternion.setFromUnitVectors(this.touch1, this.touch2);
-      handle.quaternion.premultiply(this.handleTargetQuaternion);
+      if (this.attachMode === ATTACH_MODE.FIXED) {
+        handle.quaternion.premultiply(this.handleTargetQuaternion);
+      }
     }
 
     this.objectTargetQuaternion.premultiply(this.handleTargetQuaternion);
@@ -339,6 +355,9 @@ export default class Controls extends THREE.Group {
     }
 
     this.object.getWorldQuaternion(this.objectTargetQuaternion);
+    if (this.attachMode === ATTACH_MODE.INHERIT) {
+      this.quaternion.copy(this.objectTargetQuaternion);
+    }
 
     super.updateMatrixWorld(force);
   };

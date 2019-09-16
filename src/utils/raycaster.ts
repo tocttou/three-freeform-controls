@@ -17,6 +17,8 @@ export default class Raycaster extends THREE.Raycaster {
   private activeHandle: IHandle | null = null;
   private activePlane: THREE.Plane | null = null;
   private point = new THREE.Vector3();
+  private normal = new THREE.Vector3();
+  private controlsWorldQuaternion = new THREE.Quaternion();
 
   constructor(
     public camera: THREE.Camera,
@@ -35,24 +37,26 @@ export default class Raycaster extends THREE.Raycaster {
     Object.values(this.controls).map(controls => {
       interactiveObjects.push(...controls.getInteractiveObjects());
     });
-    this.activeHandle = this.resolveControlGroup(
-      this.intersectObjects(interactiveObjects, true)[0]
-    );
+    this.activeHandle = this.resolveHandleGroup(this.intersectObjects(interactiveObjects, true)[0]);
 
-    if (this.activeHandle !== null) {
+    if (this.activeHandle !== null && this.activeHandle.parent !== null) {
       this.activePlane = new THREE.Plane();
+      const controls = this.activeHandle.parent;
 
-      const normal =
+      controls.getWorldQuaternion(this.controlsWorldQuaternion);
+      this.normal.copy(
         this.activeHandle instanceof PickGroup
           ? this.getEyePlaneNormal(this.activeHandle)
-          : this.activeHandle.up;
+          : this.activeHandle.up
+      );
+      this.normal.applyQuaternion(this.controlsWorldQuaternion);
 
       if (this.activeHandle instanceof PickPlane) {
         this.setPickPlaneOpacity(PICK_PLANE_OPACITY.ACTIVE);
       }
 
       this.activePlane.setFromNormalAndCoplanarPoint(
-        normal,
+        this.normal,
         (this.activeHandle.parent as Controls).position
       );
 
@@ -125,7 +129,7 @@ export default class Raycaster extends THREE.Raycaster {
     }
   }
 
-  private resolveControlGroup = (intersectedObject: THREE.Intersection | undefined) => {
+  private resolveHandleGroup = (intersectedObject: THREE.Intersection | undefined) => {
     if (intersectedObject === undefined) {
       return null;
     }

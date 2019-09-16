@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import Controls, { DEFAULT_HANDLE_GROUP_NAMES, ISeparationT } from "./controls";
+import Controls, { ATTACH_MODE, DEFAULT_HANDLE_GROUP_NAME, ISeparationT } from "./controls";
 import Raycaster, { RAYCASTER_EVENTS } from "./utils/raycaster";
 import { emitter, unbindAll } from "./utils/emmiter";
 import { IHandle, PickPlaneGroup, RotationGroup, TranslationGroup } from "./controls/handles";
@@ -10,7 +10,8 @@ import PickPlane from "./controls/handles/pick-plane";
 
 export {
   RAYCASTER_EVENTS,
-  DEFAULT_HANDLE_GROUP_NAMES,
+  DEFAULT_HANDLE_GROUP_NAME,
+  ATTACH_MODE,
   Translation,
   Rotation,
   Pick,
@@ -91,12 +92,15 @@ export default class FreeformControls extends THREE.Object3D {
     });
   };
 
-  public attach: (object: THREE.Object3D) => this = object => {
+  public attach: (object: THREE.Object3D, attachMode?: ATTACH_MODE) => this = (
+    object,
+    attachMode = ATTACH_MODE.FIXED
+  ) => {
     if (this.objects.hasOwnProperty(object.id)) {
       return this;
     }
 
-    const controlsId = this.addControls(object);
+    const controlsId = this.addControls(object, attachMode);
     this.objects[object.id] = object;
     this.objectsControlsMap[object.id] = controlsId;
     return this;
@@ -118,8 +122,8 @@ export default class FreeformControls extends THREE.Object3D {
     delete this.objectsControlsMap[object.id];
   };
 
-  private addControls = (object: THREE.Object3D) => {
-    const controls = new Controls(object, this.separationT);
+  private addControls = (object: THREE.Object3D, attachMode: ATTACH_MODE) => {
+    const controls = new Controls(object, this.separationT, attachMode);
     this.controls[controls.id] = controls;
     this.add(controls);
     return controls.id;
