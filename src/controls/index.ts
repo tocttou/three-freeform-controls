@@ -1,10 +1,16 @@
 import * as THREE from "three";
-import Translation from "./handles/translation";
 import { DEFAULT_TRANSLATION_CONTROLS_SEPARATION } from "../utils/constants";
+import Translation from "./handles/translation";
 import Rotation from "./handles/rotation";
 import Pick from "./handles/pick";
 import PickPlane from "./handles/pick-plane";
-import { ISeparationT } from "../index";
+import { IHandle, PickGroup, PickPlaneGroup, RotationGroup, TranslationGroup } from "./handles";
+
+export interface ISeparationT {
+  x: number;
+  y: number;
+  z: number;
+}
 
 export enum DEFAULT_HANDLE_GROUP_NAMES {
   XPT = "xpt_handle",
@@ -21,8 +27,6 @@ export enum DEFAULT_HANDLE_GROUP_NAMES {
   PICK_PLANE_YZ = "pick_plane_yz_handle",
   PICK_PLANE_ZX = "pick_plane_zx_handle"
 }
-
-export type IHandle = Rotation | Translation | Pick | PickPlane;
 
 export default class Controls extends THREE.Group {
   private readonly pick: Pick;
@@ -230,20 +234,22 @@ export default class Controls extends THREE.Group {
     this.dragStartPoint.copy(point);
     this.dragIncrementalStartPoint.copy(point);
     this.isBeingDraggedTranslation =
-      handle instanceof Translation || handle instanceof Pick || handle instanceof PickPlane;
-    this.isBeingDraggedRotation = handle instanceof Rotation;
+      handle instanceof TranslationGroup ||
+      handle instanceof PickGroup ||
+      handle instanceof PickPlaneGroup;
+    this.isBeingDraggedRotation = handle instanceof RotationGroup;
   };
 
   processHandle = (args: { point: THREE.Vector3; handle: IHandle }) => {
     const { point, handle } = args;
-    if (handle instanceof Translation) {
+    if (handle instanceof TranslationGroup) {
       this.deltaPosition.copy(point).sub(this.dragIncrementalStartPoint);
       const delta = this.deltaPosition.dot(handle.parallel.normalize());
       this.deltaPosition.copy(handle.parallel.normalize()).multiplyScalar(delta);
       this.position.add(this.deltaPosition);
-    } else if (handle instanceof Pick || handle instanceof PickPlane) {
+    } else if (handle instanceof PickGroup || handle instanceof PickPlaneGroup) {
       this.position.add(point).sub(this.dragIncrementalStartPoint);
-    } else if (handle instanceof Rotation) {
+    } else if (handle instanceof RotationGroup) {
       this.touch1
         .copy(this.dragStartPoint)
         .sub(this.position)

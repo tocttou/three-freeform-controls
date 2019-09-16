@@ -1,8 +1,8 @@
 import * as THREE from "three";
 import Octahedron from "../../primitives/octahedron";
-import HandlesGroup from "./index";
+import { PickGroup } from "./index";
 
-export default class Pick extends HandlesGroup {
+export default class Pick extends PickGroup {
   private readonly octahedron: Octahedron;
 
   constructor() {
@@ -11,7 +11,7 @@ export default class Pick extends HandlesGroup {
     this.add(this.octahedron);
   }
 
-  public getInteractiveObjects(): THREE.Object3D[] {
+  public getInteractiveObjects(): THREE.Mesh[] {
     return [this.octahedron];
   }
 }

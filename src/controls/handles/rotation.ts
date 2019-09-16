@@ -5,10 +5,10 @@ import {
   DEFAULT_RING_RADIUS
 } from "../../utils/constants";
 import Line from "../../primitives/line";
-import HandlesGroup from "./index";
 import Octahedron from "../../primitives/octahedron";
+import { RotationGroup } from "./index";
 
-export default class Rotation extends HandlesGroup {
+export default class Rotation extends RotationGroup {
   private readonly ring: Line;
   private readonly handlebar: Octahedron;
 
@@ -30,7 +30,7 @@ export default class Rotation extends HandlesGroup {
     this.add(this.handlebar);
   }
 
-  public getInteractiveObjects(): THREE.Object3D[] {
+  public getInteractiveObjects(): THREE.Mesh[] {
     return [this.handlebar];
   }
 }

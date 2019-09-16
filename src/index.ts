@@ -1,19 +1,24 @@
 import * as THREE from "three";
-import Controls, { DEFAULT_HANDLE_GROUP_NAMES, IHandle } from "./controls";
+import Controls, { DEFAULT_HANDLE_GROUP_NAMES, ISeparationT } from "./controls";
 import Raycaster, { RAYCASTER_EVENTS } from "./utils/raycaster";
 import { emitter, unbindAll } from "./utils/emmiter";
+import { IHandle, PickPlaneGroup, RotationGroup, TranslationGroup } from "./controls/handles";
 import Translation from "./controls/handles/translation";
 import Rotation from "./controls/handles/rotation";
 import Pick from "./controls/handles/pick";
 import PickPlane from "./controls/handles/pick-plane";
 
-export { RAYCASTER_EVENTS, DEFAULT_HANDLE_GROUP_NAMES, Translation, Rotation, Pick, PickPlane };
-
-export interface ISeparationT {
-  x: number;
-  y: number;
-  z: number;
-}
+export {
+  RAYCASTER_EVENTS,
+  DEFAULT_HANDLE_GROUP_NAMES,
+  Translation,
+  Rotation,
+  Pick,
+  PickPlane,
+  PickPlaneGroup,
+  RotationGroup,
+  TranslationGroup
+};
 
 export default class FreeformControls extends THREE.Object3D {
   private objects: { [id: number]: THREE.Object3D } = {};

@@ -1,9 +1,9 @@
 import * as THREE from "three";
 import { emitter } from "./emmiter";
-import Controls, { IHandle } from "../controls";
-import Pick from "../controls/handles/pick";
+import Controls from "../controls";
 import PickPlane from "../controls/handles/pick-plane";
 import { PICK_PLANE_OPACITY } from "./constants";
+import { IHandle, PickGroup } from "../controls/handles";
 
 export enum RAYCASTER_EVENTS {
   DRAG_START = "DRAG_START",
@@ -43,7 +43,7 @@ export default class Raycaster extends THREE.Raycaster {
       this.activePlane = new THREE.Plane();
 
       const normal =
-        this.activeHandle instanceof Pick
+        this.activeHandle instanceof PickGroup
           ? this.getEyePlaneNormal(this.activeHandle)
           : this.activeHandle.up;
 
@@ -57,7 +57,7 @@ export default class Raycaster extends THREE.Raycaster {
       );
 
       const initialIntersectionPoint = new THREE.Vector3();
-      if (this.activeHandle instanceof Pick) {
+      if (this.activeHandle instanceof PickGroup) {
         this.activeHandle.getWorldPosition(initialIntersectionPoint);
       } else {
         this.ray.intersectPlane(this.activePlane, initialIntersectionPoint);

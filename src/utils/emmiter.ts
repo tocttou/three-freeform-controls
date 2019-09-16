@@ -2,7 +2,7 @@ import * as THREE from "three";
 import NanoEvents from "nanoevents";
 import unbindAllEvents from "nanoevents/unbind-all";
 import { RAYCASTER_EVENTS } from "./raycaster";
-import { IHandle } from "../controls";
+import { IHandle } from "../controls/handles";
 
 export const emitter = new NanoEvents<
   {

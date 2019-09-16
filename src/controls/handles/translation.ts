@@ -6,10 +6,10 @@ import {
   DEFAULT_CONE_RADIUS,
   DEFAULT_LINE_HEIGHT
 } from "../../utils/constants";
-import HandlesGroup from "./index";
 import Line from "../../primitives/line";
+import { TranslationGroup } from "./index";
 
-export default class Translation extends HandlesGroup {
+export default class Translation extends TranslationGroup {
   private readonly cone: Cone;
   private readonly line: Line;
   public parallel = new THREE.Vector3(0, 1, 0);
@@ -29,7 +29,7 @@ export default class Translation extends HandlesGroup {
     this.add(this.line);
   }
 
-  public getInteractiveObjects(): THREE.Object3D[] {
+  public getInteractiveObjects(): THREE.Mesh[] {
     return [this.cone];
   }
 }

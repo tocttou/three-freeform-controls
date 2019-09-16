@@ -5,10 +5,10 @@ import {
   DEFAULT_PLANE_HEIGHT,
   DEFAULT_PLANE_WIDTH
 } from "../../utils/constants";
-import HandlesGroup from "./index";
 import Line from "../../primitives/line";
+import { PickPlaneGroup } from "./index";
 
-export default class PickPlane extends HandlesGroup {
+export default class PickPlane extends PickPlaneGroup {
   public readonly plane: Plane;
   public readonly boundary: Line;
   public readonly crossX: Line;
@@ -45,7 +45,7 @@ export default class PickPlane extends HandlesGroup {
     this.add(this.crossY);
   }
 
-  public getInteractiveObjects(): THREE.Object3D[] {
+  public getInteractiveObjects(): THREE.Mesh[] {
     return [this.plane];
   }
 }
