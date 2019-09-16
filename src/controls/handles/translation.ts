@@ -1,13 +1,13 @@
 import * as THREE from "three";
-import Cone from "../primitives/cone";
+import Cone from "../../primitives/cone";
 import {
   DEFAULT_COLOR_ARROW,
   DEFAULT_CONE_HEIGHT,
   DEFAULT_CONE_RADIUS,
   DEFAULT_LINE_HEIGHT
-} from "../utils/constants";
-import HandlesGroup from "./handles-group";
-import Line from "../primitives/line";
+} from "../../utils/constants";
+import HandlesGroup from "./index";
+import Line from "../../primitives/line";
 
 export default class Translation extends HandlesGroup {
   private readonly cone: Cone;

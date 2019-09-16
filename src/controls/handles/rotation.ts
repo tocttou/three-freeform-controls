@@ -3,10 +3,10 @@ import {
   DEFAULT_COLOR_RING,
   DEFAULT_RING_NUM_POINTS,
   DEFAULT_RING_RADIUS
-} from "../utils/constants";
-import Line from "../primitives/line";
-import HandlesGroup from "./handles-group";
-import Octahedron from "../primitives/octahedron";
+} from "../../utils/constants";
+import Line from "../../primitives/line";
+import HandlesGroup from "./index";
+import Octahedron from "../../primitives/octahedron";
 
 export default class Rotation extends HandlesGroup {
   private readonly ring: Line;

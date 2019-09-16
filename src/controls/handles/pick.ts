@@ -1,6 +1,6 @@
 import * as THREE from "three";
-import Octahedron from "../primitives/octahedron";
-import HandlesGroup from "./handles-group";
+import Octahedron from "../../primitives/octahedron";
+import HandlesGroup from "./index";
 
 export default class Pick extends HandlesGroup {
   private readonly octahedron: Octahedron;

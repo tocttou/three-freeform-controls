@@ -1,9 +1,9 @@
 import * as THREE from "three";
-import Translation from "./translation";
+import Translation from "./handles/translation";
 import { DEFAULT_TRANSLATION_CONTROLS_SEPARATION } from "../utils/constants";
-import Rotation from "./rotation";
-import Pick from "./pick";
-import PickPlane from "./pick-plane";
+import Rotation from "./handles/rotation";
+import Pick from "./handles/pick";
+import PickPlane from "./handles/pick-plane";
 import { ISeparationT } from "../index";
 
 export enum DEFAULT_HANDLE_GROUP_NAMES {
@@ -52,7 +52,7 @@ export default class Controls extends THREE.Group {
   private maxBox = new THREE.Vector3();
   private dragStartPoint = new THREE.Vector3();
   private dragIncrementalStartPoint = new THREE.Vector3();
-  private handleNamesMap: { [name: string]: IHandle } = {};
+  private handleNamesMap: { [name: string]: IHandle | undefined } = {};
   public isBeingDraggedTranslation = false;
   public isBeingDraggedRotation = false;
 
@@ -79,13 +79,13 @@ export default class Controls extends THREE.Group {
     this.rotationY = new Rotation("green");
     this.rotationZ = new Rotation("blue");
 
-    this.setupTranslation();
-    this.setupRotation();
-    this.setupPickPlane();
-    this.setupPick();
+    this.setupDefaultTranslation();
+    this.setupDefaultRotation();
+    this.setupDefaultPickPlane();
+    this.setupDefaultPick();
   }
 
-  private setupPickPlane = () => {
+  private setupDefaultPickPlane = () => {
     this.pickPlaneXY.name = DEFAULT_HANDLE_GROUP_NAMES.PICK_PLANE_XY;
     this.pickPlaneYZ.name = DEFAULT_HANDLE_GROUP_NAMES.PICK_PLANE_YZ;
     this.pickPlaneZX.name = DEFAULT_HANDLE_GROUP_NAMES.PICK_PLANE_ZX;
@@ -106,7 +106,17 @@ export default class Controls extends THREE.Group {
     this.add(this.pickPlaneZX);
   };
 
-  private setupPick = () => {
+  public setupHandle = (handle: IHandle) => {
+    const existingHandle = this.handleNamesMap[handle.name];
+    if (existingHandle !== undefined) {
+      throw new Error("handle with this name already exists!");
+    }
+
+    this.handleNamesMap[handle.name] = handle;
+    this.add(handle);
+  };
+
+  private setupDefaultPick = () => {
     this.pick.name = DEFAULT_HANDLE_GROUP_NAMES.PICK;
 
     this.handleNamesMap[this.pick.name] = this.pick;
@@ -114,7 +124,7 @@ export default class Controls extends THREE.Group {
     this.add(this.pick);
   };
 
-  private setupTranslation = () => {
+  private setupDefaultTranslation = () => {
     this.translationXP.name = DEFAULT_HANDLE_GROUP_NAMES.XPT;
     this.translationYP.name = DEFAULT_HANDLE_GROUP_NAMES.YPT;
     this.translationZP.name = DEFAULT_HANDLE_GROUP_NAMES.ZPT;
@@ -171,7 +181,7 @@ export default class Controls extends THREE.Group {
     this.add(this.translationZN);
   };
 
-  private setupRotation = () => {
+  private setupDefaultRotation = () => {
     this.rotationX.name = DEFAULT_HANDLE_GROUP_NAMES.XR;
     this.rotationY.name = DEFAULT_HANDLE_GROUP_NAMES.YR;
     this.rotationZ.name = DEFAULT_HANDLE_GROUP_NAMES.ZR;
@@ -272,32 +282,26 @@ export default class Controls extends THREE.Group {
 
   public showByName = (handleName: string, visibility = true) => {
     const handle = this.handleNamesMap[handleName];
+    if (handle === undefined) {
+      throw new Error(`handle: ${handleName} not found`);
+    }
     handle.visible = visibility;
   };
 
   public showAll = (visibility = true) => {
     const handles = Object.values(this.handleNamesMap);
     handles.map(handle => {
-      handle.visible = visibility;
+      handle!.visible = visibility;
     });
   };
 
   public getInteractiveObjects(): THREE.Object3D[] {
-    return [
-      ...this.translationXP.getInteractiveObjects(),
-      ...this.translationYP.getInteractiveObjects(),
-      ...this.translationZP.getInteractiveObjects(),
-      ...this.translationXN.getInteractiveObjects(),
-      ...this.translationYN.getInteractiveObjects(),
-      ...this.translationZN.getInteractiveObjects(),
-      ...this.rotationX.getInteractiveObjects(),
-      ...this.rotationY.getInteractiveObjects(),
-      ...this.rotationZ.getInteractiveObjects(),
-      ...this.pick.getInteractiveObjects(),
-      ...this.pickPlaneXY.getInteractiveObjects(),
-      ...this.pickPlaneYZ.getInteractiveObjects(),
-      ...this.pickPlaneZX.getInteractiveObjects()
-    ];
+    const handles = Object.values(this.handleNamesMap);
+    const interactiveObjects: THREE.Object3D[] = [];
+    handles.map(handle => {
+      interactiveObjects.push(...handle!.getInteractiveObjects());
+    });
+    return interactiveObjects;
   }
 
   updateMatrixWorld = (force?: boolean) => {

@@ -1,9 +1,13 @@
 import * as THREE from "three";
-import Controls, { DEFAULT_HANDLE_GROUP_NAMES } from "./controls";
+import Controls, { DEFAULT_HANDLE_GROUP_NAMES, IHandle } from "./controls";
 import Raycaster, { RAYCASTER_EVENTS } from "./utils/raycaster";
 import { emitter, unbindAll } from "./utils/emmiter";
+import Translation from "./controls/handles/translation";
+import Rotation from "./controls/handles/rotation";
+import Pick from "./controls/handles/pick";
+import PickPlane from "./controls/handles/pick-plane";
 
-export { RAYCASTER_EVENTS, DEFAULT_HANDLE_GROUP_NAMES };
+export { RAYCASTER_EVENTS, DEFAULT_HANDLE_GROUP_NAMES, Translation, Rotation, Pick, PickPlane };
 
 export interface ISeparationT {
   x: number;
@@ -188,6 +192,9 @@ export default class FreeformControls extends THREE.Object3D {
 
   public showAll = (object: THREE.Object3D, visibility = true) =>
     this.getControlsForObject(object).showAll(visibility);
+
+  public setupHandle = (object: THREE.Object3D, handle: IHandle) =>
+    this.getControlsForObject(object).setupHandle(handle);
 
   public setUserData = (object: THREE.Object3D, userData: { [key: string]: any }) => {
     const controls = this.getControlsForObject(object);

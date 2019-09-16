@@ -1,8 +1,8 @@
 import * as THREE from "three";
 import { emitter } from "./emmiter";
 import Controls, { IHandle } from "../controls";
-import Pick from "../controls/pick";
-import PickPlane from "../controls/pick-plane";
+import Pick from "../controls/handles/pick";
+import PickPlane from "../controls/handles/pick-plane";
 import { PICK_PLANE_OPACITY } from "./constants";
 
 export enum RAYCASTER_EVENTS {
@@ -33,13 +33,16 @@ export default class Raycaster extends THREE.Raycaster {
 
     const interactiveObjects: THREE.Object3D[] = [];
     Object.values(this.controls).map(controls => {
+      if (!controls.visible) {
+        return;
+      }
       interactiveObjects.push(...controls.getInteractiveObjects());
     });
     this.activeHandle = this.resolveControlGroup(
       this.intersectObjects(interactiveObjects, true)[0]
     );
 
-    if (this.activeHandle !== null && this.activeHandle.visible) {
+    if (this.activeHandle !== null) {
       this.activePlane = new THREE.Plane();
 
       const normal =
