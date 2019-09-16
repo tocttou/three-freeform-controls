@@ -10,15 +10,18 @@ Todo list:
 - [ ] Documentation
 - [ ] Examples
 - [ ] Tests
-- [ ] Mode: Rotation around arbitrary axes
-- [ ] Mode: Inherit orientation from object
 - [ ] Eye plane rotation controls
+- [ ] Multiple freeform controls instances attached to same object
+- [ ] Damping
+- [x] Arbitrary objects as controls' handles
+- [x] Mode: Inherit orientation from object
+- [x] Rotation around arbitrary axes
 - [x] Translation controls
 - [x] Rotation controls
 - [x] Free pick controls
 - [x] Pick via places controls
 - [x] Enable/disable controls
-- [x] Multiple controls instances at once
+- [x] Multiple controls instances at once (different objects)
 - [x] Typescript
 
 ### Documentation
