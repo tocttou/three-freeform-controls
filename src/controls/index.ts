@@ -307,12 +307,14 @@ export default class Controls extends THREE.Group {
     }
   };
 
-  public showByName = (handleName: string, visibility = true) => {
-    const handle = this.handleNamesMap[handleName];
-    if (handle === undefined) {
-      throw new Error(`handle: ${handleName} not found`);
-    }
-    handle.visible = visibility;
+  public showByNames = (handleNames: string[], visibility = true) => {
+    handleNames.map(handleName => {
+      const handle = this.handleNamesMap[handleName];
+      if (handle === undefined) {
+        throw new Error(`handle: ${handleName} not found`);
+      }
+      handle.visible = visibility;
+    });
   };
 
   public showAll = (visibility = true) => {

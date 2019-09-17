@@ -11,8 +11,8 @@ Todo list:
 - [ ] Examples
 - [ ] Tests
 - [ ] Eye plane rotation controls
-- [ ] Multiple freeform controls instances attached to same object
-- [ ] Damping
+- [x] Multiple freeform controls instances attached to same object
+- [x] Damping
 - [x] Arbitrary objects as controls' handles
 - [x] Mode: Inherit orientation from object
 - [x] Rotation around arbitrary axes
