@@ -12,10 +12,9 @@ export default class Rotation extends RotationGroup {
   private readonly ring: Line;
   private readonly handlebar: Octahedron;
 
-  constructor(color = DEFAULT_COLOR_RING) {
+  constructor(color = DEFAULT_COLOR_RING, ringRadius = DEFAULT_RING_RADIUS) {
     super();
     const ringNumberOfPoints = DEFAULT_RING_NUM_POINTS;
-    const ringRadius = DEFAULT_RING_RADIUS;
     const ringGeometry = new THREE.Geometry();
     const angle = (2 * Math.PI) / ringNumberOfPoints;
     for (let i = 1; i < ringNumberOfPoints + 1; i++) {
@@ -25,7 +24,7 @@ export default class Rotation extends RotationGroup {
     }
     this.ring = new Line(color, ringGeometry);
     this.handlebar = new Octahedron(color);
-    this.handlebar.position.y = 1;
+    this.handlebar.position.y = ringRadius;
     this.add(this.ring);
     this.add(this.handlebar);
   }

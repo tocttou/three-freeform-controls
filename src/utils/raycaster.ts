@@ -4,6 +4,7 @@ import Controls from "../controls";
 import PickPlane from "../controls/handles/pick-plane";
 import { PICK_PLANE_OPACITY } from "./constants";
 import { IHandle, PickGroup } from "../controls/handles";
+import RotationEye from "../controls/handles/rotation-eye";
 
 export enum RAYCASTER_EVENTS {
   DRAG_START = "DRAG_START",
@@ -58,7 +59,10 @@ export default class Raycaster extends THREE.Raycaster {
           ? this.getEyePlaneNormal(this.activeHandle)
           : this.activeHandle.up
       );
-      this.normal.applyQuaternion(this.controlsWorldQuaternion);
+
+      if (!(this.activeHandle instanceof RotationEye)) {
+        this.normal.applyQuaternion(this.controlsWorldQuaternion);
+      }
 
       if (this.activeHandle instanceof PickPlane) {
         this.setPickPlaneOpacity(PICK_PLANE_OPACITY.ACTIVE);

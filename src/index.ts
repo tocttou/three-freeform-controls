@@ -115,7 +115,7 @@ export default class FreeformControls extends THREE.Object3D {
   };
 
   private addControls = (object: THREE.Object3D, attachMode: ATTACH_MODE) => {
-    const controls = new Controls(object, this.separationT, attachMode);
+    const controls = new Controls(object, this.camera, this.separationT, attachMode);
     this.controls[controls.id] = controls;
     this.add(controls);
     return controls;

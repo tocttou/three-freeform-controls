@@ -5,6 +5,7 @@ import Rotation from "./handles/rotation";
 import Pick from "./handles/pick";
 import PickPlane from "./handles/pick-plane";
 import { IHandle, PickGroup, PickPlaneGroup, RotationGroup, TranslationGroup } from "./handles";
+import RotationEye from "./handles/rotation-eye";
 
 export interface ISeparationT {
   x: number;
@@ -22,6 +23,7 @@ export enum DEFAULT_HANDLE_GROUP_NAME {
   XR = "xr_handle",
   YR = "yr_handle",
   ZR = "zr_handle",
+  ER = "er_handle",
   PICK = "pick_handle",
   PICK_PLANE_XY = "pick_plane_xy_handle",
   PICK_PLANE_YZ = "pick_plane_yz_handle",
@@ -47,6 +49,7 @@ export default class Controls extends THREE.Group {
   private readonly rotationX: Rotation;
   private readonly rotationY: Rotation;
   private readonly rotationZ: Rotation;
+  private readonly rotationEye: RotationEye;
   private handleTargetQuaternion = new THREE.Quaternion();
   private objectWorldPosition = new THREE.Vector3();
   private objectTargetPosition = new THREE.Vector3();
@@ -66,10 +69,11 @@ export default class Controls extends THREE.Group {
   public isBeingDraggedTranslation = false;
   public isBeingDraggedRotation = false;
   public isDampingEnabled = true;
-  public dampingFactor = 0.8;
+  private dampingFactor = 0.8;
 
   constructor(
     public object: THREE.Object3D,
+    private camera: THREE.Camera,
     private separationT?: ISeparationT,
     private attachMode: ATTACH_MODE = ATTACH_MODE.FIXED
   ) {
@@ -95,8 +99,11 @@ export default class Controls extends THREE.Group {
     this.rotationY = new Rotation("green");
     this.rotationZ = new Rotation("blue");
 
+    this.rotationEye = new RotationEye("yellow");
+
     this.setupDefaultTranslation();
     this.setupDefaultRotation();
+    this.setupDefaultEyeRotation();
     this.setupDefaultPickPlane();
     this.setupDefaultPick();
   }
@@ -134,10 +141,15 @@ export default class Controls extends THREE.Group {
 
   private setupDefaultPick = () => {
     this.pick.name = DEFAULT_HANDLE_GROUP_NAME.PICK;
-
     this.handleNamesMap[this.pick.name] = this.pick;
-
     this.add(this.pick);
+  };
+
+  private setupDefaultEyeRotation = () => {
+    this.rotationEye.name = DEFAULT_HANDLE_GROUP_NAME.ER;
+    this.handleNamesMap[this.rotationEye.name] = this.rotationEye;
+    this.rotationEye.camera = this.camera;
+    this.add(this.rotationEye);
   };
 
   private setupDefaultTranslation = () => {
@@ -252,6 +264,9 @@ export default class Controls extends THREE.Group {
     this.isBeingDraggedRotation = handle instanceof RotationGroup;
   };
 
+  public setDampingFactor = (dampingFactor = 0) =>
+    (this.dampingFactor = THREE.Math.clamp(dampingFactor, 0, 1));
+
   processHandle = (args: { point: THREE.Vector3; handle: IHandle; dragRatio?: number }) => {
     const { point, handle, dragRatio = 1 } = args;
     const k = Math.exp(-this.dampingFactor * Math.abs(dragRatio ** 3));
@@ -274,12 +289,12 @@ export default class Controls extends THREE.Group {
     } else if (handle instanceof RotationGroup) {
       this.touch1
         .copy(this.dragIncrementalStartPoint)
-        .sub(this.position)
+        .sub(this.objectWorldPosition)
         .normalize();
 
       this.touch2
         .copy(point)
-        .sub(this.position)
+        .sub(this.objectWorldPosition)
         .normalize();
 
       this.handleTargetQuaternion.setFromUnitVectors(this.touch1, this.touch2);
