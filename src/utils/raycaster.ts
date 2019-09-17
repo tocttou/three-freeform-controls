@@ -19,6 +19,9 @@ export default class Raycaster extends THREE.Raycaster {
   private point = new THREE.Vector3();
   private normal = new THREE.Vector3();
   private controlsWorldQuaternion = new THREE.Quaternion();
+  private clientDiagonalLength = 1;
+  private previousScreenPoint = new THREE.Vector2();
+  private currentScreenPoint = new THREE.Vector2();
 
   constructor(
     public camera: THREE.Camera,
@@ -32,6 +35,12 @@ export default class Raycaster extends THREE.Raycaster {
 
   private mouseDownListener = (event: MouseEvent) => {
     this.setRayDirection(event);
+
+    this.clientDiagonalLength = Math.sqrt(
+      (event.target as HTMLElement).clientWidth ** 2 +
+        (event.target as HTMLElement).clientHeight ** 2
+    );
+    this.previousScreenPoint.set(event.clientX, event.clientY);
 
     const interactiveObjects: THREE.Object3D[] = [];
     Object.values(this.controls).map(controls => {
@@ -97,7 +106,18 @@ export default class Raycaster extends THREE.Raycaster {
     }
     this.setRayDirection(event);
     this.ray.intersectPlane(this.activePlane, this.point);
-    emitter.emit(RAYCASTER_EVENTS.DRAG, { point: this.point, handle: this.activeHandle });
+
+    this.currentScreenPoint.set(event.clientX, event.clientY);
+    const distance = this.currentScreenPoint.distanceTo(this.previousScreenPoint);
+    const dragRatio = distance / this.clientDiagonalLength || 1;
+
+    emitter.emit(RAYCASTER_EVENTS.DRAG, {
+      point: this.point,
+      handle: this.activeHandle,
+      dragRatio
+    });
+
+    this.previousScreenPoint.set(event.clientX, event.clientY);
   };
 
   private mouseUpListener = () => {

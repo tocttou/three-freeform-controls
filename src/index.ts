@@ -62,7 +62,7 @@ export default class FreeformControls extends THREE.Object3D {
       });
     });
 
-    emitter.on(RAYCASTER_EVENTS.DRAG, ({ point, handle }) => {
+    emitter.on(RAYCASTER_EVENTS.DRAG, ({ point, handle, dragRatio }) => {
       if (handle === null) {
         return;
       }
@@ -70,7 +70,7 @@ export default class FreeformControls extends THREE.Object3D {
       if (controls === null) {
         return;
       }
-      controls.processHandle({ point, handle });
+      controls.processHandle({ point, handle, dragRatio });
       this.eventListeners[RAYCASTER_EVENTS.DRAG].map(callback => {
         callback(controls.object, handle.name);
       });
@@ -204,6 +204,12 @@ export default class FreeformControls extends THREE.Object3D {
 
   public setupHandle = (object: THREE.Object3D, handle: IHandle) =>
     this.getControlsForObject(object).setupHandle(handle);
+
+  public enableDamping = (object: THREE.Object3D, enable = true) =>
+    (this.getControlsForObject(object).isDampingEnabled = enable);
+
+  public setDampingFactor = (object: THREE.Object3D, dampingFactor = 0) =>
+    (this.getControlsForObject(object).dampingFactor = THREE.Math.clamp(dampingFactor, 0, 1));
 
   public setUserData = (object: THREE.Object3D, userData: { [key: string]: any }) => {
     const controls = this.getControlsForObject(object);

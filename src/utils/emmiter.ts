@@ -9,6 +9,7 @@ export const emitter = new NanoEvents<
     [event in RAYCASTER_EVENTS]: {
       point: THREE.Vector3;
       handle: IHandle | null;
+      dragRatio?: number;
     };
   }
 >();

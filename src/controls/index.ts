@@ -65,6 +65,8 @@ export default class Controls extends THREE.Group {
   private handleNamesMap: { [name: string]: IHandle | undefined } = {};
   public isBeingDraggedTranslation = false;
   public isBeingDraggedRotation = false;
+  public isDampingEnabled = true;
+  public dampingFactor = 0.8;
 
   constructor(
     public object: THREE.Object3D,
@@ -250,30 +252,33 @@ export default class Controls extends THREE.Group {
     this.isBeingDraggedRotation = handle instanceof RotationGroup;
   };
 
-  processHandle = (args: { point: THREE.Vector3; handle: IHandle }) => {
-    const { point, handle } = args;
+  processHandle = (args: { point: THREE.Vector3; handle: IHandle; dragRatio?: number }) => {
+    const { point, handle, dragRatio = 1 } = args;
+    const k = Math.exp(-this.dampingFactor * Math.abs(dragRatio ** 3));
     if (handle instanceof TranslationGroup) {
       this.deltaPosition.copy(point).sub(this.dragIncrementalStartPoint);
       this.normalizedHandleParallelVectorCache
         .copy(handle.parallel.normalize())
         .applyQuaternion(this.quaternion);
       const delta = this.deltaPosition.dot(this.normalizedHandleParallelVectorCache);
-      this.deltaPosition.copy(this.normalizedHandleParallelVectorCache).multiplyScalar(delta);
+      this.deltaPosition
+        .copy(this.normalizedHandleParallelVectorCache)
+        .multiplyScalar(this.isDampingEnabled ? k * delta : delta);
       this.position.add(this.deltaPosition);
     } else if (handle instanceof PickGroup || handle instanceof PickPlaneGroup) {
-      this.position.add(point).sub(this.dragIncrementalStartPoint);
+      this.deltaPosition
+        .copy(point)
+        .sub(this.dragIncrementalStartPoint)
+        .multiplyScalar(this.isDampingEnabled ? k : 1);
+      this.position.add(this.deltaPosition);
     } else if (handle instanceof RotationGroup) {
       this.touch1
-        .copy(this.dragStartPoint)
-        .sub(this.position)
-        .normalize();
-      this.touch2
-        .copy(point)
+        .copy(this.dragIncrementalStartPoint)
         .sub(this.position)
         .normalize();
 
-      this.touch1 // touch1 can be reused
-        .copy(this.dragIncrementalStartPoint)
+      this.touch2
+        .copy(point)
         .sub(this.position)
         .normalize();
 
