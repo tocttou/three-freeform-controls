@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import Controls, { ATTACH_MODE, DEFAULT_HANDLE_GROUP_NAME, ISeparationT } from "./controls";
+import Controls, { ANCHOR_MODE, DEFAULT_HANDLE_GROUP_NAME, IControlsOptions } from "./controls";
 import Raycaster, { RAYCASTER_EVENTS } from "./utils/raycaster";
 import { emitter, unbindAll } from "./utils/emmiter";
 import { PickPlaneGroup, RotationGroup, TranslationGroup } from "./controls/handles";
@@ -11,7 +11,7 @@ import PickPlane from "./controls/handles/pick-plane";
 export {
   RAYCASTER_EVENTS,
   DEFAULT_HANDLE_GROUP_NAME,
-  ATTACH_MODE,
+  ANCHOR_MODE,
   Translation,
   Rotation,
   Pick,
@@ -35,11 +35,7 @@ export default class FreeformControls extends THREE.Object3D {
   };
   private rayCaster: Raycaster;
 
-  constructor(
-    private camera: THREE.Camera,
-    private domElement: HTMLElement,
-    private separationT?: ISeparationT
-  ) {
+  constructor(private camera: THREE.Camera, private domElement: HTMLElement) {
     super();
     this.rayCaster = new Raycaster(this.camera, this.domElement, this.controls);
 
@@ -91,11 +87,8 @@ export default class FreeformControls extends THREE.Object3D {
     });
   };
 
-  public anchor: (object: THREE.Object3D, attachMode?: ATTACH_MODE) => Controls = (
-    object,
-    attachMode = ATTACH_MODE.FIXED
-  ) => {
-    const controls = this.addControls(object, attachMode);
+  public anchor = (object: THREE.Object3D, options?: IControlsOptions) => {
+    const controls = this.addControls(object, options);
     this.objects[object.id] = object;
     return controls;
   };
@@ -114,8 +107,8 @@ export default class FreeformControls extends THREE.Object3D {
     delete this.controls[controls.id];
   };
 
-  private addControls = (object: THREE.Object3D, attachMode: ATTACH_MODE) => {
-    const controls = new Controls(object, this.camera, this.separationT, attachMode);
+  private addControls = (object: THREE.Object3D, options?: IControlsOptions) => {
+    const controls = new Controls(object, this.camera, options);
     this.controls[controls.id] = controls;
     this.add(controls);
     return controls;

@@ -30,26 +30,37 @@ export enum DEFAULT_HANDLE_GROUP_NAME {
   PICK_PLANE_ZX = "pick_plane_zx_handle"
 }
 
-export enum ATTACH_MODE {
+export enum ANCHOR_MODE {
   FIXED = "fixed",
   INHERIT = "inherit"
 }
 
+export interface IControlsOptions {
+  mode?: ANCHOR_MODE;
+  separationT?: ISeparationT;
+  orientation?: {
+    x: number;
+    y: number;
+    z: number;
+    w: number;
+  };
+}
+
 export default class Controls extends THREE.Group {
-  private readonly pick: Pick;
-  private readonly pickPlaneXY: PickPlane;
-  private readonly pickPlaneYZ: PickPlane;
-  private readonly pickPlaneZX: PickPlane;
-  private readonly translationXP: Translation;
-  private readonly translationYP: Translation;
-  private readonly translationZP: Translation;
-  private readonly translationXN: Translation;
-  private readonly translationYN: Translation;
-  private readonly translationZN: Translation;
-  private readonly rotationX: Rotation;
-  private readonly rotationY: Rotation;
-  private readonly rotationZ: Rotation;
-  private readonly rotationEye: RotationEye;
+  public readonly pick: Pick;
+  public readonly pickPlaneXY: PickPlane;
+  public readonly pickPlaneYZ: PickPlane;
+  public readonly pickPlaneZX: PickPlane;
+  public readonly translationXP: Translation;
+  public readonly translationYP: Translation;
+  public readonly translationZP: Translation;
+  public readonly translationXN: Translation;
+  public readonly translationYN: Translation;
+  public readonly translationZN: Translation;
+  public readonly rotationX: Rotation;
+  public readonly rotationY: Rotation;
+  public readonly rotationZ: Rotation;
+  public readonly rotationEye: RotationEye;
   private handleTargetQuaternion = new THREE.Quaternion();
   private objectWorldPosition = new THREE.Vector3();
   private objectTargetPosition = new THREE.Vector3();
@@ -70,14 +81,24 @@ export default class Controls extends THREE.Group {
   public isBeingDraggedRotation = false;
   public isDampingEnabled = true;
   private dampingFactor = 0.8;
+  private initialSelfQuaternion = new THREE.Quaternion();
+  private readonly options: IControlsOptions;
+  private readonly attachMode: ANCHOR_MODE;
 
   constructor(
     public object: THREE.Object3D,
     private camera: THREE.Camera,
-    private separationT?: ISeparationT,
-    private attachMode: ATTACH_MODE = ATTACH_MODE.FIXED
+    options?: IControlsOptions
   ) {
     super();
+
+    this.options = options || {};
+    this.attachMode = this.options.mode || ANCHOR_MODE.FIXED;
+
+    if (this.options.orientation !== undefined) {
+      const { x, y, z, w } = this.options.orientation;
+      this.initialSelfQuaternion.set(x, y, z, w).normalize();
+    }
 
     this.computeObjectBounds();
 
@@ -232,8 +253,8 @@ export default class Controls extends THREE.Group {
   };
 
   private computeObjectBounds = () => {
-    if (this.separationT !== undefined) {
-      const { x, y, z } = this.separationT;
+    if (this.options.separationT !== undefined) {
+      const { x, y, z } = this.options.separationT;
       this.minBox.copy(new THREE.Vector3(-x, -y, -z));
       this.maxBox.copy(new THREE.Vector3(x, y, z));
     } else if (this.object.type === "Mesh") {
@@ -298,7 +319,7 @@ export default class Controls extends THREE.Group {
         .normalize();
 
       this.handleTargetQuaternion.setFromUnitVectors(this.touch1, this.touch2);
-      if (this.attachMode === ATTACH_MODE.FIXED) {
+      if (this.attachMode === ANCHOR_MODE.FIXED) {
         handle.quaternion.premultiply(this.handleTargetQuaternion);
       }
     }
@@ -377,8 +398,8 @@ export default class Controls extends THREE.Group {
     }
 
     this.object.getWorldQuaternion(this.objectTargetQuaternion);
-    if (this.attachMode === ATTACH_MODE.INHERIT) {
-      this.quaternion.copy(this.objectTargetQuaternion);
+    if (this.attachMode === ANCHOR_MODE.INHERIT) {
+      this.quaternion.copy(this.initialSelfQuaternion).premultiply(this.objectTargetQuaternion);
     }
 
     super.updateMatrixWorld(force);
