@@ -234,8 +234,8 @@ export default class Controls extends THREE.Group {
   private computeObjectBounds = () => {
     if (this.separationT !== undefined) {
       const { x, y, z } = this.separationT;
-      this.minBox.copy(new THREE.Vector3(-x / 2, -y / 2, -z / 2));
-      this.maxBox.copy(new THREE.Vector3(x / 2, y / 2, z / 2));
+      this.minBox.copy(new THREE.Vector3(-x, -y, -z));
+      this.maxBox.copy(new THREE.Vector3(x, y, z));
     } else if (this.object.type === "Mesh") {
       const geometry = (this.object as THREE.Mesh).geometry;
       geometry.computeBoundingBox();
