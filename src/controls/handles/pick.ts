@@ -11,7 +11,12 @@ export default class Pick extends PickGroup {
     this.add(this.octahedron);
   }
 
-  public getInteractiveObjects(): THREE.Mesh[] {
+  public getInteractiveObjects = () => {
     return [this.octahedron];
-  }
+  };
+
+  public setColor = (color: string) => {
+    const octahedronMaterial = this.octahedron.material as THREE.MeshBasicMaterial;
+    octahedronMaterial.color.set(color);
+  };
 }

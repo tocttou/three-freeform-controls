@@ -45,7 +45,14 @@ export default class PickPlane extends PickPlaneGroup {
     this.add(this.crossY);
   }
 
-  public getInteractiveObjects(): THREE.Mesh[] {
+  public getInteractiveObjects = () => {
     return [this.plane];
-  }
+  };
+
+  public setColor = (color: string) => {
+    const planeMaterial = this.plane.material as THREE.MeshBasicMaterial;
+    const boundaryMaterial = this.boundary.material as THREE.MeshBasicMaterial;
+    planeMaterial.color.set(color);
+    boundaryMaterial.color.set(color);
+  };
 }

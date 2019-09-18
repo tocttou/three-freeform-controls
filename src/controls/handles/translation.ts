@@ -29,7 +29,14 @@ export default class Translation extends TranslationGroup {
     this.add(this.line);
   }
 
-  public getInteractiveObjects(): THREE.Mesh[] {
+  public getInteractiveObjects = () => {
     return [this.cone];
-  }
+  };
+
+  public setColor = (color: string) => {
+    const coneMaterial = this.cone.material as THREE.MeshBasicMaterial;
+    const lineMaterial = this.line.material as THREE.MeshBasicMaterial;
+    coneMaterial.color.set(color);
+    lineMaterial.color.set(color);
+  };
 }

@@ -29,7 +29,14 @@ export default class Rotation extends RotationGroup {
     this.add(this.handlebar);
   }
 
-  public getInteractiveObjects(): THREE.Mesh[] {
+  public getInteractiveObjects = () => {
     return [this.handlebar];
-  }
+  };
+
+  public setColor = (color: string) => {
+    const ringMaterial = this.ring.material as THREE.MeshBasicMaterial;
+    const handlebarMaterial = this.handlebar.material as THREE.MeshBasicMaterial;
+    ringMaterial.color.set(color);
+    handlebarMaterial.color.set(color);
+  };
 }

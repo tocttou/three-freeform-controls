@@ -98,6 +98,7 @@ export default class Controls extends THREE.Group {
     if (this.options.orientation !== undefined) {
       const { x, y, z, w } = this.options.orientation;
       this.initialSelfQuaternion.set(x, y, z, w).normalize();
+      this.quaternion.copy(this.initialSelfQuaternion);
     }
 
     this.computeObjectBounds();
@@ -291,21 +292,25 @@ export default class Controls extends THREE.Group {
   processHandle = (args: { point: THREE.Vector3; handle: IHandle; dragRatio?: number }) => {
     const { point, handle, dragRatio = 1 } = args;
     const k = Math.exp(-this.dampingFactor * Math.abs(dragRatio ** 3));
+
     if (handle instanceof TranslationGroup) {
       this.deltaPosition.copy(point).sub(this.dragIncrementalStartPoint);
       this.normalizedHandleParallelVectorCache
         .copy(handle.parallel.normalize())
         .applyQuaternion(this.quaternion);
+
       const delta = this.deltaPosition.dot(this.normalizedHandleParallelVectorCache);
       this.deltaPosition
         .copy(this.normalizedHandleParallelVectorCache)
         .multiplyScalar(this.isDampingEnabled ? k * delta : delta);
+
       this.position.add(this.deltaPosition);
     } else if (handle instanceof PickGroup || handle instanceof PickPlaneGroup) {
       this.deltaPosition
         .copy(point)
         .sub(this.dragIncrementalStartPoint)
         .multiplyScalar(this.isDampingEnabled ? k : 1);
+
       this.position.add(this.deltaPosition);
     } else if (handle instanceof RotationGroup) {
       this.touch1
@@ -319,9 +324,13 @@ export default class Controls extends THREE.Group {
         .normalize();
 
       this.handleTargetQuaternion.setFromUnitVectors(this.touch1, this.touch2);
-      if (this.attachMode === ANCHOR_MODE.FIXED) {
-        handle.quaternion.premultiply(this.handleTargetQuaternion);
-      }
+
+      // handle rotation is disabled until a way is found to do this
+      // with this.options.orientation also being provided
+
+      // if (this.attachMode === ANCHOR_MODE.FIXED) {
+      //   handle.quaternion.premultiply(this.handleTargetQuaternion);
+      // }
     }
 
     this.objectTargetQuaternion.premultiply(this.handleTargetQuaternion);
