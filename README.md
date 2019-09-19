@@ -10,7 +10,7 @@ Todo list:
 - [ ] Documentation
 - [ ] Examples
 - [ ] Tests
-- [ ] Eye plane rotation controls
+- [x] Eye plane rotation controls
 - [x] Multiple freeform controls instances attached to same object
 - [x] Damping
 - [x] Arbitrary objects as controls' handles
@@ -27,39 +27,3 @@ Todo list:
 ### Documentation
 
 Work in progress. Will be updated soon.
-
-```typescript
-import FreeformControls, { RAYCASTER_EVENTS } from "three-freeform-controls";
-
-// instantiation
-const freeFormControls = new FreeformControls(camera, renderer.domElement);
-scene.add(freeFormControls);
-
-// attach (to Object3D)
-freeFormControls.attach(object);
-
-// hide specific controls
-freeFormControls.showZT(false);
-freeFormControls.showZR(false);
-freeFormControls.pickPlaneZX(false);
-freeFormControls.showPickT(false);
-
-// detach
-freeFormControls.detach(object);
-
-// events
-freeFormControls.listen(RAYCASTER_EVENTS.DRAG_START, (object: Object3D, handleName: string) => {
-  orbitControls.enabled = false;
-});
-
-freeFormControls.listen(RAYCASTER_EVENTS.DRAG, (object: Object3D, handleName: string) => {
-  console.log(object, "dragged by", handleName);
-});
-
-freeFormControls.listen(RAYCASTER_EVENTS.DRAG_STOP, (object: Object3D, handleName: string) => {
-  orbitControls.enabled = true;
-});
-
-// destroy
-freeFormControls.destroy();
-```

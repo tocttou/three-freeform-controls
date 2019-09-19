@@ -20,6 +20,7 @@ export default class Raycaster extends THREE.Raycaster {
   private point = new THREE.Vector3();
   private normal = new THREE.Vector3();
   private controlsWorldQuaternion = new THREE.Quaternion();
+  private activeHandleWorldQuaternion = new THREE.Quaternion();
   private clientDiagonalLength = 1;
   private previousScreenPoint = new THREE.Vector2();
   private currentScreenPoint = new THREE.Vector2();
@@ -108,6 +109,12 @@ export default class Raycaster extends THREE.Raycaster {
     if (this.activeHandle === null || this.activePlane === null) {
       return;
     }
+
+    if (!(this.activeHandle instanceof RotationEye)) {
+      this.activeHandle.getWorldQuaternion(this.activeHandleWorldQuaternion);
+      this.normal.applyQuaternion(this.activeHandleWorldQuaternion);
+    }
+
     this.setRayDirection(event);
     this.ray.intersectPlane(this.activePlane, this.point);
 

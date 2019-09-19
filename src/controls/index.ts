@@ -328,9 +328,9 @@ export default class Controls extends THREE.Group {
       // handle rotation is disabled until a way is found to do this
       // with this.options.orientation also being provided
 
-      // if (this.attachMode === ANCHOR_MODE.FIXED) {
-      //   handle.quaternion.premultiply(this.handleTargetQuaternion);
-      // }
+      if (this.attachMode === ANCHOR_MODE.FIXED) {
+        this.detachHandleUpdateQuaternionAttach(handle, this.handleTargetQuaternion);
+      }
     }
 
     this.objectTargetQuaternion.premultiply(this.handleTargetQuaternion);
@@ -349,6 +349,18 @@ export default class Controls extends THREE.Group {
       scene.attach(object);
       object.position.copy(this.objectTargetPosition);
       parent.attach(object);
+    }
+  };
+
+  private detachHandleUpdateQuaternionAttach = (handle: IHandle, quaternion: THREE.Quaternion) => {
+    if (this.parent !== null && this.parent.parent) {
+      const scene = this.parent.parent;
+      if (scene.type !== "Scene") {
+        throw new Error("freeform controls must be attached to the scene");
+      }
+      scene.attach(handle);
+      handle.applyQuaternion(quaternion);
+      this.attach(handle);
     }
   };
 
