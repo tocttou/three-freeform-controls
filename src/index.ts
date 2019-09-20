@@ -21,6 +21,10 @@ export {
   TranslationGroup
 };
 
+export interface IFreeformControlsOptions {
+  hideOtherHandlesOnSelect?: boolean;
+}
+
 export default class FreeformControls extends THREE.Object3D {
   private objects: { [id: number]: THREE.Object3D } = {};
   private controls: { [id: number]: Controls } = {};
@@ -35,9 +39,22 @@ export default class FreeformControls extends THREE.Object3D {
   };
   private rayCaster: Raycaster;
 
-  constructor(private camera: THREE.Camera, private domElement: HTMLElement) {
+  constructor(
+    private camera: THREE.Camera,
+    private domElement: HTMLElement,
+    private options?: IFreeformControlsOptions
+  ) {
     super();
-    this.rayCaster = new Raycaster(this.camera, this.domElement, this.controls);
+
+    const hideOtherHandlesOnSelect =
+      this.options !== undefined ? this.options.hideOtherHandlesOnSelect || true : true;
+
+    this.rayCaster = new Raycaster(
+      this.camera,
+      this.domElement,
+      this.controls,
+      hideOtherHandlesOnSelect
+    );
 
     this.listenToEvents();
   }

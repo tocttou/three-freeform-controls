@@ -19,6 +19,7 @@ export default class Raycaster extends THREE.Raycaster {
   private activePlane: THREE.Plane | null = null;
   private point = new THREE.Vector3();
   private normal = new THREE.Vector3();
+  private visibleHandles: THREE.Object3D[] = [];
   private controlsWorldQuaternion = new THREE.Quaternion();
   private activeHandleWorldQuaternion = new THREE.Quaternion();
   private clientDiagonalLength = 1;
@@ -28,7 +29,8 @@ export default class Raycaster extends THREE.Raycaster {
   constructor(
     public camera: THREE.Camera,
     private domElement: HTMLElement,
-    private controls: { [id: string]: Controls }
+    private controls: { [id: string]: Controls },
+    private hideOtherHandlesOnSelect: boolean
   ) {
     super();
     this.domElement.addEventListener("mousedown", this.mouseDownListener, false);
@@ -63,6 +65,21 @@ export default class Raycaster extends THREE.Raycaster {
 
       if (!(this.activeHandle instanceof RotationEye)) {
         this.normal.applyQuaternion(this.controlsWorldQuaternion);
+      }
+
+      if (this.hideOtherHandlesOnSelect) {
+        Object.values(this.controls).map(controls => {
+          if (!controls.visible) {
+            return;
+          }
+          controls.children.map(handle => {
+            if (handle.visible) {
+              this.visibleHandles.push(handle);
+            }
+            handle.visible = false;
+          });
+        });
+        this.activeHandle.visible = true;
       }
 
       if (this.activeHandle instanceof PickPlane) {
@@ -135,6 +152,13 @@ export default class Raycaster extends THREE.Raycaster {
     this.domElement.removeEventListener("mousemove", this.mouseMoveListener);
     this.domElement.addEventListener("mousedown", this.mouseDownListener, false);
     emitter.emit(RAYCASTER_EVENTS.DRAG_STOP, { point: this.point, handle: this.activeHandle });
+
+    if (this.hideOtherHandlesOnSelect) {
+      this.visibleHandles.map(handle => {
+        handle.visible = true;
+      });
+      this.visibleHandles = [];
+    }
 
     if (this.activeHandle instanceof PickPlane) {
       this.setPickPlaneOpacity(PICK_PLANE_OPACITY.INACTIVE);

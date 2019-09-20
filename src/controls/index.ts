@@ -324,10 +324,6 @@ export default class Controls extends THREE.Group {
         .normalize();
 
       this.handleTargetQuaternion.setFromUnitVectors(this.touch1, this.touch2);
-
-      // handle rotation is disabled until a way is found to do this
-      // with this.options.orientation also being provided
-
       if (this.attachMode === ANCHOR_MODE.FIXED) {
         this.detachHandleUpdateQuaternionAttach(handle, this.handleTargetQuaternion);
       }
