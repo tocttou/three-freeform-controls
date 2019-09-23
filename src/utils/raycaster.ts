@@ -67,7 +67,7 @@ export default class Raycaster extends THREE.Raycaster {
           : this.activeHandle.up
       );
 
-      if (!(this.activeHandle instanceof RotationEye)) {
+      if (!(this.activeHandle instanceof RotationEye || this.activeHandle instanceof PickGroup)) {
         this.normal.applyQuaternion(this.controlsWorldQuaternion);
       }
 
