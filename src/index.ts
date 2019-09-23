@@ -1,4 +1,5 @@
 import * as THREE from "three";
+import get from "lodash.get";
 import Controls, { ANCHOR_MODE, DEFAULT_HANDLE_GROUP_NAME, IControlsOptions } from "./controls";
 import Raycaster, { RAYCASTER_EVENTS } from "./utils/raycaster";
 import { emitter, unbindAll } from "./utils/emmiter";
@@ -23,6 +24,7 @@ export {
 
 export interface IFreeformControlsOptions {
   hideOtherHandlesOnSelect?: boolean;
+  showHelperPlane?: boolean;
 }
 
 export default class FreeformControls extends THREE.Object3D {
@@ -46,14 +48,12 @@ export default class FreeformControls extends THREE.Object3D {
   ) {
     super();
 
-    const hideOtherHandlesOnSelect =
-      this.options !== undefined ? this.options.hideOtherHandlesOnSelect || true : true;
-
     this.rayCaster = new Raycaster(
       this.camera,
       this.domElement,
       this.controls,
-      hideOtherHandlesOnSelect
+      get(this.options, "hideOtherHandlesOnSelect", true),
+      get(this.options, "showHelperPlane", false)
     );
 
     this.listenToEvents();

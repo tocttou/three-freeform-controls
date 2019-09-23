@@ -5,6 +5,8 @@ import PickPlane from "../controls/handles/pick-plane";
 import { PICK_PLANE_OPACITY } from "./constants";
 import { IHandle, PickGroup } from "../controls/handles";
 import RotationEye from "../controls/handles/rotation-eye";
+import Plane from "../primitives/plane";
+import Pick from "../controls/handles/pick";
 
 export enum RAYCASTER_EVENTS {
   DRAG_START = "DRAG_START",
@@ -20,6 +22,7 @@ export default class Raycaster extends THREE.Raycaster {
   private point = new THREE.Vector3();
   private normal = new THREE.Vector3();
   private visibleHandles: THREE.Object3D[] = [];
+  private helperPlane = new Plane("yellow");
   private controlsWorldQuaternion = new THREE.Quaternion();
   private activeHandleWorldQuaternion = new THREE.Quaternion();
   private clientDiagonalLength = 1;
@@ -30,7 +33,8 @@ export default class Raycaster extends THREE.Raycaster {
     public camera: THREE.Camera,
     private domElement: HTMLElement,
     private controls: { [id: string]: Controls },
-    private hideOtherHandlesOnSelect: boolean
+    private hideOtherHandlesOnSelect: boolean,
+    private showHelperPlane: boolean
   ) {
     super();
     this.domElement.addEventListener("mousedown", this.mouseDownListener, false);
@@ -82,14 +86,21 @@ export default class Raycaster extends THREE.Raycaster {
         this.activeHandle.visible = true;
       }
 
+      if (
+        this.showHelperPlane &&
+        !(this.activeHandle instanceof Pick || this.activeHandle instanceof PickPlane)
+      ) {
+        const scene = controls.parent as THREE.Scene;
+        this.helperPlane.position.copy(controls.position);
+        this.activeHandle.getWorldQuaternion(this.helperPlane.quaternion);
+        scene.add(this.helperPlane);
+      }
+
       if (this.activeHandle instanceof PickPlane) {
         this.setPickPlaneOpacity(PICK_PLANE_OPACITY.ACTIVE);
       }
 
-      this.activePlane.setFromNormalAndCoplanarPoint(
-        this.normal,
-        (this.activeHandle.parent as Controls).position
-      );
+      this.activePlane.setFromNormalAndCoplanarPoint(this.normal, controls.position);
 
       const initialIntersectionPoint = new THREE.Vector3();
       if (this.activeHandle instanceof PickGroup) {
@@ -162,6 +173,11 @@ export default class Raycaster extends THREE.Raycaster {
 
     if (this.activeHandle instanceof PickPlane) {
       this.setPickPlaneOpacity(PICK_PLANE_OPACITY.INACTIVE);
+    }
+
+    if (this.showHelperPlane && this.activeHandle !== null && this.activeHandle.parent !== null) {
+      const scene = this.activeHandle.parent.parent as THREE.Scene;
+      scene.remove(this.helperPlane);
     }
 
     this.activeHandle = null;
