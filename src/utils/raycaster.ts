@@ -68,7 +68,7 @@ export default class Raycaster extends THREE.Raycaster {
       if (!(this.activeHandle instanceof RotationEye || this.activeHandle instanceof PickGroup)) {
         this.normal.applyQuaternion(this.controlsWorldQuaternion);
       }
-      
+
       if (controls.hideOtherHandlesOnSelect) {
         Object.values(this.controls).map(controls => {
           if (!controls.visible) {
@@ -136,8 +136,9 @@ export default class Raycaster extends THREE.Raycaster {
       return;
     }
 
-    if (!(this.activeHandle instanceof RotationEye)) {
-      this.activeHandle.getWorldQuaternion(this.activeHandleWorldQuaternion);
+    this.activeHandle.getWorldQuaternion(this.activeHandleWorldQuaternion);
+    this.helperPlane.quaternion.copy(this.activeHandleWorldQuaternion);
+    if (!(this.activeHandle instanceof RotationEye || this.activeHandle instanceof PickGroup)) {
       this.normal.applyQuaternion(this.activeHandleWorldQuaternion);
     }
 
