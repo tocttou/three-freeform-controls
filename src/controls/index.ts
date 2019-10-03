@@ -319,7 +319,7 @@ export default class Controls extends THREE.Group {
         .multiplyScalar(this.isDampingEnabled ? k : 1);
 
       this.position.add(this.deltaPosition);
-    } else if (handle instanceof RotationGroup) {
+    } else {
       this.touch1
         .copy(this.dragIncrementalStartPoint)
         .sub(this.objectWorldPosition)
@@ -422,7 +422,7 @@ export default class Controls extends THREE.Group {
     }
 
     this.object.getWorldQuaternion(this.objectTargetQuaternion);
-    if (this.attachMode === ANCHOR_MODE.INHERIT) {
+    if (this.attachMode === ANCHOR_MODE.INHERIT && !this.isBeingDraggedTranslation) {
       this.quaternion.copy(this.initialSelfQuaternion).premultiply(this.objectTargetQuaternion);
     }
 
