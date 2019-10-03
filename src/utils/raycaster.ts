@@ -3,7 +3,7 @@ import { emitter } from "./emmiter";
 import Controls from "../controls";
 import PickPlane from "../controls/handles/pick-plane";
 import { PICK_PLANE_OPACITY } from "./constants";
-import { IHandle, PickGroup } from "../controls/handles";
+import { IHandle, PickGroup, TranslationGroup } from "../controls/handles";
 import RotationEye from "../controls/handles/rotation-eye";
 import Plane from "../primitives/plane";
 import Pick from "../controls/handles/pick";
@@ -32,9 +32,7 @@ export default class Raycaster extends THREE.Raycaster {
   constructor(
     public camera: THREE.Camera,
     private domElement: HTMLElement,
-    private controls: { [id: string]: Controls },
-    private hideOtherHandlesOnSelect: boolean,
-    private showHelperPlane: boolean
+    private controls: { [id: string]: Controls }
   ) {
     super();
     this.domElement.addEventListener("mousedown", this.mouseDownListener, false);
@@ -58,7 +56,7 @@ export default class Raycaster extends THREE.Raycaster {
 
     if (this.activeHandle !== null && this.activeHandle.parent !== null) {
       this.activePlane = new THREE.Plane();
-      const controls = this.activeHandle.parent;
+      const controls = this.activeHandle.parent as Controls;
 
       controls.getWorldQuaternion(this.controlsWorldQuaternion);
       this.normal.copy(
@@ -70,8 +68,8 @@ export default class Raycaster extends THREE.Raycaster {
       if (!(this.activeHandle instanceof RotationEye || this.activeHandle instanceof PickGroup)) {
         this.normal.applyQuaternion(this.controlsWorldQuaternion);
       }
-
-      if (this.hideOtherHandlesOnSelect) {
+      
+      if (controls.hideOtherHandlesOnSelect) {
         Object.values(this.controls).map(controls => {
           if (!controls.visible) {
             return;
@@ -87,7 +85,7 @@ export default class Raycaster extends THREE.Raycaster {
       }
 
       if (
-        this.showHelperPlane &&
+        controls.showHelperPlane &&
         !(this.activeHandle instanceof Pick || this.activeHandle instanceof PickPlane)
       ) {
         const scene = controls.parent as THREE.Scene;
@@ -164,7 +162,11 @@ export default class Raycaster extends THREE.Raycaster {
     this.domElement.addEventListener("mousedown", this.mouseDownListener, false);
     emitter.emit(RAYCASTER_EVENTS.DRAG_STOP, { point: this.point, handle: this.activeHandle });
 
-    if (this.hideOtherHandlesOnSelect) {
+    if (
+      this.activeHandle !== null &&
+      this.activeHandle.parent !== null &&
+      (this.activeHandle.parent as Controls).hideOtherHandlesOnSelect
+    ) {
       this.visibleHandles.map(handle => {
         handle.visible = true;
       });
@@ -175,7 +177,11 @@ export default class Raycaster extends THREE.Raycaster {
       this.setPickPlaneOpacity(PICK_PLANE_OPACITY.INACTIVE);
     }
 
-    if (this.showHelperPlane && this.activeHandle !== null && this.activeHandle.parent !== null) {
+    if (
+      this.activeHandle !== null &&
+      this.activeHandle.parent !== null &&
+      (this.activeHandle.parent as Controls).showHelperPlane
+    ) {
       const scene = this.activeHandle.parent.parent as THREE.Scene;
       scene.remove(this.helperPlane);
     }

@@ -6,6 +6,7 @@ import Pick from "./handles/pick";
 import PickPlane from "./handles/pick-plane";
 import { IHandle, PickGroup, PickPlaneGroup, RotationGroup, TranslationGroup } from "./handles";
 import RotationEye from "./handles/rotation-eye";
+import get from "lodash.get";
 
 export interface ISeparationT {
   x: number;
@@ -44,6 +45,8 @@ export interface IControlsOptions {
     z: number;
     w: number;
   };
+  hideOtherHandlesOnSelect?: boolean;
+  showHelperPlane?: boolean;
 }
 
 export default class Controls extends THREE.Group {
@@ -81,6 +84,8 @@ export default class Controls extends THREE.Group {
   public isBeingDraggedRotation = false;
   public isDampingEnabled = true;
   private dampingFactor = 0.8;
+  public hideOtherHandlesOnSelect?: boolean;
+  public showHelperPlane?: boolean;
   private initialSelfQuaternion = new THREE.Quaternion();
   private readonly options: IControlsOptions;
   private readonly attachMode: ANCHOR_MODE;
@@ -93,7 +98,9 @@ export default class Controls extends THREE.Group {
     super();
 
     this.options = options || {};
-    this.attachMode = this.options.mode || ANCHOR_MODE.FIXED;
+    this.attachMode = get(this.options, "mode", ANCHOR_MODE.FIXED);
+    this.hideOtherHandlesOnSelect = get(this.options, "hideOtherHandlesOnSelect", true);
+    this.showHelperPlane = get(this.options, "showHelperPlane", false);
 
     if (this.options.orientation !== undefined) {
       const { x, y, z, w } = this.options.orientation;
