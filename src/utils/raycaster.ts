@@ -3,7 +3,7 @@ import { emitter } from "./emmiter";
 import Controls from "../controls";
 import PickPlane from "../controls/handles/pick-plane";
 import { PICK_PLANE_OPACITY } from "./constants";
-import { IHandle, PickGroup, TranslationGroup } from "../controls/handles";
+import { IHandle, PickGroup } from "../controls/handles";
 import RotationEye from "../controls/handles/rotation-eye";
 import Plane from "../primitives/plane";
 import Pick from "../controls/handles/pick";
@@ -138,9 +138,6 @@ export default class Raycaster extends THREE.Raycaster {
 
     this.activeHandle.getWorldQuaternion(this.activeHandleWorldQuaternion);
     this.helperPlane.quaternion.copy(this.activeHandleWorldQuaternion);
-    if (!(this.activeHandle instanceof RotationEye || this.activeHandle instanceof PickGroup)) {
-      this.normal.applyQuaternion(this.activeHandleWorldQuaternion);
-    }
 
     this.setRayDirection(event);
     this.ray.intersectPlane(this.activePlane, this.point);
@@ -168,7 +165,7 @@ export default class Raycaster extends THREE.Raycaster {
       this.activeHandle.parent !== null &&
       (this.activeHandle.parent as Controls).hideOtherHandlesOnSelect
     ) {
-      this.visibleHandles.map(handle => {
+      this.visibleHandles.forEach(handle => {
         handle.visible = true;
       });
       this.visibleHandles = [];
