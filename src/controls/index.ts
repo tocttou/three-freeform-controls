@@ -46,6 +46,7 @@ export interface IControlsOptions {
     w: number;
   };
   hideOtherHandlesOnSelect?: boolean;
+  hideOtherControlsInstancesOnSelect?: boolean;
   showHelperPlane?: boolean;
 }
 
@@ -85,6 +86,7 @@ export default class Controls extends THREE.Group {
   public isDampingEnabled = true;
   private dampingFactor = 0.8;
   public hideOtherHandlesOnSelect?: boolean;
+  public hideOtherControlsInstancesOnSelect?: boolean;
   public showHelperPlane?: boolean;
   private initialSelfQuaternion = new THREE.Quaternion();
   private readonly options: IControlsOptions;
@@ -100,6 +102,11 @@ export default class Controls extends THREE.Group {
     this.options = options || {};
     this.attachMode = get(this.options, "mode", ANCHOR_MODE.FIXED);
     this.hideOtherHandlesOnSelect = get(this.options, "hideOtherHandlesOnSelect", true);
+    this.hideOtherControlsInstancesOnSelect = get(
+      this.options,
+      "hideOtherControlsInstancesOnSelect",
+      true
+    );
     this.showHelperPlane = get(this.options, "showHelperPlane", false);
 
     if (this.options.orientation !== undefined) {

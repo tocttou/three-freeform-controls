@@ -22,6 +22,7 @@ export default class Raycaster extends THREE.Raycaster {
   private point = new THREE.Vector3();
   private normal = new THREE.Vector3();
   private visibleHandles: THREE.Object3D[] = [];
+  private visibleControls: THREE.Object3D[] = [];
   private helperPlane = new Plane("yellow");
   private controlsWorldQuaternion = new THREE.Quaternion();
   private activeHandleWorldQuaternion = new THREE.Quaternion();
@@ -69,17 +70,22 @@ export default class Raycaster extends THREE.Raycaster {
         this.normal.applyQuaternion(this.controlsWorldQuaternion);
       }
 
-      if (controls.hideOtherHandlesOnSelect) {
-        Object.values(this.controls).map(controls => {
-          if (!controls.visible) {
-            return;
+      if (controls.hideOtherControlsInstancesOnSelect) {
+        Object.values(this.controls).forEach(x => {
+          if (x.visible) {
+            this.visibleControls.push(x);
           }
-          controls.children.map(handle => {
-            if (handle.visible) {
-              this.visibleHandles.push(handle);
-            }
-            handle.visible = false;
-          });
+          x.visible = false;
+        });
+        controls.visible = true;
+      }
+
+      if (controls.hideOtherHandlesOnSelect) {
+        controls.children.map(handle => {
+          if (handle.visible) {
+            this.visibleHandles.push(handle);
+          }
+          handle.visible = false;
         });
         this.activeHandle.visible = true;
       }
@@ -159,6 +165,17 @@ export default class Raycaster extends THREE.Raycaster {
     this.domElement.removeEventListener("mousemove", this.mouseMoveListener);
     this.domElement.addEventListener("mousedown", this.mouseDownListener, false);
     emitter.emit(RAYCASTER_EVENTS.DRAG_STOP, { point: this.point, handle: this.activeHandle });
+
+    if (
+      this.activeHandle !== null &&
+      this.activeHandle.parent !== null &&
+      (this.activeHandle.parent as Controls).hideOtherControlsInstancesOnSelect
+    ) {
+      this.visibleControls.forEach(controls => {
+        controls.visible = true;
+      });
+      this.visibleControls = [];
+    }
 
     if (
       this.activeHandle !== null &&
