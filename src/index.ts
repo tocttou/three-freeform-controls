@@ -9,20 +9,7 @@ import Rotation from "./controls/handles/rotation";
 import Pick from "./controls/handles/pick";
 import PickPlane from "./controls/handles/pick-plane";
 
-export {
-  RAYCASTER_EVENTS,
-  DEFAULT_HANDLE_GROUP_NAME,
-  ANCHOR_MODE,
-  Translation,
-  Rotation,
-  Pick,
-  PickPlane,
-  PickPlaneGroup,
-  RotationGroup,
-  TranslationGroup
-};
-
-export default class FreeformControls extends THREE.Object3D {
+class ControlsManger extends THREE.Object3D {
   private objects: { [id: number]: THREE.Object3D } = {};
   private controls: { [id: number]: Controls } = {};
   private eventListeners: {
@@ -36,12 +23,9 @@ export default class FreeformControls extends THREE.Object3D {
   };
   private rayCaster: Raycaster;
 
-  constructor(
-    private camera: THREE.Camera,
-    private domElement: HTMLElement,
-  ) {
+  constructor(private camera: THREE.Camera, private domElement: HTMLElement) {
     super();
-    this.rayCaster = new Raycaster(this.camera,this.domElement,this.controls);
+    this.rayCaster = new Raycaster(this.camera, this.domElement, this.controls);
     this.listenToEvents();
   }
 
@@ -170,3 +154,17 @@ export default class FreeformControls extends THREE.Object3D {
     };
   };
 }
+
+export {
+  RAYCASTER_EVENTS,
+  DEFAULT_HANDLE_GROUP_NAME,
+  ANCHOR_MODE,
+  Translation,
+  Rotation,
+  Pick,
+  PickPlane,
+  PickPlaneGroup,
+  RotationGroup,
+  TranslationGroup,
+  ControlsManger
+};
