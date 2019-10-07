@@ -1,6 +1,6 @@
 {
   "name": "three-freeform-controls",
-  "version": "0.0.11",
+  "version": "0.0.12",
   "description": "",
   "keywords": [],
   "main": "dist/three-freeform-controls.umd.js",
@@ -93,7 +93,6 @@
     "jest": "^24.9.0",
     "jest-config": "^24.9.0",
     "lint-staged": "^9.2.5",
-    "lodash.camelcase": "^4.3.0",
     "prettier": "^1.18.2",
     "prompt": "^1.0.0",
     "replace-in-file": "^4.1.3",
