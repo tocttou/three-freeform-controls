@@ -9,6 +9,8 @@ This library provides rotation and translation controls for [THREE.JS](https://t
 
 ### [Documentation](https://ashishchaudhary.in/three-freeform-controls)
 
+![screenshot](https://i.imgur.com/cTJTG9o.png)
+
 ---
 
 ### The following features are currently supported:
