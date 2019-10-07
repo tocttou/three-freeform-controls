@@ -1,0 +1,23 @@
+title: three-freeform-controls
+email: iamashishchaudhary@gmail.com
+description: >-
+  A 6DOF controls library for threejs objects
+baseurl: "/three-freeform-controls"
+url: "https://ashishchaudhary.in"
+
+exclude: ["node_modules/", "*.gemspec", "*.gem", "Gemfile", "Gemfile.lock", "package.json", "package-lock.json",  "script/", "LICENSE.txt", "lib/", "bin/", "README.md", "Rakefile", ".idea/"]
+
+
+# Theme settings
+search_enabled: false
+aux_links:
+  "GitHub":
+    - "//github.com/tocttou/three-freeform-controls"
+footer_content: "MIT License"
+ga_tracking: UA-67838485-3
+
+# Build settings
+markdown: kramdown
+theme: "just-the-docs"
+plugins:
+  - jekyll-feed
