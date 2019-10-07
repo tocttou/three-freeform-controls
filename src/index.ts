@@ -9,7 +9,7 @@ import Rotation from "./controls/handles/rotation";
 import Pick from "./controls/handles/pick";
 import PickPlane from "./controls/handles/pick-plane";
 
-class ControlsManger extends THREE.Object3D {
+class ControlsManager extends THREE.Object3D {
   private objects: { [id: number]: THREE.Object3D } = {};
   private controls: { [id: number]: Controls } = {};
   private eventListeners: {
@@ -166,5 +166,5 @@ export {
   PickPlaneGroup,
   RotationGroup,
   TranslationGroup,
-  ControlsManger
+  ControlsManager
 };
