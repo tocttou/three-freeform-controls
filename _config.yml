@@ -13,7 +13,6 @@ search_enabled: false
 aux_links:
   "GitHub":
     - "//github.com/tocttou/three-freeform-controls"
-footer_content: "MIT License"
 ga_tracking: UA-67838485-3
 
 # Build settings
