@@ -61,4 +61,4 @@ An attached listener function can be removed like this:
 controlsManager.removeListen(RAYCASTER_EVENTS.DRAG, listenerFn);
 ```
 
-An example illustrating these events can be accessed here.
+An example illustrating these events can be accessed [here]({{ site.baseurl }}/examples/events.html){:target="_blank"}.

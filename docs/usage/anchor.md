@@ -67,14 +67,14 @@ const controls = controlsManager.anchor(
 ### Different anchors on different objects
 
 The `controlsManager` can be used to anchor the controls on more than one object as well.
-An example illustrating the different anchor modes on different objects can be accessed [here]({{ site.baseurl }}/examples/different-anchors-different-objects).
+An example illustrating the different anchor modes on different objects can be accessed [here]({{ site.baseurl }}/examples/different-anchors-different-objects){:target="_blank"}.
 
 ### Different anchors on the same object
 
 Sometimes it is necessary to have some controls handles behave differently (or perhaps at different orientation) than others. In that case the `controlsManager` can be used to anchor different partial controls on the same object.
 More on partial controls in [Partial Controls]({{ site.baseurl }}/docs/partial-controls).
 
-An example illustrating different anchor modes for multiple partial controls on the same object can be accessed [here]({{ site.baseurl }}/examples/different-anchors-same-object).
+An example illustrating different anchor modes for multiple partial controls on the same object can be accessed [here]({{ site.baseurl }}/examples/different-anchors-same-object){:target="_blank"}.
 
 ## detach
 

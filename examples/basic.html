@@ -1,64 +1,67 @@
 <html lang="en">
-  <head>
-    <title>Basic Example</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/109/three.min.js"></script>
-    <script src="https://threejs.org/examples/js/controls/OrbitControls.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three-freeform-controls@0.0.15/dist/three-freeform-controls.umd.js"></script>
-    <style>
-      html,
-      body {
-        width: 100%;
-        height: 100%;
-        overflow: hidden;
-        margin: unset;
-      }
-    </style>
-  </head>
-  <body>
-    <script>
-      // setup the scene
-      const renderer = new THREE.WebGLRenderer({
+<head>
+  <title>Basic Example</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/109/three.min.js"></script>
+  <script src="https://threejs.org/examples/js/controls/OrbitControls.js"></script>
+  <script
+    src="https://cdn.jsdelivr.net/npm/three-freeform-controls@0.0.15/dist/three-freeform-controls.umd.js"></script>
+  <style>
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      margin: unset;
+    }
+  </style>
+</head>
+<body>
+<script>
+    // setup the scene
+    const renderer = new THREE.WebGLRenderer({
         antialias: true
-      });
-      renderer.setSize(window.innerWidth, window.innerHeight);
-      document.body.appendChild(renderer.domElement);
-      const scene = new THREE.Scene();
-      const camera = new THREE.PerspectiveCamera(
+    });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.body.appendChild(renderer.domElement);
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(
         45,
         window.innerWidth / window.innerHeight,
         1,
         10000
-      );
-      const orbitControls = new THREE.OrbitControls(camera, renderer.domElement);
-      camera.position.set(0, 2, 5);
-      const gridHelper = new THREE.GridHelper(20, 20, 0x333333, 0x222222);
-      gridHelper.position.y -= 0.51;
-      scene.add(gridHelper);
-      const box = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), new THREE.MeshNormalMaterial());
-      scene.add(box);
-      function animate() {
+    );
+    const orbitControls = new THREE.OrbitControls(camera, renderer.domElement);
+    camera.position.set(0, 2, 5);
+    const gridHelper = new THREE.GridHelper(20, 20, 0x333333, 0x222222);
+    gridHelper.position.y -= 0.51;
+    scene.add(gridHelper);
+    const box = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), new THREE.MeshNormalMaterial());
+    scene.add(box);
+
+    function animate() {
         requestAnimationFrame(animate);
         orbitControls.update();
         renderer.render(scene, camera);
-      }
-      animate();
+    }
 
-      <!-- three-freeform-controls -->
+    animate();
 
-      // initialize three-freeform-controls
-      const controlsManager = new FreeformControls.ControlsManager(camera, renderer.domElement);
-      scene.add(controlsManager);
+    <!-- three-freeform-controls -->
 
-      // anchor controls to the box
-      const controls = controlsManager.anchor(box);
+    // initialize three-freeform-controls
+    const controlsManager = new FreeformControls.ControlsManager(camera, renderer.domElement);
+    scene.add(controlsManager);
 
-      // disable orbit controls while the freeform-controls are in use
-      controlsManager.listen(FreeformControls.RAYCASTER_EVENTS.DRAG_START, () => {
+    // anchor controls to the box
+    const controls = controlsManager.anchor(box);
+
+    // disable orbit controls while the freeform-controls are in use
+    controlsManager.listen(FreeformControls.RAYCASTER_EVENTS.DRAG_START, () => {
         orbitControls.enabled = false;
-      });
-      controlsManager.listen(FreeformControls.RAYCASTER_EVENTS.DRAG_STOP, () => {
+    });
+    controlsManager.listen(FreeformControls.RAYCASTER_EVENTS.DRAG_STOP, () => {
         orbitControls.enabled = true;
-      });
-    </script>
-  </body>
+    });
+</script>
+</body>
 </html>
