@@ -1,6 +1,6 @@
 {
   "name": "three-freeform-controls",
-  "version": "0.0.14",
+  "version": "0.0.17",
   "description": "",
   "keywords": [],
   "main": "dist/three-freeform-controls.umd.js",
@@ -102,6 +102,7 @@
     "rollup-plugin-json": "^4.0.0",
     "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-peer-deps-external": "^2.2.0",
+    "rollup-plugin-replace": "^2.2.0",
     "rollup-plugin-sourcemaps": "^0.4.2",
     "rollup-plugin-typescript2": "^0.24.0",
     "shelljs": "^0.8.3",
