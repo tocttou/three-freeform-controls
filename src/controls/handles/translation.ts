@@ -29,6 +29,9 @@ export default class Translation extends TranslationGroup {
     this.add(this.line);
   }
 
+  /**
+   * @hidden
+   */
   public getInteractiveObjects = () => {
     return [this.cone];
   };

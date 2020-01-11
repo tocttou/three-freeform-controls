@@ -18,7 +18,7 @@ export enum PICK_PLANE_OPACITY {
   INACTIVE = 0.3
 }
 
-export const DEFAULT_TRANSLATION_CONTROLS_SEPARATION = 0.5;
+export const DEFAULT_CONTROLS_SEPARATION = 0.5;
 
 export const DEFAULT_COLOR_ARROW = "#f0ff00";
 export const DEFAULT_COLOR_RING = "#f0ff00";

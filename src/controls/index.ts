@@ -1,69 +1,152 @@
 import * as THREE from "three";
-import { DEFAULT_TRANSLATION_CONTROLS_SEPARATION } from "../utils/constants";
+import { DEFAULT_CONTROLS_SEPARATION } from "../utils/constants";
 import Translation from "./handles/translation";
 import Rotation from "./handles/rotation";
 import Pick from "./handles/pick";
 import PickPlane from "./handles/pick-plane";
-import { IHandle, PickGroup, PickPlaneGroup, RotationGroup, TranslationGroup } from "./handles";
+import {
+  DEFAULT_HANDLE_GROUP_NAME,
+  IHandle,
+  PickGroup,
+  PickPlaneGroup,
+  RotationGroup,
+  TranslationGroup
+} from "./handles";
 import RotationEye from "./handles/rotation-eye";
-import get from "lodash.get";
-
-export interface ISeparationT {
-  x: number;
-  y: number;
-  z: number;
-}
-
-export enum DEFAULT_HANDLE_GROUP_NAME {
-  XPT = "xpt_handle",
-  YPT = "ypt_handle",
-  ZPT = "zpt_handle",
-  XNT = "xnt_handle",
-  YNT = "ynt_handle",
-  ZNT = "znt_handle",
-  XR = "xr_handle",
-  YR = "yr_handle",
-  ZR = "zr_handle",
-  ER = "er_handle",
-  PICK = "pick_handle",
-  PICK_PLANE_XY = "pick_plane_xy_handle",
-  PICK_PLANE_YZ = "pick_plane_yz_handle",
-  PICK_PLANE_ZX = "pick_plane_zx_handle"
-}
 
 export enum ANCHOR_MODE {
+  /**
+   * In this mode the Controls do not inherit the orientation of the object
+   * as it is rotated.
+   */
   FIXED = "fixed",
+  /**
+   * In this mode the Controls rotate as the object is rotated.
+   */
   INHERIT = "inherit"
 }
 
 export interface IControlsOptions {
+  /**
+   * the anchor mode for the controls
+   * @default [[ANCHOR_MODE.FIXED]]
+   */
   mode?: ANCHOR_MODE;
-  separationT?: ISeparationT;
+  /**
+   * distance between the position of the object and the position of the
+   * handles (in case of translation handles), or the radius (in case of rotation handles),
+   * or the size of the plane (in case of plane handles)
+   * @default 0.5
+   */
+  separation?: number;
+  /**
+   * uses THREE.Mesh.computeBounds to set the separation; if separation
+   * is provided in addition to this option, it is added to the computed bounds
+   * @default false
+   */
+  useComputedBounds?: boolean;
+  /**
+   * the quaternion applied to the whole Controls instance (handles get rotated relatively)
+   * @default undefined
+   */
   orientation?: {
     x: number;
     y: number;
     z: number;
     w: number;
   };
-  hideOtherHandlesOnSelect?: boolean;
-  hideOtherControlsInstancesOnSelect?: boolean;
+  /**
+   * hides other handles of a Controls instance when drag starts
+   * @default true
+   */
+  hideOtherHandlesOnDrag?: boolean;
+  /**
+   *  hides all other Controls instances when drag starts
+   *  @default true
+   */
+  hideOtherControlsInstancesOnDrag?: boolean;
+  /**
+   * displays the plane in which the drag interaction takes place
+   * (useful for debugging)
+   * @default false
+   */
   showHelperPlane?: boolean;
+  /**
+   * enables damping for the controls
+   * @default true
+   */
+  isDampingEnabled?: boolean;
 }
 
+/**
+ * Controls is the main class in this library.
+ * It is a subclass of THREE.Group, so its properties like `position` and
+ * `quaternion` can be modified as desired.
+ * The `children` are the control handles (like `rotationX`).
+ * All translations and rotations are setup with respect to the global coordinate system.
+ */
 export default class Controls extends THREE.Group {
+  /**
+   * handle which translates the object in the eye-plane
+   */
   public readonly pick: Pick;
+  /**
+   * handle which translates the object in XY plane
+   */
   public readonly pickPlaneXY: PickPlane;
+  /**
+   * handle which translates the object in YZ plane
+   */
   public readonly pickPlaneYZ: PickPlane;
+  /**
+   * handle which translates the object in ZX plane
+   */
   public readonly pickPlaneZX: PickPlane;
+  /**
+   * handle which translates the object along the x-axis; displayed in the
+   * +ve x-axis direction
+   */
   public readonly translationXP: Translation;
+  /**
+   * handle which translates the object along the y-axis; displayed in the
+   * +ve y-axis direction
+   */
   public readonly translationYP: Translation;
+  /**
+   * handle which translates the object along the z-axis; displayed in the
+   * +ve z-axis direction
+   */
   public readonly translationZP: Translation;
+  /**
+   * handle which translates the object along the x-axis; displayed in the
+   * -ve x-axis direction
+   */
   public readonly translationXN: Translation;
+  /**
+   * handle which translates the object along the y-axis; displayed in the
+   * -ve y-axis direction
+   */
   public readonly translationYN: Translation;
+  /**
+   * handle which translates the object along the z-axis; displayed in the
+   * -ve z-axis direction
+   */
   public readonly translationZN: Translation;
+  /**
+   * handle which rotates the object along the x-axis
+   */
   public readonly rotationX: Rotation;
+  /**
+   * handle which rotates the object along the y-axis
+   */
   public readonly rotationY: Rotation;
+  /**
+   * handle which rotates the object along the z-axis
+   */
   public readonly rotationZ: Rotation;
+  /**
+   * handle which rotates the object in the eye-plane
+   */
   public readonly rotationEye: RotationEye;
   private handleTargetQuaternion = new THREE.Quaternion();
   private objectWorldPosition = new THREE.Vector3();
@@ -80,18 +163,43 @@ export default class Controls extends THREE.Group {
   private maxBox = new THREE.Vector3();
   private dragStartPoint = new THREE.Vector3();
   private dragIncrementalStartPoint = new THREE.Vector3();
-  private handleNamesMap: { [name: string]: IHandle | undefined } = {};
+  private handles: Set<IHandle> = new Set();
   private isBeingDraggedTranslation = false;
   private isBeingDraggedRotation = false;
-  public isDampingEnabled = true;
   private dampingFactor = 0.8;
-  public hideOtherHandlesOnSelect?: boolean;
-  public hideOtherControlsInstancesOnSelect?: boolean;
-  public showHelperPlane?: boolean;
+  private readonly useComputedBounds: boolean;
+  private readonly separation: number;
   private initialSelfQuaternion = new THREE.Quaternion();
   private readonly options: IControlsOptions;
-  private readonly attachMode: ANCHOR_MODE;
+  private readonly mode: ANCHOR_MODE;
+  /**
+   * enables damping for the controls
+   * @default true
+   */
+  public isDampingEnabled: boolean;
+  /**
+   * hides other handles of a Controls instance when drag starts
+   * @default true
+   */
+  public hideOtherHandlesOnDrag: boolean;
+  /**
+   *  hides all other Controls instances when drag starts
+   *  @default true
+   */
+  public hideOtherControlsInstancesOnDrag: boolean;
+  /**
+   * displays the plane in which the drag interaction takes place
+   * (useful for debugging)
+   * @default false
+   */
+  public showHelperPlane: boolean;
 
+  /**
+   *
+   * @param object - the object provided by the user
+   * @param camera - the THREE.Camera instance used in the scene
+   * @param options
+   */
   constructor(
     public object: THREE.Object3D,
     private camera: THREE.Camera,
@@ -100,14 +208,13 @@ export default class Controls extends THREE.Group {
     super();
 
     this.options = options || {};
-    this.attachMode = get(this.options, "mode", ANCHOR_MODE.FIXED);
-    this.hideOtherHandlesOnSelect = get(this.options, "hideOtherHandlesOnSelect", true);
-    this.hideOtherControlsInstancesOnSelect = get(
-      this.options,
-      "hideOtherControlsInstancesOnSelect",
-      true
-    );
-    this.showHelperPlane = get(this.options, "showHelperPlane", false);
+    this.mode = this.options?.mode ?? ANCHOR_MODE.FIXED;
+    this.hideOtherHandlesOnDrag = this.options?.hideOtherHandlesOnDrag ?? true;
+    this.hideOtherControlsInstancesOnDrag = this.options?.hideOtherControlsInstancesOnDrag ?? true;
+    this.showHelperPlane = this.options?.showHelperPlane ?? false;
+    this.useComputedBounds = this.options?.useComputedBounds ?? false;
+    this.separation = this.options?.separation ?? DEFAULT_CONTROLS_SEPARATION;
+    this.isDampingEnabled = this.options?.isDampingEnabled ?? true;
 
     if (this.options.orientation !== undefined) {
       const { x, y, z, w } = this.options.orientation;
@@ -156,36 +263,25 @@ export default class Controls extends THREE.Group {
     this.pickPlaneYZ.rotateY(Math.PI / 2);
     this.pickPlaneZX.rotateX(Math.PI / 2);
 
-    this.handleNamesMap[this.pickPlaneXY.name] = this.pickPlaneXY;
-    this.handleNamesMap[this.pickPlaneYZ.name] = this.pickPlaneYZ;
-    this.handleNamesMap[this.pickPlaneZX.name] = this.pickPlaneZX;
-
-    this.add(this.pickPlaneXY);
-    this.add(this.pickPlaneYZ);
-    this.add(this.pickPlaneZX);
+    this.setupHandle(this.pickPlaneXY);
+    this.setupHandle(this.pickPlaneYZ);
+    this.setupHandle(this.pickPlaneZX);
   };
 
   public setupHandle = (handle: IHandle) => {
-    const existingHandle = this.handleNamesMap[handle.name];
-    if (existingHandle !== undefined) {
-      throw new Error("handle with this name already exists!");
-    }
-
-    this.handleNamesMap[handle.name] = handle;
+    this.handles.add(handle);
     this.add(handle);
   };
 
   private setupDefaultPick = () => {
     this.pick.name = DEFAULT_HANDLE_GROUP_NAME.PICK;
-    this.handleNamesMap[this.pick.name] = this.pick;
-    this.add(this.pick);
+    this.setupHandle(this.pick);
   };
 
   private setupDefaultEyeRotation = () => {
     this.rotationEye.name = DEFAULT_HANDLE_GROUP_NAME.ER;
-    this.handleNamesMap[this.rotationEye.name] = this.rotationEye;
     this.rotationEye.camera = this.camera;
-    this.add(this.rotationEye);
+    this.setupHandle(this.rotationEye);
   };
 
   private setupDefaultTranslation = () => {
@@ -228,21 +324,13 @@ export default class Controls extends THREE.Group {
     this.translationYN.parallel = new THREE.Vector3(0, -1, 0);
     this.translationZN.parallel = new THREE.Vector3(0, 0, -1);
 
-    this.handleNamesMap[this.translationXP.name] = this.translationXP;
-    this.handleNamesMap[this.translationYP.name] = this.translationYP;
-    this.handleNamesMap[this.translationZP.name] = this.translationZP;
+    this.setupHandle(this.translationXP);
+    this.setupHandle(this.translationYP);
+    this.setupHandle(this.translationZP);
 
-    this.handleNamesMap[this.translationXN.name] = this.translationXN;
-    this.handleNamesMap[this.translationYN.name] = this.translationYN;
-    this.handleNamesMap[this.translationZN.name] = this.translationZN;
-
-    this.add(this.translationXP);
-    this.add(this.translationYP);
-    this.add(this.translationZP);
-
-    this.add(this.translationXN);
-    this.add(this.translationYN);
-    this.add(this.translationZN);
+    this.setupHandle(this.translationXN);
+    this.setupHandle(this.translationYN);
+    this.setupHandle(this.translationZN);
   };
 
   private setupDefaultRotation = () => {
@@ -254,41 +342,46 @@ export default class Controls extends THREE.Group {
     this.rotationY.up = new THREE.Vector3(0, 1, 0);
     this.rotationZ.up = new THREE.Vector3(0, 0, 1);
 
+    this.rotationY.rotateX(Math.PI / 2);
     this.rotationX.rotateY(Math.PI / 2);
     this.rotationX.rotateZ(Math.PI);
-    this.rotationY.rotateX(Math.PI / 2);
 
-    this.handleNamesMap[this.rotationX.name] = this.rotationX;
-    this.handleNamesMap[this.rotationY.name] = this.rotationY;
-    this.handleNamesMap[this.rotationZ.name] = this.rotationZ;
-
-    this.add(this.rotationX);
-    this.add(this.rotationY);
-    this.add(this.rotationZ);
+    this.setupHandle(this.rotationX);
+    this.setupHandle(this.rotationY);
+    this.setupHandle(this.rotationZ);
   };
 
   private computeObjectBounds = () => {
-    if (this.options.separationT !== undefined) {
-      const { x, y, z } = this.options.separationT;
-      this.minBox.copy(new THREE.Vector3(-x, -y, -z));
-      this.maxBox.copy(new THREE.Vector3(x, y, z));
-    } else if (this.object.type === "Mesh") {
-      const geometry = (this.object as THREE.Mesh).geometry;
-      geometry.computeBoundingBox();
-      const {
-        boundingBox: { min, max }
-      } = geometry;
-      this.minBox.copy(min);
-      this.maxBox.copy(max);
+    if (this.useComputedBounds) {
+      if (this.object.type === "Mesh") {
+        const geometry = (this.object as THREE.Mesh).geometry;
+        geometry.computeBoundingBox();
+        const {
+          boundingBox: { min, max }
+        } = geometry;
+        this.minBox.copy(min);
+        this.maxBox.copy(max);
 
-      this.minBox.addScalar(-DEFAULT_TRANSLATION_CONTROLS_SEPARATION);
-      this.maxBox.addScalar(DEFAULT_TRANSLATION_CONTROLS_SEPARATION);
-    } else {
-      this.minBox.copy(new THREE.Vector3(-1, -1, -1));
-      this.maxBox.copy(new THREE.Vector3(1, 1, 1));
+        this.minBox.addScalar(-this.separation);
+        this.maxBox.addScalar(this.separation);
+        return;
+      } else {
+        console.warn(
+          `Bounds can only be computed for object of type THREE.Mesh,
+          received object with type: ${this.object.type}. Falling back to using
+          default separation.
+        `
+        );
+      }
     }
+
+    this.minBox.copy(new THREE.Vector3(-this.separation, -this.separation, -this.separation));
+    this.maxBox.copy(new THREE.Vector3(this.separation, this.separation, this.separation));
   };
 
+  /**
+   * @hidden
+   */
   processDragStart = (args: { point: THREE.Vector3; handle: IHandle }) => {
     const { point, handle } = args;
     this.dragStartPoint.copy(point);
@@ -300,14 +393,24 @@ export default class Controls extends THREE.Group {
     this.isBeingDraggedRotation = handle instanceof RotationGroup;
   };
 
+  /**
+   * @hidden
+   */
   processDragEnd = () => {
     this.isBeingDraggedTranslation = false;
     this.isBeingDraggedRotation = false;
   };
 
+  /**
+   * Only takes effect if [[IControlsOptions.isDampingEnabled]] is true.
+   * @param dampingFactor - value between 0 and 1, acts like a weight on the controls
+   */
   public setDampingFactor = (dampingFactor = 0) =>
     (this.dampingFactor = THREE.Math.clamp(dampingFactor, 0, 1));
 
+  /**
+   * @hidden
+   */
   processDrag = (args: { point: THREE.Vector3; handle: IHandle; dragRatio?: number }) => {
     const { point, handle, dragRatio = 1 } = args;
     const k = Math.exp(-this.dampingFactor * Math.abs(dragRatio ** 3));
@@ -343,7 +446,7 @@ export default class Controls extends THREE.Group {
         .normalize();
 
       this.handleTargetQuaternion.setFromUnitVectors(this.touch1, this.touch2);
-      if (this.attachMode === ANCHOR_MODE.FIXED) {
+      if (this.mode === ANCHOR_MODE.FIXED) {
         this.detachHandleUpdateQuaternionAttach(handle, this.handleTargetQuaternion);
       }
     }
@@ -379,9 +482,23 @@ export default class Controls extends THREE.Group {
     }
   };
 
-  public showByNames = (handleNames: string[], visibility = true) => {
+  /**
+   * Applies supplied visibility to the supplied handle names.
+   * Individual handle's visibility can also be changed by modifying the `visibility`
+   * property on the handle directly.
+   * @param handleNames
+   * @param visibility
+   */
+  public showByNames = (
+    handleNames: Array<DEFAULT_HANDLE_GROUP_NAME | string>,
+    visibility = true
+  ) => {
+    const handleNamesMap: { [name: string]: IHandle } = {};
+    this.handles.forEach(handle => {
+      handleNamesMap[handle.name] = handle;
+    });
     handleNames.map(handleName => {
-      const handle = this.handleNamesMap[handleName];
+      const handle = handleNamesMap[handleName];
       if (handle === undefined) {
         throw new Error(`handle: ${handleName} not found`);
       }
@@ -389,17 +506,22 @@ export default class Controls extends THREE.Group {
     });
   };
 
+  /**
+   * Applies supplied visibility to all handles
+   * @param visibility
+   */
   public showAll = (visibility = true) => {
-    const handles = Object.values(this.handleNamesMap);
-    handles.map(handle => {
+    this.handles.forEach(handle => {
       handle!.visible = visibility;
     });
   };
 
+  /**
+   * @hidden
+   */
   public getInteractiveObjects(): THREE.Object3D[] {
-    const handles = Object.values(this.handleNamesMap);
     const interactiveObjects: THREE.Object3D[] = [];
-    handles.map(handle => {
+    this.handles.forEach(handle => {
       if (!handle!.visible) {
         return;
       }
@@ -408,6 +530,9 @@ export default class Controls extends THREE.Group {
     return interactiveObjects;
   }
 
+  /**
+   * @hidden
+   */
   updateMatrixWorld = (force?: boolean) => {
     this.object.updateMatrixWorld(force);
 
@@ -434,7 +559,7 @@ export default class Controls extends THREE.Group {
     }
 
     this.object.getWorldQuaternion(this.objectTargetQuaternion);
-    if (this.attachMode === ANCHOR_MODE.INHERIT && !this.isBeingDraggedTranslation) {
+    if (this.mode === ANCHOR_MODE.INHERIT && !this.isBeingDraggedTranslation) {
       this.quaternion.copy(this.initialSelfQuaternion).premultiply(this.objectTargetQuaternion);
     }
 

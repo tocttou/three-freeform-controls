@@ -8,12 +8,15 @@ import RotationEye from "../controls/handles/rotation-eye";
 import Plane from "../primitives/plane";
 import Pick from "../controls/handles/pick";
 
-export enum RAYCASTER_EVENTS {
+export enum EVENTS {
   DRAG_START = "DRAG_START",
   DRAG = "DRAG",
   DRAG_STOP = "DRAG_STOP"
 }
 
+/**
+ * @hidden
+ */
 export default class Raycaster extends THREE.Raycaster {
   private mouse = new THREE.Vector2();
   private cameraPosition = new THREE.Vector3();
@@ -70,7 +73,7 @@ export default class Raycaster extends THREE.Raycaster {
         this.normal.applyQuaternion(this.controlsWorldQuaternion);
       }
 
-      if (controls.hideOtherControlsInstancesOnSelect) {
+      if (controls.hideOtherControlsInstancesOnDrag) {
         Object.values(this.controls).forEach(x => {
           if (x.visible) {
             this.visibleControls.push(x);
@@ -80,7 +83,7 @@ export default class Raycaster extends THREE.Raycaster {
         controls.visible = true;
       }
 
-      if (controls.hideOtherHandlesOnSelect) {
+      if (controls.hideOtherHandlesOnDrag) {
         controls.children.map(handle => {
           if (handle.visible) {
             this.visibleHandles.push(handle);
@@ -114,7 +117,7 @@ export default class Raycaster extends THREE.Raycaster {
       }
 
       this.domElement.removeEventListener("mousedown", this.mouseDownListener);
-      emitter.emit(RAYCASTER_EVENTS.DRAG_START, {
+      emitter.emit(EVENTS.DRAG_START, {
         point: initialIntersectionPoint,
         handle: this.activeHandle
       });
@@ -152,7 +155,7 @@ export default class Raycaster extends THREE.Raycaster {
     const distance = this.currentScreenPoint.distanceTo(this.previousScreenPoint);
     const dragRatio = distance / (this.clientDiagonalLength || 1);
 
-    emitter.emit(RAYCASTER_EVENTS.DRAG, {
+    emitter.emit(EVENTS.DRAG, {
       point: this.point,
       handle: this.activeHandle,
       dragRatio
@@ -164,12 +167,12 @@ export default class Raycaster extends THREE.Raycaster {
   private mouseUpListener = () => {
     this.domElement.removeEventListener("mousemove", this.mouseMoveListener);
     this.domElement.addEventListener("mousedown", this.mouseDownListener, false);
-    emitter.emit(RAYCASTER_EVENTS.DRAG_STOP, { point: this.point, handle: this.activeHandle });
+    emitter.emit(EVENTS.DRAG_STOP, { point: this.point, handle: this.activeHandle });
 
     if (
       this.activeHandle !== null &&
       this.activeHandle.parent !== null &&
-      (this.activeHandle.parent as Controls).hideOtherControlsInstancesOnSelect
+      (this.activeHandle.parent as Controls).hideOtherControlsInstancesOnDrag
     ) {
       this.visibleControls.forEach(controls => {
         controls.visible = true;
@@ -180,7 +183,7 @@ export default class Raycaster extends THREE.Raycaster {
     if (
       this.activeHandle !== null &&
       this.activeHandle.parent !== null &&
-      (this.activeHandle.parent as Controls).hideOtherHandlesOnSelect
+      (this.activeHandle.parent as Controls).hideOtherHandlesOnDrag
     ) {
       this.visibleHandles.forEach(handle => {
         handle.visible = true;

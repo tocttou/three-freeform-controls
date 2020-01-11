@@ -29,6 +29,9 @@ export default class Rotation extends RotationGroup {
     this.add(this.handlebar);
   }
 
+  /**
+   * @hidden
+   */
   public getInteractiveObjects = () => {
     return [this.handlebar];
   };

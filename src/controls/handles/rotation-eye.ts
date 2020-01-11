@@ -2,6 +2,9 @@ import * as THREE from "three";
 import Rotation from "./rotation";
 import { DEFAULT_COLOR_RING } from "../../utils/constants";
 
+/**
+ * @hidden
+ */
 export default class RotationEye extends Rotation {
   public camera: THREE.Camera | null = null;
   private controlsWorldOrientation = new THREE.Quaternion();

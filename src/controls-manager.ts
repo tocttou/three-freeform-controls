@@ -1,22 +1,33 @@
 import * as THREE from "three";
 import Controls, { IControlsOptions } from "./controls";
-import Raycaster, { RAYCASTER_EVENTS } from "./utils/raycaster";
+import Raycaster, { EVENTS } from "./utils/raycaster";
 import { emitter, unbindAll } from "./utils/emmiter";
+import { DEFAULT_HANDLE_GROUP_NAME } from "./controls/handles";
 
+/**
+ * The ControlsManager provides helper functions to create Controls instances
+ * and link them up with a Raycaster instance (reused across multiple Controls
+ * instances).
+ */
 export default class ControlsManager extends THREE.Object3D {
   private objects: { [id: number]: THREE.Object3D } = {};
   private controls: { [id: number]: Controls } = {};
   private eventListeners: {
-    [event in RAYCASTER_EVENTS]: Array<
-      (object: THREE.Object3D | null, handleName: string | null) => void
+    [event in EVENTS]: Array<
+      (object: THREE.Object3D | null, handleName: DEFAULT_HANDLE_GROUP_NAME | string) => void
     >;
   } = {
-    [RAYCASTER_EVENTS.DRAG_START]: [],
-    [RAYCASTER_EVENTS.DRAG]: [],
-    [RAYCASTER_EVENTS.DRAG_STOP]: []
+    [EVENTS.DRAG_START]: [],
+    [EVENTS.DRAG]: [],
+    [EVENTS.DRAG_STOP]: []
   };
   private rayCaster: Raycaster;
 
+  /**
+   * @param camera - the THREE.Camera instance used in the scene
+   * @param domElement - the dom element on which THREE.js renderer is attached,
+   * generally available as `renderer.domElement`
+   */
   constructor(private camera: THREE.Camera, private domElement: HTMLElement) {
     super();
     this.rayCaster = new Raycaster(this.camera, this.domElement, this.controls);
@@ -24,7 +35,7 @@ export default class ControlsManager extends THREE.Object3D {
   }
 
   private listenToEvents = () => {
-    emitter.on(RAYCASTER_EVENTS.DRAG_START, ({ point, handle }) => {
+    emitter.on(EVENTS.DRAG_START, ({ point, handle }) => {
       if (handle === null) {
         return;
       }
@@ -33,12 +44,12 @@ export default class ControlsManager extends THREE.Object3D {
         return;
       }
       controls.processDragStart({ point, handle });
-      this.eventListeners[RAYCASTER_EVENTS.DRAG_START].map(callback => {
+      this.eventListeners[EVENTS.DRAG_START].map(callback => {
         callback(controls.object, handle.name);
       });
     });
 
-    emitter.on(RAYCASTER_EVENTS.DRAG, ({ point, handle, dragRatio }) => {
+    emitter.on(EVENTS.DRAG, ({ point, handle, dragRatio }) => {
       if (handle === null) {
         return;
       }
@@ -47,12 +58,12 @@ export default class ControlsManager extends THREE.Object3D {
         return;
       }
       controls.processDrag({ point, handle, dragRatio });
-      this.eventListeners[RAYCASTER_EVENTS.DRAG].map(callback => {
+      this.eventListeners[EVENTS.DRAG].map(callback => {
         callback(controls.object, handle.name);
       });
     });
 
-    emitter.on(RAYCASTER_EVENTS.DRAG_STOP, ({ handle }) => {
+    emitter.on(EVENTS.DRAG_STOP, ({ handle }) => {
       if (handle === null) {
         return;
       }
@@ -61,26 +72,35 @@ export default class ControlsManager extends THREE.Object3D {
         return;
       }
       controls.processDragEnd();
-      this.eventListeners[RAYCASTER_EVENTS.DRAG_STOP].map(callback => {
+      this.eventListeners[EVENTS.DRAG_STOP].map(callback => {
         callback(controls.object, handle.name);
       });
     });
   };
 
+  /**
+   * Creates a Controls instance and attaches it to the provided THREE.js object
+   *
+   * @param object - the object provided by the user
+   * @param options
+   */
   public anchor = (object: THREE.Object3D, options?: IControlsOptions) => {
     const controls = this.addControls(object, options);
     this.objects[object.id] = object;
     return controls;
   };
 
+  /**
+   * Detaches the Controls instance from the provided THREE.js object
+   *
+   * @param object - the object provided by the user
+   * @param controls - the controls instance anchored on the object
+   */
   public detach = (object: THREE.Object3D, controls: Controls) => {
     if (!this.objects.hasOwnProperty(object.id)) {
       throw new Error("object should be attached first");
     }
     this.remove(controls);
-    this.eventListeners[RAYCASTER_EVENTS.DRAG_STOP].map(callback => {
-      callback(controls.object, null);
-    });
     this.dispose(controls);
 
     delete this.objects[object.id];
@@ -94,12 +114,38 @@ export default class ControlsManager extends THREE.Object3D {
     return controls;
   };
 
-  public listen = (event: RAYCASTER_EVENTS, callback: () => void): void => {
+  /**
+   * Adds an event listener. Note that there is another method `addEventListener`
+   * on THREE.Object3D from which this class extends but that is specific to the
+   * internals of THREE.js, but not this library
+   * @param event
+   * @param callback - by default the second argument is the default group name
+   * for the Handle involved; for a custom handle, it is the `name` property
+   * set on the handle
+   */
+  public listen = (
+    event: EVENTS,
+    callback: (
+      object: THREE.Object3D | null,
+      handleName: DEFAULT_HANDLE_GROUP_NAME | string
+    ) => void
+  ): void => {
     this.eventListeners[event].push(callback);
   };
 
-  public removeListen = (event: RAYCASTER_EVENTS, callback: () => void): void => {
-    const index = this.eventListeners[event].findIndex(callback);
+  /**
+   * Removes the event listener.
+   * @param event
+   * @param callback
+   */
+  public removeListen = (
+    event: EVENTS,
+    callback: (
+      object: THREE.Object3D | null,
+      handleName: DEFAULT_HANDLE_GROUP_NAME | string
+    ) => void
+  ): void => {
+    const index = this.eventListeners[event].findIndex(x => x === callback);
     if (index !== -1) {
       this.eventListeners[event].splice(index, 1);
     }
@@ -122,6 +168,9 @@ export default class ControlsManager extends THREE.Object3D {
     }
   };
 
+  /**
+   * Destroys all Controls instances and removes all event listeners
+   */
   public destroy = () => {
     unbindAll();
 
@@ -133,17 +182,14 @@ export default class ControlsManager extends THREE.Object3D {
     Object.values(this.controls).map(control => {
       this.dispose(control);
     });
-    this.eventListeners[RAYCASTER_EVENTS.DRAG_STOP].map(callback => {
-      callback(null, null);
-    });
 
     this.rayCaster.destroy();
     this.objects = {};
     this.controls = {};
     this.eventListeners = {
-      [RAYCASTER_EVENTS.DRAG_START]: [],
-      [RAYCASTER_EVENTS.DRAG]: [],
-      [RAYCASTER_EVENTS.DRAG_STOP]: []
+      [EVENTS.DRAG_START]: [],
+      [EVENTS.DRAG]: [],
+      [EVENTS.DRAG_STOP]: []
     };
   };
 }

@@ -9,9 +9,21 @@ import Line from "../../primitives/line";
 import { PickPlaneGroup } from "./index";
 
 export default class PickPlane extends PickPlaneGroup {
+  /**
+   * @hidden
+   */
   public readonly plane: Plane;
+  /**
+   * @hidden
+   */
   public readonly boundary: Line;
+  /**
+   * @hidden
+   */
   public readonly crossX: Line;
+  /**
+   * @hidden
+   */
   public readonly crossY: Line;
 
   constructor(color = DEFAULT_COLOR_PLANE) {
@@ -45,6 +57,9 @@ export default class PickPlane extends PickPlaneGroup {
     this.add(this.crossY);
   }
 
+  /**
+   * @hidden
+   */
   public getInteractiveObjects = () => {
     return [this.plane];
   };
