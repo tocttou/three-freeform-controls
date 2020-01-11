@@ -106,6 +106,7 @@
     "rollup-plugin-sourcemaps": "^0.4.2",
     "rollup-plugin-typescript2": "^0.24.0",
     "shelljs": "^0.8.3",
+    "three": "^0.112.1",
     "travis-deploy-once": "^5.0.11",
     "ts-jest": "^24.0.2",
     "ts-node": "^8.3.0",

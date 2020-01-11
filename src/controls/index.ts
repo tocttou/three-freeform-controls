@@ -81,8 +81,8 @@ export default class Controls extends THREE.Group {
   private dragStartPoint = new THREE.Vector3();
   private dragIncrementalStartPoint = new THREE.Vector3();
   private handleNamesMap: { [name: string]: IHandle | undefined } = {};
-  public isBeingDraggedTranslation = false;
-  public isBeingDraggedRotation = false;
+  private isBeingDraggedTranslation = false;
+  private isBeingDraggedRotation = false;
   public isDampingEnabled = true;
   private dampingFactor = 0.8;
   public hideOtherHandlesOnSelect?: boolean;
@@ -300,10 +300,15 @@ export default class Controls extends THREE.Group {
     this.isBeingDraggedRotation = handle instanceof RotationGroup;
   };
 
+  processDragEnd = () => {
+    this.isBeingDraggedTranslation = false;
+    this.isBeingDraggedRotation = false;
+  };
+
   public setDampingFactor = (dampingFactor = 0) =>
     (this.dampingFactor = THREE.Math.clamp(dampingFactor, 0, 1));
 
-  processHandle = (args: { point: THREE.Vector3; handle: IHandle; dragRatio?: number }) => {
+  processDrag = (args: { point: THREE.Vector3; handle: IHandle; dragRatio?: number }) => {
     const { point, handle, dragRatio = 1 } = args;
     const k = Math.exp(-this.dampingFactor * Math.abs(dragRatio ** 3));
 
