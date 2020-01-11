@@ -1,0 +1,832 @@
+<!doctype html>
+<html class="default no-js">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Controls | three-freeform-controls - v0.0.18</title>
+	<meta name="description" content="">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="../assets/css/main.css">
+</head>
+<body>
+<header>
+	<div class="tsd-page-toolbar">
+		<div class="container">
+			<div class="table-wrap">
+				<div class="table-cell" id="tsd-search" data-index="../assets/js/search.js" data-base="..">
+					<div class="field">
+						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
+						<input id="tsd-search-field" type="text" />
+					</div>
+					<ul class="results">
+						<li class="state loading">Preparing search index...</li>
+						<li class="state failure">The search index is not available</li>
+					</ul>
+					<a href="../index.html" class="title">three-freeform-controls - v0.0.18</a>
+				</div>
+				<div class="table-cell" id="tsd-widgets">
+					<div id="tsd-filter">
+						<a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a>
+						<div class="tsd-filter-group">
+							<div class="tsd-select" id="tsd-filter-visibility">
+								<span class="tsd-select-label">All</span>
+								<ul class="tsd-select-list">
+									<li data-value="public">Public</li>
+									<li data-value="protected">Public/Protected</li>
+									<li data-value="private" class="selected">All</li>
+								</ul>
+							</div>
+							<input type="checkbox" id="tsd-filter-inherited" checked />
+							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
+						</div>
+					</div>
+					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="tsd-page-title">
+		<div class="container">
+			<ul class="tsd-breadcrumb">
+				<li>
+					<a href="../index.html">Globals</a>
+				</li>
+				<li>
+					<a href="controls.html">Controls</a>
+				</li>
+			</ul>
+			<h1>Class Controls</h1>
+		</div>
+	</div>
+</header>
+<div class="container container-main">
+	<div class="row">
+		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>Controls is the main class in this library.
+							It is a subclass of THREE.Group, so its properties like <code>position</code> and
+							<code>quaternion</code> can be modified as desired.
+							The <code>children</code> are the control handles (like <code>rotationX</code>).
+						All translations and rotations are setup with respect to the global coordinate system.</p>
+					</div>
+				</div>
+			</section>
+			<section class="tsd-panel tsd-hierarchy">
+				<h3>Hierarchy</h3>
+				<ul class="tsd-hierarchy">
+					<li>
+						<span class="tsd-signature-type">Group</span>
+						<ul class="tsd-hierarchy">
+							<li>
+								<span class="target">Controls</span>
+							</li>
+						</ul>
+					</li>
+				</ul>
+			</section>
+			<section class="tsd-panel-group tsd-index-group">
+				<h2>Index</h2>
+				<section class="tsd-panel tsd-index-panel">
+					<div class="tsd-index-content">
+						<section class="tsd-index-section ">
+							<h3>Constructors</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite"><a href="controls.html#constructor" class="tsd-kind-icon">constructor</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section ">
+							<h3>Properties</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="controls.html#hideothercontrolsinstancesondrag" class="tsd-kind-icon">hide<wbr>Other<wbr>Controls<wbr>Instances<wbr>OnDrag</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="controls.html#hideotherhandlesondrag" class="tsd-kind-icon">hide<wbr>Other<wbr>Handles<wbr>OnDrag</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="controls.html#isdampingenabled" class="tsd-kind-icon">is<wbr>Damping<wbr>Enabled</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="controls.html#object" class="tsd-kind-icon">object</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="controls.html#pick" class="tsd-kind-icon">pick</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="controls.html#pickplanexy" class="tsd-kind-icon">pick<wbr>PlaneXY</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="controls.html#pickplaneyz" class="tsd-kind-icon">pick<wbr>PlaneYZ</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="controls.html#pickplanezx" class="tsd-kind-icon">pick<wbr>PlaneZX</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="controls.html#rotationeye" class="tsd-kind-icon">rotation<wbr>Eye</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="controls.html#rotationx" class="tsd-kind-icon">rotationX</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="controls.html#rotationy" class="tsd-kind-icon">rotationY</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="controls.html#rotationz" class="tsd-kind-icon">rotationZ</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="controls.html#showhelperplane" class="tsd-kind-icon">show<wbr>Helper<wbr>Plane</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="controls.html#translationxn" class="tsd-kind-icon">translationXN</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="controls.html#translationxp" class="tsd-kind-icon">translationXP</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="controls.html#translationyn" class="tsd-kind-icon">translationYN</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="controls.html#translationyp" class="tsd-kind-icon">translationYP</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="controls.html#translationzn" class="tsd-kind-icon">translationZN</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="controls.html#translationzp" class="tsd-kind-icon">translationZP</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section ">
+							<h3>Methods</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="controls.html#setdampingfactor" class="tsd-kind-icon">set<wbr>Damping<wbr>Factor</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="controls.html#setuphandle" class="tsd-kind-icon">setup<wbr>Handle</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="controls.html#showall" class="tsd-kind-icon">show<wbr>All</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="controls.html#showbynames" class="tsd-kind-icon">show<wbr>ByNames</a></li>
+							</ul>
+						</section>
+					</div>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Constructors</h2>
+				<section class="tsd-panel tsd-member tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite">
+					<a name="constructor" class="tsd-anchor"></a>
+					<h3>constructor</h3>
+					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite">
+						<li class="tsd-signature tsd-kind-icon">new <wbr>Controls<span class="tsd-signature-symbol">(</span>object<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Object3D</span>, camera<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Camera</span>, options<span class="tsd-signature-symbol">?: </span><a href="../interfaces/icontrolsoptions.html" class="tsd-signature-type">IControlsOptions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="controls.html" class="tsd-signature-type">Controls</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Overrides Group.__constructor</p>
+								<ul>
+									<li>Defined in <a href="https://github.com/tocttou/three-freeform-controls/blob/85f8c45/src/controls/index.ts#L196">src/controls/index.ts:196</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>object: <span class="tsd-signature-type">Object3D</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+											<p>the object provided by the user</p>
+										</div>
+									</div>
+								</li>
+								<li>
+									<h5>camera: <span class="tsd-signature-type">Camera</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+											<p>the THREE.Camera instance used in the scene</p>
+										</div>
+									</div>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> options: <a href="../interfaces/icontrolsoptions.html" class="tsd-signature-type">IControlsOptions</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+										</div>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="controls.html" class="tsd-signature-type">Controls</a></h4>
+						</li>
+					</ul>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Properties</h2>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="hideothercontrolsinstancesondrag" class="tsd-anchor"></a>
+					<h3>hide<wbr>Other<wbr>Controls<wbr>Instances<wbr>OnDrag</h3>
+					<div class="tsd-signature tsd-kind-icon">hide<wbr>Other<wbr>Controls<wbr>Instances<wbr>OnDrag<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/tocttou/three-freeform-controls/blob/85f8c45/src/controls/index.ts#L190">src/controls/index.ts:190</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p> hides all other Controls instances when drag starts
+							@default true</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="hideotherhandlesondrag" class="tsd-anchor"></a>
+					<h3>hide<wbr>Other<wbr>Handles<wbr>OnDrag</h3>
+					<div class="tsd-signature tsd-kind-icon">hide<wbr>Other<wbr>Handles<wbr>OnDrag<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/tocttou/three-freeform-controls/blob/85f8c45/src/controls/index.ts#L185">src/controls/index.ts:185</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>hides other handles of a Controls instance when drag starts</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>default</dt>
+							<dd><p>true</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="isdampingenabled" class="tsd-anchor"></a>
+					<h3>is<wbr>Damping<wbr>Enabled</h3>
+					<div class="tsd-signature tsd-kind-icon">is<wbr>Damping<wbr>Enabled<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/tocttou/three-freeform-controls/blob/85f8c45/src/controls/index.ts#L180">src/controls/index.ts:180</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>enables damping for the controls</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>default</dt>
+							<dd><p>true</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="object" class="tsd-anchor"></a>
+					<h3>object</h3>
+					<div class="tsd-signature tsd-kind-icon">object<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Object3D</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/tocttou/three-freeform-controls/blob/85f8c45/src/controls/index.ts#L205">src/controls/index.ts:205</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>the object provided by the user</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="pick" class="tsd-anchor"></a>
+					<h3>pick</h3>
+					<div class="tsd-signature tsd-kind-icon">pick<span class="tsd-signature-symbol">:</span> <a href="pick.html" class="tsd-signature-type">Pick</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/tocttou/three-freeform-controls/blob/85f8c45/src/controls/index.ts#L93">src/controls/index.ts:93</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>handle which translates the object in the eye-plane</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="pickplanexy" class="tsd-anchor"></a>
+					<h3>pick<wbr>PlaneXY</h3>
+					<div class="tsd-signature tsd-kind-icon">pick<wbr>PlaneXY<span class="tsd-signature-symbol">:</span> <a href="pickplane.html" class="tsd-signature-type">PickPlane</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/tocttou/three-freeform-controls/blob/85f8c45/src/controls/index.ts#L97">src/controls/index.ts:97</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>handle which translates the object in XY plane</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="pickplaneyz" class="tsd-anchor"></a>
+					<h3>pick<wbr>PlaneYZ</h3>
+					<div class="tsd-signature tsd-kind-icon">pick<wbr>PlaneYZ<span class="tsd-signature-symbol">:</span> <a href="pickplane.html" class="tsd-signature-type">PickPlane</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/tocttou/three-freeform-controls/blob/85f8c45/src/controls/index.ts#L101">src/controls/index.ts:101</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>handle which translates the object in YZ plane</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="pickplanezx" class="tsd-anchor"></a>
+					<h3>pick<wbr>PlaneZX</h3>
+					<div class="tsd-signature tsd-kind-icon">pick<wbr>PlaneZX<span class="tsd-signature-symbol">:</span> <a href="pickplane.html" class="tsd-signature-type">PickPlane</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/tocttou/three-freeform-controls/blob/85f8c45/src/controls/index.ts#L105">src/controls/index.ts:105</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>handle which translates the object in ZX plane</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="rotationeye" class="tsd-anchor"></a>
+					<h3>rotation<wbr>Eye</h3>
+					<div class="tsd-signature tsd-kind-icon">rotation<wbr>Eye<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">RotationEye</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/tocttou/three-freeform-controls/blob/85f8c45/src/controls/index.ts#L151">src/controls/index.ts:151</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>handle which rotates the object in the eye-plane</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="rotationx" class="tsd-anchor"></a>
+					<h3>rotationX</h3>
+					<div class="tsd-signature tsd-kind-icon">rotationX<span class="tsd-signature-symbol">:</span> <a href="rotation.html" class="tsd-signature-type">Rotation</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/tocttou/three-freeform-controls/blob/85f8c45/src/controls/index.ts#L139">src/controls/index.ts:139</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>handle which rotates the object along the x-axis</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="rotationy" class="tsd-anchor"></a>
+					<h3>rotationY</h3>
+					<div class="tsd-signature tsd-kind-icon">rotationY<span class="tsd-signature-symbol">:</span> <a href="rotation.html" class="tsd-signature-type">Rotation</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/tocttou/three-freeform-controls/blob/85f8c45/src/controls/index.ts#L143">src/controls/index.ts:143</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>handle which rotates the object along the y-axis</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="rotationz" class="tsd-anchor"></a>
+					<h3>rotationZ</h3>
+					<div class="tsd-signature tsd-kind-icon">rotationZ<span class="tsd-signature-symbol">:</span> <a href="rotation.html" class="tsd-signature-type">Rotation</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/tocttou/three-freeform-controls/blob/85f8c45/src/controls/index.ts#L147">src/controls/index.ts:147</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>handle which rotates the object along the z-axis</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="showhelperplane" class="tsd-anchor"></a>
+					<h3>show<wbr>Helper<wbr>Plane</h3>
+					<div class="tsd-signature tsd-kind-icon">show<wbr>Helper<wbr>Plane<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/tocttou/three-freeform-controls/blob/85f8c45/src/controls/index.ts#L196">src/controls/index.ts:196</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>displays the plane in which the drag interaction takes place
+							(useful for debugging)</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>default</dt>
+							<dd><p>false</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="translationxn" class="tsd-anchor"></a>
+					<h3>translationXN</h3>
+					<div class="tsd-signature tsd-kind-icon">translationXN<span class="tsd-signature-symbol">:</span> <a href="translation.html" class="tsd-signature-type">Translation</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/tocttou/three-freeform-controls/blob/85f8c45/src/controls/index.ts#L125">src/controls/index.ts:125</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>handle which translates the object along the x-axis; displayed in the
+							-ve x-axis direction</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="translationxp" class="tsd-anchor"></a>
+					<h3>translationXP</h3>
+					<div class="tsd-signature tsd-kind-icon">translationXP<span class="tsd-signature-symbol">:</span> <a href="translation.html" class="tsd-signature-type">Translation</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/tocttou/three-freeform-controls/blob/85f8c45/src/controls/index.ts#L110">src/controls/index.ts:110</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>handle which translates the object along the x-axis; displayed in the
+							+ve x-axis direction</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="translationyn" class="tsd-anchor"></a>
+					<h3>translationYN</h3>
+					<div class="tsd-signature tsd-kind-icon">translationYN<span class="tsd-signature-symbol">:</span> <a href="translation.html" class="tsd-signature-type">Translation</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/tocttou/three-freeform-controls/blob/85f8c45/src/controls/index.ts#L130">src/controls/index.ts:130</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>handle which translates the object along the y-axis; displayed in the
+							-ve y-axis direction</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="translationyp" class="tsd-anchor"></a>
+					<h3>translationYP</h3>
+					<div class="tsd-signature tsd-kind-icon">translationYP<span class="tsd-signature-symbol">:</span> <a href="translation.html" class="tsd-signature-type">Translation</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/tocttou/three-freeform-controls/blob/85f8c45/src/controls/index.ts#L115">src/controls/index.ts:115</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>handle which translates the object along the y-axis; displayed in the
+							+ve y-axis direction</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="translationzn" class="tsd-anchor"></a>
+					<h3>translationZN</h3>
+					<div class="tsd-signature tsd-kind-icon">translationZN<span class="tsd-signature-symbol">:</span> <a href="translation.html" class="tsd-signature-type">Translation</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/tocttou/three-freeform-controls/blob/85f8c45/src/controls/index.ts#L135">src/controls/index.ts:135</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>handle which translates the object along the z-axis; displayed in the
+							-ve z-axis direction</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="translationzp" class="tsd-anchor"></a>
+					<h3>translationZP</h3>
+					<div class="tsd-signature tsd-kind-icon">translationZP<span class="tsd-signature-symbol">:</span> <a href="translation.html" class="tsd-signature-type">Translation</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/tocttou/three-freeform-controls/blob/85f8c45/src/controls/index.ts#L120">src/controls/index.ts:120</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>handle which translates the object along the z-axis; displayed in the
+							+ve z-axis direction</p>
+						</div>
+					</div>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Methods</h2>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="setdampingfactor" class="tsd-anchor"></a>
+					<h3>set<wbr>Damping<wbr>Factor</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">set<wbr>Damping<wbr>Factor<span class="tsd-signature-symbol">(</span>dampingFactor<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/tocttou/three-freeform-controls/blob/85f8c45/src/controls/index.ts#L409">src/controls/index.ts:409</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Only takes effect if <a href="../interfaces/icontrolsoptions.html#isdampingenabled">IControlsOptions.isDampingEnabled</a> is true.</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> dampingFactor: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> =&nbsp;0</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+											<p>value between 0 and 1, acts like a weight on the controls</p>
+										</div>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="setuphandle" class="tsd-anchor"></a>
+					<h3>setup<wbr>Handle</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">setup<wbr>Handle<span class="tsd-signature-symbol">(</span>handle<span class="tsd-signature-symbol">: </span><a href="../index.html#ihandle" class="tsd-signature-type">IHandle</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/tocttou/three-freeform-controls/blob/85f8c45/src/controls/index.ts#L272">src/controls/index.ts:272</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>handle: <a href="../index.html#ihandle" class="tsd-signature-type">IHandle</a></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="showall" class="tsd-anchor"></a>
+					<h3>show<wbr>All</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">show<wbr>All<span class="tsd-signature-symbol">(</span>visibility<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/tocttou/three-freeform-controls/blob/85f8c45/src/controls/index.ts#L514">src/controls/index.ts:514</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Applies supplied visibility to all handles</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> visibility: <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> =&nbsp;true</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+										</div>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="showbynames" class="tsd-anchor"></a>
+					<h3>show<wbr>ByNames</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">show<wbr>ByNames<span class="tsd-signature-symbol">(</span>handleNames<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><a href="../enums/default_handle_group_name.html" class="tsd-signature-type">DEFAULT_HANDLE_GROUP_NAME</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span>, visibility<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/tocttou/three-freeform-controls/blob/85f8c45/src/controls/index.ts#L493">src/controls/index.ts:493</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Applies supplied visibility to the supplied handle names.
+										Individual handle&#39;s visibility can also be changed by modifying the <code>visibility</code>
+									property on the handle directly.</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>handleNames: <span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><a href="../enums/default_handle_group_name.html" class="tsd-signature-type">DEFAULT_HANDLE_GROUP_NAME</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> visibility: <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> =&nbsp;true</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+										</div>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+			</section>
+		</div>
+		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
+			<nav class="tsd-navigation primary">
+				<ul>
+					<li class="globals  ">
+						<a href="../index.html"><em>Globals</em></a>
+					</li>
+				</ul>
+			</nav>
+			<nav class="tsd-navigation secondary menu-sticky">
+				<ul class="before-current">
+					<li class=" tsd-kind-enum">
+						<a href="../enums/anchor_mode.html" class="tsd-kind-icon">ANCHOR_<wbr>MODE</a>
+					</li>
+					<li class=" tsd-kind-enum">
+						<a href="../enums/default_handle_group_name.html" class="tsd-kind-icon">DEFAULT_<wbr>HANDLE_<wbr>GROUP_<wbr>NAME</a>
+					</li>
+					<li class=" tsd-kind-enum">
+						<a href="../enums/events.html" class="tsd-kind-icon">EVENTS</a>
+					</li>
+				</ul>
+				<ul class="current">
+					<li class="current tsd-kind-class">
+						<a href="controls.html" class="tsd-kind-icon">Controls</a>
+						<ul>
+							<li class=" tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite">
+								<a href="controls.html#constructor" class="tsd-kind-icon">constructor</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="controls.html#hideothercontrolsinstancesondrag" class="tsd-kind-icon">hide<wbr>Other<wbr>Controls<wbr>Instances<wbr>OnDrag</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="controls.html#hideotherhandlesondrag" class="tsd-kind-icon">hide<wbr>Other<wbr>Handles<wbr>OnDrag</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="controls.html#isdampingenabled" class="tsd-kind-icon">is<wbr>Damping<wbr>Enabled</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="controls.html#object" class="tsd-kind-icon">object</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="controls.html#pick" class="tsd-kind-icon">pick</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="controls.html#pickplanexy" class="tsd-kind-icon">pick<wbr>PlaneXY</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="controls.html#pickplaneyz" class="tsd-kind-icon">pick<wbr>PlaneYZ</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="controls.html#pickplanezx" class="tsd-kind-icon">pick<wbr>PlaneZX</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="controls.html#rotationeye" class="tsd-kind-icon">rotation<wbr>Eye</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="controls.html#rotationx" class="tsd-kind-icon">rotationX</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="controls.html#rotationy" class="tsd-kind-icon">rotationY</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="controls.html#rotationz" class="tsd-kind-icon">rotationZ</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="controls.html#showhelperplane" class="tsd-kind-icon">show<wbr>Helper<wbr>Plane</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="controls.html#translationxn" class="tsd-kind-icon">translationXN</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="controls.html#translationxp" class="tsd-kind-icon">translationXP</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="controls.html#translationyn" class="tsd-kind-icon">translationYN</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="controls.html#translationyp" class="tsd-kind-icon">translationYP</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="controls.html#translationzn" class="tsd-kind-icon">translationZN</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="controls.html#translationzp" class="tsd-kind-icon">translationZP</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="controls.html#setdampingfactor" class="tsd-kind-icon">set<wbr>Damping<wbr>Factor</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="controls.html#setuphandle" class="tsd-kind-icon">setup<wbr>Handle</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="controls.html#showall" class="tsd-kind-icon">show<wbr>All</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="controls.html#showbynames" class="tsd-kind-icon">show<wbr>ByNames</a>
+							</li>
+						</ul>
+					</li>
+				</ul>
+				<ul class="after-current">
+					<li class=" tsd-kind-class">
+						<a href="controlsmanager.html" class="tsd-kind-icon">Controls<wbr>Manager</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="handlegroup.html" class="tsd-kind-icon">Handle<wbr>Group</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="pick.html" class="tsd-kind-icon">Pick</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="pickgroup.html" class="tsd-kind-icon">Pick<wbr>Group</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="pickplane.html" class="tsd-kind-icon">Pick<wbr>Plane</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="pickplanegroup.html" class="tsd-kind-icon">Pick<wbr>Plane<wbr>Group</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="rotation.html" class="tsd-kind-icon">Rotation</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="rotationgroup.html" class="tsd-kind-icon">Rotation<wbr>Group</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="translation.html" class="tsd-kind-icon">Translation</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="translationgroup.html" class="tsd-kind-icon">Translation<wbr>Group</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="../interfaces/icontrolsoptions.html" class="tsd-kind-icon">IControls<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="../index.html#ihandle" class="tsd-kind-icon">IHandle</a>
+					</li>
+				</ul>
+			</nav>
+		</div>
+	</div>
+</div>
+<footer class="with-border-bottom">
+	<div class="container">
+		<h2>Legend</h2>
+		<div class="tsd-legend-group">
+			<ul class="tsd-legend">
+				<li class="tsd-kind-module"><span class="tsd-kind-icon">Module</span></li>
+				<li class="tsd-kind-object-literal"><span class="tsd-kind-icon">Object literal</span></li>
+				<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
+				<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
+				<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>
+				<li class="tsd-kind-index-signature"><span class="tsd-kind-icon">Index signature</span></li>
+				<li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li>
+				<li class="tsd-kind-type-alias tsd-has-type-parameter"><span class="tsd-kind-icon">Type alias with type parameter</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
+				<li class="tsd-kind-enum-member"><span class="tsd-kind-icon">Enumeration member</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-enum"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-enum"><span class="tsd-kind-icon">Method</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
+				<li class="tsd-kind-interface tsd-has-type-parameter"><span class="tsd-kind-icon">Interface with type parameter</span></li>
+				<li class="tsd-kind-constructor tsd-parent-kind-interface"><span class="tsd-kind-icon">Constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-interface"><span class="tsd-kind-icon">Method</span></li>
+				<li class="tsd-kind-index-signature tsd-parent-kind-interface"><span class="tsd-kind-icon">Index signature</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
+				<li class="tsd-kind-class tsd-has-type-parameter"><span class="tsd-kind-icon">Class with type parameter</span></li>
+				<li class="tsd-kind-constructor tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-class"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class"><span class="tsd-kind-icon">Accessor</span></li>
+				<li class="tsd-kind-index-signature tsd-parent-kind-class"><span class="tsd-kind-icon">Index signature</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited accessor</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected accessor</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private accessor</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static property</span></li>
+				<li class="tsd-kind-call-signature tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static method</span></li>
+			</ul>
+		</div>
+	</div>
+</footer>
+<div class="container tsd-generator">
+	<p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p>
+</div>
+<div class="overlay"></div>
+<script src="../assets/js/main.js"></script>
+<script>if (location.protocol == 'file:') document.write('<script src="../assets/js/search.js"><' + '/script>');</script>
+</body>
+</html>
