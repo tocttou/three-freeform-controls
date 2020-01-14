@@ -39,11 +39,11 @@ export default class Raycaster extends THREE.Raycaster {
     private controls: { [id: string]: Controls }
   ) {
     super();
-    this.domElement.addEventListener("mousedown", this.mouseDownListener, false);
-    this.domElement.addEventListener("mouseup", this.mouseUpListener, false);
+    this.domElement.addEventListener("pointerdown", this.pointerDownListener, false);
+    this.domElement.addEventListener("pointerup", this.pointerUpListener, false);
   }
 
-  private mouseDownListener = (event: MouseEvent) => {
+  private pointerDownListener = (event: PointerEvent) => {
     this.setRayDirection(event);
 
     this.clientDiagonalLength = Math.sqrt(
@@ -116,12 +116,12 @@ export default class Raycaster extends THREE.Raycaster {
         this.ray.intersectPlane(this.activePlane, initialIntersectionPoint);
       }
 
-      this.domElement.removeEventListener("mousedown", this.mouseDownListener);
+      this.domElement.removeEventListener("pointerdown", this.pointerDownListener);
       emitter.emit(EVENTS.DRAG_START, {
         point: initialIntersectionPoint,
         handle: this.activeHandle
       });
-      this.domElement.addEventListener("mousemove", this.mouseMoveListener, false);
+      this.domElement.addEventListener("pointermove", this.pointerMoveListener, false);
     } else {
       this.activePlane = null;
     }
@@ -132,7 +132,7 @@ export default class Raycaster extends THREE.Raycaster {
     return this.cameraPosition.sub(object.position);
   };
 
-  private setRayDirection = (event: MouseEvent) => {
+  private setRayDirection = (event: PointerEvent) => {
     const rect = this.domElement.getBoundingClientRect();
     const { clientHeight, clientWidth } = this.domElement;
     this.mouse.x = ((event.clientX - rect.left) / clientWidth) * 2 - 1;
@@ -140,7 +140,7 @@ export default class Raycaster extends THREE.Raycaster {
     this.setFromCamera(this.mouse, this.camera);
   };
 
-  private mouseMoveListener = (event: MouseEvent) => {
+  private pointerMoveListener = (event: PointerEvent) => {
     if (this.activeHandle === null || this.activePlane === null) {
       return;
     }
@@ -164,9 +164,9 @@ export default class Raycaster extends THREE.Raycaster {
     this.previousScreenPoint.set(event.clientX, event.clientY);
   };
 
-  private mouseUpListener = () => {
-    this.domElement.removeEventListener("mousemove", this.mouseMoveListener);
-    this.domElement.addEventListener("mousedown", this.mouseDownListener, false);
+  private pointerUpListener = () => {
+    this.domElement.removeEventListener("pointermove", this.pointerMoveListener);
+    this.domElement.addEventListener("pointerdown", this.pointerDownListener, false);
     emitter.emit(EVENTS.DRAG_STOP, { point: this.point, handle: this.activeHandle });
 
     if (
@@ -235,8 +235,8 @@ export default class Raycaster extends THREE.Raycaster {
   public destroy = () => {
     this.activePlane = null;
     this.activeHandle = null;
-    this.domElement.removeEventListener("mousedown", this.mouseDownListener);
-    this.domElement.removeEventListener("mousemove", this.mouseMoveListener);
-    this.domElement.removeEventListener("mouseup", this.mouseUpListener);
+    this.domElement.removeEventListener("pointerdown", this.pointerDownListener);
+    this.domElement.removeEventListener("pointermove", this.pointerMoveListener);
+    this.domElement.removeEventListener("pointerup", this.pointerUpListener);
   };
 }
