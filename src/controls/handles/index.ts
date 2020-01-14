@@ -64,6 +64,7 @@ export enum DEFAULT_HANDLE_GROUP_NAME {
 
 /**
  * Base class for all handles
+ * @noInheritDoc
  */
 export abstract class HandleGroup extends THREE.Group {
   /**
@@ -83,8 +84,6 @@ export abstract class HandleGroup extends THREE.Group {
 /**
  * This class can be extended to create custom translation handles.
  * It requires setting the properties `parallel` and `up`.
- * Requires implementing [[HandleGroup.getInteractiveObjects]] and
- * [[HandleGroup.setColor]].
  */
 export abstract class TranslationGroup extends HandleGroup {
   /**
@@ -104,8 +103,6 @@ export abstract class TranslationGroup extends HandleGroup {
 /**
  * This class can be extended to create custom rotation handles.
  * It requires setting the property `up`.
- * Requires implementing [[HandleGroup.getInteractiveObjects]] and
- * [[HandleGroup.setColor]].
  */
 export abstract class RotationGroup extends HandleGroup {
   /**
@@ -118,16 +115,12 @@ export abstract class RotationGroup extends HandleGroup {
 
 /**
  * This class can be extended to create custom pick handle (translates in eye-plane).
- * Requires implementing [[HandleGroup.getInteractiveObjects]] and
- * [[HandleGroup.setColor]].
  */
 export abstract class PickGroup extends HandleGroup {}
 
 /**
  * This class can be extended to create custom pick plane handles.
  * It requires setting the property `up`.
- * Requires implementing [[HandleGroup.getInteractiveObjects]] and
- * [[HandleGroup.setColor]].
  */
 export abstract class PickPlaneGroup extends HandleGroup {
   /**

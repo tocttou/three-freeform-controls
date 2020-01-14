@@ -1,6 +1,6 @@
 {
   "name": "three-freeform-controls",
-  "version": "0.0.18",
+  "version": "0.1.0",
   "description": "",
   "keywords": [],
   "main": "dist/three-freeform-controls.umd.js",
@@ -116,6 +116,7 @@
     "tslint-config-standard": "^8.0.1",
     "typedoc": "^0.15.8",
     "typedoc-plugin-internal-external": "^2.0.2",
+    "typedoc-plugin-no-inherit": "^1.1.10",
     "typescript": "^3.7.4"
   },
   "peerDependencies": {

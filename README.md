@@ -3,7 +3,6 @@
 [![npm version](https://badge.fury.io/js/three-freeform-controls.svg)](https://badge.fury.io/js/three-freeform-controls)
 ![Built with TypeScript](https://flat.badgen.net/badge/icon/TypeScript?icon=typescript&label&labelColor=blue&color=555555)
 [![Build Status](https://travis-ci.org/tocttou/three-freeform-controls.svg?branch=master)](https://travis-ci.org/tocttou/three-freeform-controls)
-[![Greenkeeper badge](https://badges.greenkeeper.io/tocttou/three-freeform-controls.svg)](https://greenkeeper.io/)
 
 This library provides rotation and translation controls for [THREE.JS](https://threejs.org/) objects.
 
@@ -30,7 +29,7 @@ This library provides rotation and translation controls for [THREE.JS](https://t
 
 ### Todo:
 
-- [ ] examples
+- [ ] snap in Translation controls
 - [ ] tests
 
 ---

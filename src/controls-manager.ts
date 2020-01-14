@@ -8,6 +8,7 @@ import { DEFAULT_HANDLE_GROUP_NAME } from "./controls/handles";
  * The ControlsManager provides helper functions to create Controls instances
  * and link them up with a Raycaster instance (reused across multiple Controls
  * instances).
+ * @noInheritDoc
  */
 export default class ControlsManager extends THREE.Object3D {
   private objects: { [id: number]: THREE.Object3D } = {};

@@ -84,6 +84,7 @@ export interface IControlsOptions {
  * `quaternion` can be modified as desired.
  * The `children` are the control handles (like `rotationX`).
  * All translations and rotations are setup with respect to the global coordinate system.
+ * @noInheritDoc
  */
 export default class Controls extends THREE.Group {
   /**
