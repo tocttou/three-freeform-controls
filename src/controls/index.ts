@@ -494,7 +494,7 @@ export default class Controls extends THREE.Group {
     handleNames: Array<DEFAULT_HANDLE_GROUP_NAME | string>,
     visibility = true
   ) => {
-    const handleNamesMap: { [name: string]: IHandle } = {};
+    const handleNamesMap: { [name: string]: IHandle | undefined } = {};
     this.handles.forEach(handle => {
       handleNamesMap[handle.name] = handle;
     });
