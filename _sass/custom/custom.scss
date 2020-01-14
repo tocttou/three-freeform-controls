@@ -1,1 +1,18 @@
 $nav-width: 350px;
+
+.inherit-display {
+  display: inherit !important;
+}
+
+.link-icon {
+  width: 15px;
+  height: 15px;
+}
+
+.orange-box {
+  border: 1px solid darkorange;
+  padding: 10px;
+  background: #f8ead1;
+  border-radius: 5px;
+  margin: 20px 10px;
+}

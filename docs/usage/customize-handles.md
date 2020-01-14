@@ -5,7 +5,7 @@ nav_order: 5
 parent: Usage
 ---
 
-The three.js objects for the handles can be accessed directly from the controls object for modification.
+The `Three.js` objects for the handles can be accessed as properties on the `Controls` instance.
 
 The below table maps all the default handle objects available to their handle names.
 
@@ -22,22 +22,22 @@ const controls = ControlsManager.anchor(box);
 console.log(controls.translationZP); // three.js object
 ```
 
-| handle name   | three.js object        |
-| :------------ | :--------------------- |
-| XPT           | controls.translationXP |
-| XNT           | controls.translationXN |
-| YPT           | controls.translationYP |
-| YNT           | controls.translationYN |
-| ZPT           | controls.translationZP |
-| ZNT           | controls.translationZN |
-| XR            | controls.rotationX     |
-| YR            | controls.rotationY     |
-| ZR            | controls.rotationZ     |
-| ER            | controls.rotationEye   |
-| PICK_PLANE_XY | controls.pickPlaneXY   |
-| PICK_PLANE_YZ | controls.pickPlaneYZ   |
-| PICK_PLANE_ZX | controls.pickPlaneZX   |
-| PICK          | controls.pick          |
+| handle name                                                                                                      | `Three.js` object                                                                                         |
+| :--------------------------------------------------------------------------------------------------------------- | :-------------------------------------------------------------------------------------------------------- |
+| [XPT]({{ site.baseurl }}/apiref/enums/default_handle_group_name.html#xpt){:target="_blank"}                      | [controls.translationXP]({{ site.baseurl }}/apiref/classes/controls.html#translationxp){:target="_blank"} |
+| [XNT]({{ site.baseurl }}/apiref/enums/default_handle_group_name.html#xnt){:target="_blank"}                      | [controls.translationXN]({{ site.baseurl }}/apiref/classes/controls.html#translationxn){:target="_blank"} |
+| [YPT]({{ site.baseurl }}/apiref/enums/default_handle_group_name.html#ypt){:target="_blank"}                      | [controls.translationYP]({{ site.baseurl }}/apiref/classes/controls.html#translationyp){:target="_blank"} |
+| [YNT]({{ site.baseurl }}/apiref/enums/default_handle_group_name.html#ynt){:target="_blank"}                      | [controls.translationYN]({{ site.baseurl }}/apiref/classes/controls.html#translationyn){:target="_blank"} |
+| [ZPT]({{ site.baseurl }}/apiref/enums/default_handle_group_name.html#zpt){:target="_blank"}                      | [controls.translationZP]({{ site.baseurl }}/apiref/classes/controls.html#translationzp){:target="_blank"} |
+| [ZNT]({{ site.baseurl }}/apiref/enums/default_handle_group_name.html#znt){:target="_blank"}                      | [controls.translationZN]({{ site.baseurl }}/apiref/classes/controls.html#translationzn){:target="_blank"} |
+| [XR]({{ site.baseurl }}/apiref/enums/default_handle_group_name.html#xr){:target="_blank"}                        | [controls.rotationX]({{ site.baseurl }}/apiref/classes/controls.html#rotationx){:target="_blank"}         |
+| [YR]({{ site.baseurl }}/apiref/enums/default_handle_group_name.html#yr){:target="_blank"}                        | [controls.rotationY]({{ site.baseurl }}/apiref/classes/controls.html#rotationy){:target="_blank"}         |
+| [ZR]({{ site.baseurl }}/apiref/enums/default_handle_group_name.html#zr){:target="_blank"}                        | [controls.rotationZ]({{ site.baseurl }}/apiref/classes/controls.html#rotationz){:target="_blank"}         |
+| [ER]({{ site.baseurl }}/apiref/enums/default_handle_group_name.html#er){:target="_blank"}                        | [controls.rotationEye]({{ site.baseurl }}/apiref/classes/controls.html#rotationeye){:target="_blank"}     |
+| [PICK_PLANE_XY]({{ site.baseurl }}/apiref/enums/default_handle_group_name.html#pick_plane_xy){:target="_blank"}  | [controls.pickPlaneXY]({{ site.baseurl }}/apiref/classes/controls.html#pickplanexy){:target="_blank"}     |
+| [PICK_PLANE_YZ]({{ site.baseurl }}/apiref/enums/default_handle_group_name.html#pick_plane_yz){:target="_blank"}  | [controls.pickPlaneYZ]({{ site.baseurl }}/apiref/classes/controls.html#pickplaneyz){:target="_blank"}     |
+| [PICK_PLANE_ZX]({{ site.baseurl }}/apiref/enums/default_handle_group_name.html#pick_plane_zx){:target="_blank"}  | [controls.pickPlaneZX]({{ site.baseurl }}/apiref/classes/controls.html#pickplanezx){:target="_blank"}     |
+| [PICK]({{ site.baseurl }}/apiref/enums/default_handle_group_name.html#pick){:target="_blank"}                    | [controls.pick]({{ site.baseurl }}/apiref/classes/controls.html#pick){:target="_blank"}                   |
 
 
 ## Manipulating default handles objects
@@ -57,7 +57,9 @@ controls.rotationY.applyQuaternion(quaternion);
 controls.rotationY.up.applyQuaternion(quaternion);
 ```
 
-**In case the rotated handle is of type `Translation` or `TranslationGroup`, it is necessary to rotate the `parallel` vector along with the `up` vector.**
+<div class="orange-box">
+In case the rotated handle is of type `Translation` or `TranslationGroup`, it is necessary to rotate the `parallel` vector along with the `up` vector.
+</div>
 
 The `parallel` vector is a vector parallel to the handles object. This is defined only for the instances of `TranslationGroup`.
 
@@ -80,4 +82,6 @@ const controls = new ControlsManager.anchor(box);
 controls.rotationY.setColor("pink");
 ```
 
-An example illustrating rotation, translation, and color change for default handles can be accessed [here]({{ site.baseurl }}/examples/customize-handles){:target="_blank"}.
+An example illustrating rotation, translation, and color change for default handles can be accessed below.
+
+[View example]({{ site.baseurl }}/examples/customize-handles){: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 .mr-2 }{:target="_blank"}

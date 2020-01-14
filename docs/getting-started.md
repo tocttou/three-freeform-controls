@@ -31,7 +31,7 @@ OR
 <!-- Import three.js first -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/109/three.min.js"></script>
 <!-- Then import three-freeform-controls -->
-<script src="https://cdn.jsdelivr.net/npm/three-freeform-controls@latest/dist/three-freeform-controls.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three-freeform-controls@0.1.0/dist/three-freeform-controls.umd.js"></script>
 ```
 
 Available as: object `FreeformControls` on the `window` scope.
@@ -57,8 +57,10 @@ Now anchoring the controls on a three.js object:
 const controls = controlsManager.anchor(box);
 ```
 
+[View example]({{ site.baseurl }}/examples/basic.html){:target="_blank"}{: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 .mr-2 }
+
 ![screenshot](https://i.imgur.com/b1cxpHs.png)
 
-The above illustrated example can be accessed [here]({{ site.baseurl }}/examples/basic.html){:target="_blank"}. 
+Next section: [Usage]({{ site.baseurl }}/docs/usage)
 
 

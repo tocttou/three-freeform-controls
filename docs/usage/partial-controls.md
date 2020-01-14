@@ -7,7 +7,7 @@ parent: Usage
 
 Handles in controls can be enabled selectively.
 
-## showAll
+## [showAll ![link](https://img.icons8.com/ios/24/000000/external-link.png){: .link-icon }]({{ site.baseurl }}apiref/classes/controls.html#showall){:target="_blank"}
 
 Hiding all handles:
 
@@ -17,7 +17,7 @@ const controls = ControlsManager.anchor(box);
 controls.showAll(false); // or true to make all handles visible
 ```
 
-## showByNames
+## [showByNames ![link](https://img.icons8.com/ios/24/000000/external-link.png){: .link-icon }]({{ site.baseurl }}apiref/classes/controls.html#showByNames){:target="_blank"}
 
 Hiding handles selectively:
 
@@ -39,4 +39,12 @@ If the user wants to show only some specific handles, it can be done by:
 1. `showAll(false)`: to hide all the handles at first
 2. `showByNames([handlesToShow], true)`: to display only selective handles
 
-An example for these can be accessed [here]({{ site.baseurl }}/examples/partial-controls){:target="_blank"}.
+Since the handles are `Three.js` objects, we can modify their display property directly as well:
+
+```js
+const controls = ControlsManager.anchor(box);
+// hiding the rotation handle in the yz plane (x-axis is the normal)
+controls.rotationX.visible = false;
+```
+
+[View example]({{ site.baseurl }}/examples/partial-controls){:target="_blank"}{: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 .mr-2 }

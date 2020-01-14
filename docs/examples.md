@@ -12,3 +12,4 @@ nav_order: 5
 - [Customize handles]({{ site.baseurl }}/examples/customize-handles){:target="_blank"}
 - [Custom handles (default handles instantiated outside)]({{ site.baseurl }}/examples/custom-handles-1){:target="_blank"}
 - [Custom handles (using different objects for handles)]({{ site.baseurl }}/examples/custom-handles-2){:target="_blank"}
+- [Inverse Kinematics control]({{ site.baseurl }}/examples/ik){:target="_blank"}

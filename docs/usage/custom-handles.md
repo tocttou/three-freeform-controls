@@ -14,7 +14,7 @@ There are two ways to do this:
 
 Note that the rules of [modifying the up and parallel vectors]({{ site.baseurl }}/docs/usage/customize-handles#manipulating-default-handles-objects) when modifying the default handles, applies to custom handles as well.
 
-## instantiating default handles
+## Custom handles by instantiating default handles
 
 ```js
 import { Translation, Rotation } from "three-freeform-controls";
@@ -26,7 +26,6 @@ controls.showAll(false);
 const translationHandle = new Translation("cyan");
 const rotationHandle = new Rotation("pink");
 
-// give unique names, otherwise error
 translationHandle.name = "TranslationHandle";
 rotationHandle.name = "RotationHandle";
 
@@ -46,20 +45,22 @@ controls.setupHandle(translationHandle);
 controls.setupHandle(rotationHandle);
 ```
 
-An example of the above snippet can be accessed [here]({{ site.baseurl }}/examples/custom-handles-1){:target="\_blank"}.
+An example of the above snippet can be accessed below.
 
-## extending handles groups
+[View example]({{ site.baseurl }}/examples/custom-handles-1){: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 .mr-2 }{:target="_blank"}
+
+## Custom handles by extending handles groups
 
 The following handles groups are available:
 
 ```js
-import { PickPlaneGroup, RotationGroup, TranslationGroup } from "three-freeform-controls";
+import { PickGroup, PickPlaneGroup, RotationGroup, TranslationGroup } from "three-freeform-controls";
 ```
 
-Each of these groups requires implementing the following properties:
+Extending any of these groups requires implementing the following properties:
 
-1. `getInteractiveObjects: () => Array<THREE.Object3d>`: returns an array of the all the objects that are interactive in the handle
-2. `setColor: () => void`: sets the color for the handle
+1. [getInteractiveObjects]({{ site.baseurl }}/apiref/classes/handlegroup.html#getinteractiveobjects){:target="_blank"}: returns an array of the all the objects that are interactive in the handle
+2. [setColor]({{ site.baseurl }}/apiref/classes/handlegroup.html#setcolor){:target="_blank"}: sets the color for the handle
 
 **In addition, the `TranslationGroup` also requires implementing a `parallel` vector property on the handle.**
 
@@ -114,6 +115,8 @@ customRotationHandle.up = new THREE.Vector3(0, 0, 1);
 controls.setupHandle(customRotationHandle);
 ```
 
-The above illustrated example can be accessed [here]({{ site.baseurl }}/examples/custom-handles-2){:target="\_blank"}.
+The above illustrated example can be accessed below.
+
+[View example]({{ site.baseurl }}/examples/custom-handles-2){: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 .mr-2 }{:target="_blank"}
 
 Note that the centre of rotation remains the position of the `controls` object, and not the position of the individual handles.

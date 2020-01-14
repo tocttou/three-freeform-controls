@@ -12,7 +12,7 @@ const controlsManager = new FreeformControls.ControlsManager(camera, renderer.do
 scene.add(controlsManager);
 ```
 
-## anchor
+## [anchor ![link](https://img.icons8.com/ios/24/000000/external-link.png){: .link-icon }]({{ site.baseurl }}/apiref/classes/controlsmanager.html#anchor){:target="_blank"}
 
 Then calling `anchor` on the `controlsManager` gives access to the controls object:
 
@@ -25,14 +25,16 @@ const controls = controlsManager.anchor(box);
 
 All options accepted by `anchor` are listed below:
 
-| key                                | default value                | description                                                                                                                                                                                                                                                                                |
-| :--------------------------------- | :--------------------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| mode                               | `ANCHOR_MODE.FIXED`          | Controls can be anchored in two modes: 1. `FIXED`: The controls retain their orientation with respect to the world even if the object (or an object up its parent chain) is rotating. 2. `INHERIT`: The controls inherit the orientation of the object the controls object is anchored to. |
-| separationT                        | `{ x: 1, y: 1, z: 1 }`       | The separation between translation controls and the center of the controls object.                                                                                                                                                                                                         |
-| orientation                        | `{ x: 0, y: 0, z: 0, w: 1 }` | The initial orientation (in quaternion form) of the controls object.                                                                                                                                                                                                                       |
-| hideOtherHandlesOnSelect           | `true`                       | Hide all other handles of the controls object while being interacted with.                                                                                                                                                                                                                 |
-| hideOtherControlsInstancesOnSelect | `true`                       | Hide all other controls objects from the scene when being interacted with.                                                                                                                                                                                                                 |
-| showHelperPlane                    | `false`                      | Useful for debug. Shows the intersection plane used in raycasting.                                                                                                                                                                                                                         |
+| key                                | default value                | description                                                                                                                                                                                                                                                                                                                                      |
+| :--------------------------------- | :--------------------------- | :-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------                                                       |
+| mode                               | `ANCHOR_MODE.FIXED`          | Controls can be anchored in two modes: 1. `FIXED`: The controls retain their orientation with respect to the world even if the object (or an object up its parent chain) is rotating. 2. `INHERIT`: The controls inherit the orientation of the object the controls object is anchored to.                                                       |
+| separation                         | `0.5                 `       | The distance between the position of the object and the position of the handles (in case of translation handles), or the radius (in case of rotation handles), or the size of the plane (in case of plane handles. [View example]({{ site.baseurl }}/examples/separation.html){:target="_blank"}{: .btn .fs-5 .mb-4 .mb-md-0 .inherit-display }  |
+| orientation                        | `{ x: 0, y: 0, z: 0, w: 1 }` | The initial orientation (in quaternion form) of the controls object.                                                                                                                                                                                                                                                                             |
+| hideOtherHandlesOnDrag             | `true`                       | Hide all other handles of the controls object while being interacted with.                                                                                                                                                                                                                                                                       |
+| hideOtherControlsInstancesOnDrag   | `true`                       | Hide all other controls objects from the scene when being interacted with.                                                                                                                                                                                                                                                                       |
+| isDampingEnabled                   | `true`                       | Enables damping for the controls                                                                                                                                                                                                                                                                                                                 |
+| showHelperPlane                    | `false`                      | Useful for debug. Shows the intersection plane used in raycasting.                                                                                                                                                                                                                                                                               |
+| useComputedBounds                  | `false`                      | Uses `THREE.Mesh.computeBounds` to set the separation; if separation is provided in addition to this option, it is added to the computed bounds. [View example]({{ site.baseurl }}/examples/compute-bounds.html){:target="_blank"}{: .btn .fs-5 .mb-4 .mb-md-0 .inherit-display }                                                                |
 
 The options can be specified as:
 
@@ -61,19 +63,33 @@ const controls = controlsManager.anchor(box, {
 ### Different anchors on different objects
 
 The `controlsManager` can be used to anchor the controls on more than one object as well.
-An example illustrating the different anchor modes on different objects can be accessed [here]({{ site.baseurl }}/examples/different-anchors-different-objects){:target="\_blank"}.
+An example illustrating the different anchor modes on different objects can be accessed below.
+
+[View example]({{ site.baseurl }}/examples/different-anchors-different-objects){:target="_blank"}{: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 .mr-2 }
 
 ### Different anchors on the same object
 
 Sometimes it is necessary to have some controls handles behave differently (or perhaps at different orientation) than others. In that case the `controlsManager` can be used to anchor different partial controls on the same object.
 More on partial controls in [Partial Controls]({{ site.baseurl }}/docs/usage/partial-controls).
 
-An example illustrating different anchor modes for multiple partial controls on the same object can be accessed [here]({{ site.baseurl }}/examples/different-anchors-same-object){:target="\_blank"}.
+An example illustrating different anchor modes for multiple partial controls on the same object can be accessed below.
 
-## detach
+[View example]({{ site.baseurl }}/examples/different-anchors-same-object){:target="_blank"}{: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 .mr-2 }
+
+## [detach ![link](https://img.icons8.com/ios/24/000000/external-link.png){: .link-icon }]({{ site.baseurl }}/apiref/classes/controlsmanager.html#detach){:target="_blank"}
 
 The anchored controls can be detached like this:
 
 ```js
 controlsManager.detach(object, controls);
 ```
+
+## [destroy ![link](https://img.icons8.com/ios/24/000000/external-link.png){: .link-icon }]({{ site.baseurl }}/apiref/classes/controlsmanager.html#destroy){:target="_blank"}
+
+All anchored controls instances can be removed like this:
+
+```js
+controlsManager.destroy();
+```
+
+Next section: [Events]({{ site.baseurl }}/docs/usage/events)

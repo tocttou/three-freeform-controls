@@ -5,16 +5,16 @@ nav_order: 3
 parent: Usage
 ---
 
-## listen
+## [listen ![link](https://img.icons8.com/ios/24/000000/external-link.png){: .link-icon }]({{ site.baseurl }}/apiref/classes/controlsmanager.html#listen){:target="_blank"}
 
 The `FreeformControls.ControlsManager` instance allows listening to the following events on controls:
 
 - `DRAG_START`: Triggered once when the controls become active.
 
 ```js
-import { RAYCASTER_EVENTS } from 'three-freeform-controls';
+import { EVENTS } from 'three-freeform-controls';
 // ...
-controlsManager.listen(RAYCASTER_EVENTS.DRAG_START, (object, handleName) => {
+controlsManager.listen(EVENTS.DRAG_START, (object, handleName) => {
   // This place can be used to disable the scene controls like OrbitControls
   orbitControls.enabled = false;
 });
@@ -23,9 +23,9 @@ controlsManager.listen(RAYCASTER_EVENTS.DRAG_START, (object, handleName) => {
 - `DRAG_STOP`: Triggered once when the controls become inactive.
 
 ```js
-import { RAYCASTER_EVENTS } from 'three-freeform-controls';
+import { EVENTS } from 'three-freeform-controls';
 // ...
-controlsManager.listen(RAYCASTER_EVENTS.DRAG_STOP, (object, handleName) => {
+controlsManager.listen(EVENTS.DRAG_STOP, (object, handleName) => {
   // This place can be used to re-enable the scene controls like OrbitControls
   orbitControls.enabled = true;
 });
@@ -34,9 +34,9 @@ controlsManager.listen(RAYCASTER_EVENTS.DRAG_STOP, (object, handleName) => {
 - `DRAG`: Triggered on each drag event on the controls object.
 
 ```js
-import { RAYCASTER_EVENTS } from 'three-freeform-controls';
+import { EVENTS } from 'three-freeform-controls';
 // ...
-controlsManager.listen(RAYCASTER_EVENTS.DRAG, (object, handleName) => {
+controlsManager.listen(EVENTS.DRAG, (object, handleName) => {
   // This place can be used to ingest information about the object
   // to which the controls were anchored
   const positionOfObjectToWhichControlsWereAnchored = object.position;
@@ -51,14 +51,17 @@ callback: (object: THREE.Object3d, handleName: string) => void
 ```
 
 Here the `object` is the object to which the controls were anchored to and `handleName` is the name of the handle
-that was involved in the interaction.
+that was involved in the interaction - it can be one of the [default names]({{ site.baseurl }}/apiref/enums/default_handle_group_name.html){:target="_blank"}
+or the corresponding string for custom handles.
 
-## removeListen
+## [removeListen ![link](https://img.icons8.com/ios/24/000000/external-link.png){: .link-icon }]({{ site.baseurl }}/apiref/classes/controlsmanager.html#removelisten){:target="_blank"}
 
 An attached listener function can be removed like this:
 
 ```js
-controlsManager.removeListen(RAYCASTER_EVENTS.DRAG, listenerFn);
+controlsManager.removeListen(EVENTS.DRAG, listenerFn);
 ```
 
-An example illustrating these events can be accessed [here]({{ site.baseurl }}/examples/events.html){:target="_blank"}.
+An example illustrating these events can be accessed below.
+
+[View example]({{ site.baseurl }}/examples/events.html){:target="_blank"}{: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 .mr-2 }
