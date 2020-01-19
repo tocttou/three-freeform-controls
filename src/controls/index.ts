@@ -199,10 +199,10 @@ export default class Controls extends THREE.Group {
   private initialSelfQuaternion = new THREE.Quaternion();
   private readonly options: IControlsOptions;
   private readonly mode: ANCHOR_MODE;
-  private rotationRadiusScale: number;
-  private eyeRotationRadiusScale: number;
-  private pickPlaneSizeScale: number;
-  private translationDistanceScale: number;
+  private readonly translationDistanceScale: number;
+  private readonly rotationRadiusScale: number;
+  private readonly eyeRotationRadiusScale: number;
+  private readonly pickPlaneSizeScale: number;
   /**
    * enables damping for the controls
    * @default true
@@ -265,18 +265,18 @@ export default class Controls extends THREE.Group {
 
     this.pickPlaneXY = new PickPlane(
       "yellow",
-      this.boundingSphereRadius * 0.75,
-      this.boundingSphereRadius * 0.75
+      this.boundingSphereRadius * this.pickPlaneSizeScale,
+      this.boundingSphereRadius * this.pickPlaneSizeScale
     );
     this.pickPlaneYZ = new PickPlane(
       "cyan",
-      this.boundingSphereRadius * 0.75,
-      this.boundingSphereRadius * 0.75
+      this.boundingSphereRadius * this.pickPlaneSizeScale,
+      this.boundingSphereRadius * this.pickPlaneSizeScale
     );
     this.pickPlaneZX = new PickPlane(
       "pink",
-      this.boundingSphereRadius * 0.75,
-      this.boundingSphereRadius * 0.75
+      this.boundingSphereRadius * this.pickPlaneSizeScale,
+      this.boundingSphereRadius * this.pickPlaneSizeScale
     );
 
     this.translationXP = new Translation("red");
@@ -287,11 +287,14 @@ export default class Controls extends THREE.Group {
     this.translationYN = new Translation("green");
     this.translationZN = new Translation("blue");
 
-    this.rotationX = new Rotation("red", this.boundingSphereRadius);
-    this.rotationY = new Rotation("green", this.boundingSphereRadius);
-    this.rotationZ = new Rotation("blue", this.boundingSphereRadius);
+    this.rotationX = new Rotation("red", this.boundingSphereRadius * this.rotationRadiusScale);
+    this.rotationY = new Rotation("green", this.boundingSphereRadius * this.rotationRadiusScale);
+    this.rotationZ = new Rotation("blue", this.boundingSphereRadius * this.rotationRadiusScale);
 
-    this.rotationEye = new RotationEye("yellow", this.boundingSphereRadius * 1.25);
+    this.rotationEye = new RotationEye(
+      "yellow",
+      this.boundingSphereRadius * this.eyeRotationRadiusScale
+    );
 
     this.setupDefaultTranslation();
     this.setupDefaultRotation();
@@ -342,13 +345,13 @@ export default class Controls extends THREE.Group {
     this.translationYN.name = DEFAULT_HANDLE_GROUP_NAME.YNT;
     this.translationZN.name = DEFAULT_HANDLE_GROUP_NAME.ZNT;
 
-    this.translationXP.translateX(this.boundingSphereRadius);
-    this.translationYP.translateY(this.boundingSphereRadius);
-    this.translationZP.translateZ(this.boundingSphereRadius);
+    this.translationXP.translateX(this.boundingSphereRadius * this.translationDistanceScale);
+    this.translationYP.translateY(this.boundingSphereRadius * this.translationDistanceScale);
+    this.translationZP.translateZ(this.boundingSphereRadius * this.translationDistanceScale);
 
-    this.translationXN.translateX(-this.boundingSphereRadius);
-    this.translationYN.translateY(-this.boundingSphereRadius);
-    this.translationZN.translateZ(-this.boundingSphereRadius);
+    this.translationXN.translateX(-this.boundingSphereRadius * this.translationDistanceScale);
+    this.translationYN.translateY(-this.boundingSphereRadius * this.translationDistanceScale);
+    this.translationZN.translateZ(-this.boundingSphereRadius * this.translationDistanceScale);
 
     this.translationXP.rotateZ(-Math.PI / 2);
     this.translationZP.rotateX(Math.PI / 2);
