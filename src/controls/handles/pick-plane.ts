@@ -26,14 +26,18 @@ export default class PickPlane extends PickPlaneGroup {
    */
   public readonly crossY: Line;
 
-  constructor(color = DEFAULT_COLOR_PLANE) {
+  constructor(
+    color = DEFAULT_COLOR_PLANE,
+    width = DEFAULT_PLANE_WIDTH,
+    height = DEFAULT_PLANE_HEIGHT
+  ) {
     super();
     const boundaryGeometry = new THREE.Geometry();
     const crossXGeometry = new THREE.Geometry();
     const crossYGeometry = new THREE.Geometry();
 
-    const vertexMaxX = DEFAULT_PLANE_WIDTH / 2;
-    const vertexMaxY = DEFAULT_PLANE_HEIGHT / 2;
+    const vertexMaxX = width / 2;
+    const vertexMaxY = height / 2;
 
     boundaryGeometry.vertices.push(new THREE.Vector3(vertexMaxX, vertexMaxY, 0));
     boundaryGeometry.vertices.push(new THREE.Vector3(vertexMaxX, -vertexMaxY, 0));
@@ -49,7 +53,7 @@ export default class PickPlane extends PickPlaneGroup {
     this.boundary = new Line(color, boundaryGeometry);
     this.crossX = new Line("black", crossXGeometry);
     this.crossY = new Line("black", crossYGeometry);
-    this.plane = new Plane(color);
+    this.plane = new Plane(color, width, height);
 
     this.add(this.plane);
     this.add(this.boundary);

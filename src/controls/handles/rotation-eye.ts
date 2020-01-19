@@ -1,6 +1,6 @@
 import * as THREE from "three";
 import Rotation from "./rotation";
-import { DEFAULT_COLOR_RING } from "../../utils/constants";
+import { DEFAULT_COLOR_RING, DEFAULT_RING_RADIUS } from "../../utils/constants";
 
 /**
  * @hidden
@@ -13,8 +13,8 @@ export default class RotationEye extends Rotation {
   private _temp3 = new THREE.Quaternion();
   private worldPosition = new THREE.Vector3();
 
-  constructor(color = DEFAULT_COLOR_RING) {
-    super(color, 1.25);
+  constructor(color = DEFAULT_COLOR_RING, radius = DEFAULT_RING_RADIUS) {
+    super(color, radius);
   }
 
   updateMatrixWorld(force?: boolean): void {

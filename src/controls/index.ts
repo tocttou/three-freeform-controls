@@ -1,5 +1,11 @@
 import * as THREE from "three";
-import { DEFAULT_CONTROLS_SEPARATION } from "../utils/constants";
+import {
+  DEFAULT_CONTROLS_SEPARATION,
+  DEFAULT_EYE_ROTATION_SCALE,
+  DEFAULT_PLANE_SIZE_SCALE,
+  DEFAULT_ROTATION_RADIUS_SCALE,
+  DEFAULT_TRANSLATION_DISTANCE_SCALE
+} from "../utils/constants";
 import Translation from "./handles/translation";
 import Rotation from "./handles/rotation";
 import Pick from "./handles/pick";
@@ -76,6 +82,27 @@ export interface IControlsOptions {
    * @default true
    */
   isDampingEnabled?: boolean;
+  /**
+   * sets the scaling factor for the radius of rotation handles
+   * @default 1.0
+   */
+  rotationRadiusScale?: number;
+  /**
+   * sets the scaling factor for the radius of rotation handles in eye plane
+   * @default 1.25
+   */
+  eyeRotationRadiusScale?: number;
+  /**
+   * sets the width and height scale for the pick plane handles
+   * @default 0.75
+   */
+  pickPlaneSizeScale?: number;
+  /**
+   * sets the scaling for distance between translation handles' start and the
+   * center of the controls
+   * @default 1.0
+   */
+  translationDistanceScale?: number;
 }
 
 /**
@@ -160,8 +187,7 @@ export default class Controls extends THREE.Group {
   private normalizedHandleParallelVectorCache = new THREE.Vector3();
   private touch1 = new THREE.Vector3();
   private touch2 = new THREE.Vector3();
-  private minBox = new THREE.Vector3();
-  private maxBox = new THREE.Vector3();
+  private boundingSphereRadius = 0;
   private dragStartPoint = new THREE.Vector3();
   private dragIncrementalStartPoint = new THREE.Vector3();
   private handles: Set<IHandle> = new Set();
@@ -173,6 +199,10 @@ export default class Controls extends THREE.Group {
   private initialSelfQuaternion = new THREE.Quaternion();
   private readonly options: IControlsOptions;
   private readonly mode: ANCHOR_MODE;
+  private rotationRadiusScale: number;
+  private eyeRotationRadiusScale: number;
+  private pickPlaneSizeScale: number;
+  private translationDistanceScale: number;
   /**
    * enables damping for the controls
    * @default true
@@ -216,6 +246,12 @@ export default class Controls extends THREE.Group {
     this.useComputedBounds = this.options?.useComputedBounds ?? false;
     this.separation = this.options?.separation ?? DEFAULT_CONTROLS_SEPARATION;
     this.isDampingEnabled = this.options?.isDampingEnabled ?? true;
+    this.rotationRadiusScale = this.options?.rotationRadiusScale ?? DEFAULT_ROTATION_RADIUS_SCALE;
+    this.eyeRotationRadiusScale =
+      this.options?.eyeRotationRadiusScale ?? DEFAULT_EYE_ROTATION_SCALE;
+    this.pickPlaneSizeScale = this.options?.pickPlaneSizeScale ?? DEFAULT_PLANE_SIZE_SCALE;
+    this.translationDistanceScale =
+      this.options?.translationDistanceScale ?? DEFAULT_TRANSLATION_DISTANCE_SCALE;
 
     if (this.options.orientation !== undefined) {
       const { x, y, z, w } = this.options.orientation;
@@ -227,9 +263,21 @@ export default class Controls extends THREE.Group {
 
     this.pick = new Pick();
 
-    this.pickPlaneXY = new PickPlane("yellow");
-    this.pickPlaneYZ = new PickPlane("cyan");
-    this.pickPlaneZX = new PickPlane("pink");
+    this.pickPlaneXY = new PickPlane(
+      "yellow",
+      this.boundingSphereRadius * 0.75,
+      this.boundingSphereRadius * 0.75
+    );
+    this.pickPlaneYZ = new PickPlane(
+      "cyan",
+      this.boundingSphereRadius * 0.75,
+      this.boundingSphereRadius * 0.75
+    );
+    this.pickPlaneZX = new PickPlane(
+      "pink",
+      this.boundingSphereRadius * 0.75,
+      this.boundingSphereRadius * 0.75
+    );
 
     this.translationXP = new Translation("red");
     this.translationYP = new Translation("green");
@@ -239,11 +287,11 @@ export default class Controls extends THREE.Group {
     this.translationYN = new Translation("green");
     this.translationZN = new Translation("blue");
 
-    this.rotationX = new Rotation("red");
-    this.rotationY = new Rotation("green");
-    this.rotationZ = new Rotation("blue");
+    this.rotationX = new Rotation("red", this.boundingSphereRadius);
+    this.rotationY = new Rotation("green", this.boundingSphereRadius);
+    this.rotationZ = new Rotation("blue", this.boundingSphereRadius);
 
-    this.rotationEye = new RotationEye("yellow");
+    this.rotationEye = new RotationEye("yellow", this.boundingSphereRadius * 1.25);
 
     this.setupDefaultTranslation();
     this.setupDefaultRotation();
@@ -294,13 +342,13 @@ export default class Controls extends THREE.Group {
     this.translationYN.name = DEFAULT_HANDLE_GROUP_NAME.YNT;
     this.translationZN.name = DEFAULT_HANDLE_GROUP_NAME.ZNT;
 
-    this.translationXP.translateX(this.maxBox.x);
-    this.translationYP.translateY(this.maxBox.y);
-    this.translationZP.translateZ(this.maxBox.z);
+    this.translationXP.translateX(this.boundingSphereRadius);
+    this.translationYP.translateY(this.boundingSphereRadius);
+    this.translationZP.translateZ(this.boundingSphereRadius);
 
-    this.translationXN.translateX(this.minBox.x);
-    this.translationYN.translateY(this.minBox.y);
-    this.translationZN.translateZ(this.minBox.z);
+    this.translationXN.translateX(-this.boundingSphereRadius);
+    this.translationYN.translateY(-this.boundingSphereRadius);
+    this.translationZN.translateZ(-this.boundingSphereRadius);
 
     this.translationXP.rotateZ(-Math.PI / 2);
     this.translationZP.rotateX(Math.PI / 2);
@@ -356,15 +404,11 @@ export default class Controls extends THREE.Group {
     if (this.useComputedBounds) {
       if (this.object.type === "Mesh") {
         const geometry = (this.object as THREE.Mesh).geometry;
-        geometry.computeBoundingBox();
+        geometry.computeBoundingSphere();
         const {
-          boundingBox: { min, max }
+          boundingSphere: { radius }
         } = geometry;
-        this.minBox.copy(min);
-        this.maxBox.copy(max);
-
-        this.minBox.addScalar(-this.separation);
-        this.maxBox.addScalar(this.separation);
+        this.boundingSphereRadius = radius / 2 + this.separation;
         return;
       } else {
         console.warn(
@@ -375,9 +419,7 @@ export default class Controls extends THREE.Group {
         );
       }
     }
-
-    this.minBox.copy(new THREE.Vector3(-this.separation, -this.separation, -this.separation));
-    this.maxBox.copy(new THREE.Vector3(this.separation, this.separation, this.separation));
+    this.boundingSphereRadius = this.separation;
   };
 
   /**
