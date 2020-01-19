@@ -7,6 +7,7 @@ import { IHandle, PickGroup } from "../controls/handles";
 import RotationEye from "../controls/handles/rotation-eye";
 import Plane from "../primitives/plane";
 import Pick from "../controls/handles/pick";
+import { getPointFromEvent, addEventListener, removeEventListener } from "./helper";
 
 export enum EVENTS {
   DRAG_START = "DRAG_START",
@@ -39,18 +40,29 @@ export default class Raycaster extends THREE.Raycaster {
     private controls: { [id: string]: Controls }
   ) {
     super();
-    this.domElement.addEventListener("pointerdown", this.pointerDownListener, false);
-    this.domElement.addEventListener("pointerup", this.pointerUpListener, false);
+    addEventListener(this.domElement, ["mousedown", "touchstart"], this.pointerDownListener, {
+      passive: false,
+      capture: true
+    });
+    addEventListener(this.domElement, ["mouseup", "touchend"], this.pointerUpListener, {
+      passive: false,
+      capture: true
+    });
   }
 
-  private pointerDownListener = (event: PointerEvent) => {
-    this.setRayDirection(event);
+  private pointerDownListener = (event: MouseEvent | TouchEvent) => {
+    const point = getPointFromEvent(event);
+    if (!point) {
+      return;
+    }
+    const { clientX, clientY } = point;
+    this.setRayDirection(clientX, clientY);
 
     this.clientDiagonalLength = Math.sqrt(
       (event.target as HTMLElement).clientWidth ** 2 +
         (event.target as HTMLElement).clientHeight ** 2
     );
-    this.previousScreenPoint.set(event.clientX, event.clientY);
+    this.previousScreenPoint.set(clientX, clientY);
 
     const interactiveObjects: THREE.Object3D[] = [];
     Object.values(this.controls).map(controls => {
@@ -116,12 +128,17 @@ export default class Raycaster extends THREE.Raycaster {
         this.ray.intersectPlane(this.activePlane, initialIntersectionPoint);
       }
 
-      this.domElement.removeEventListener("pointerdown", this.pointerDownListener);
+      removeEventListener(this.domElement, ["mousedown", "touchstart"], this.pointerDownListener, {
+        capture: true
+      });
       emitter.emit(EVENTS.DRAG_START, {
         point: initialIntersectionPoint,
         handle: this.activeHandle
       });
-      this.domElement.addEventListener("pointermove", this.pointerMoveListener, false);
+      addEventListener(this.domElement, ["mousemove", "touchmove"], this.pointerMoveListener, {
+        passive: false,
+        capture: true
+      });
     } else {
       this.activePlane = null;
     }
@@ -132,26 +149,31 @@ export default class Raycaster extends THREE.Raycaster {
     return this.cameraPosition.sub(object.position);
   };
 
-  private setRayDirection = (event: PointerEvent) => {
+  private setRayDirection = (clientX: number, clientY: number) => {
     const rect = this.domElement.getBoundingClientRect();
     const { clientHeight, clientWidth } = this.domElement;
-    this.mouse.x = ((event.clientX - rect.left) / clientWidth) * 2 - 1;
-    this.mouse.y = -((event.clientY - rect.top) / clientHeight) * 2 + 1;
+    this.mouse.x = ((clientX - rect.left) / clientWidth) * 2 - 1;
+    this.mouse.y = -((clientY - rect.top) / clientHeight) * 2 + 1;
     this.setFromCamera(this.mouse, this.camera);
   };
 
-  private pointerMoveListener = (event: PointerEvent) => {
+  private pointerMoveListener = (event: MouseEvent | TouchEvent) => {
     if (this.activeHandle === null || this.activePlane === null) {
       return;
     }
+    const point = getPointFromEvent(event);
+    if (!point) {
+      return;
+    }
+    const { clientX, clientY } = point;
 
     this.activeHandle.getWorldQuaternion(this.activeHandleWorldQuaternion);
     this.helperPlane.quaternion.copy(this.activeHandleWorldQuaternion);
 
-    this.setRayDirection(event);
+    this.setRayDirection(clientX, clientY);
     this.ray.intersectPlane(this.activePlane, this.point);
 
-    this.currentScreenPoint.set(event.clientX, event.clientY);
+    this.currentScreenPoint.set(clientX, clientY);
     const distance = this.currentScreenPoint.distanceTo(this.previousScreenPoint);
     const dragRatio = distance / (this.clientDiagonalLength || 1);
 
@@ -161,12 +183,17 @@ export default class Raycaster extends THREE.Raycaster {
       dragRatio
     });
 
-    this.previousScreenPoint.set(event.clientX, event.clientY);
+    this.previousScreenPoint.set(clientX, clientY);
   };
 
   private pointerUpListener = () => {
-    this.domElement.removeEventListener("pointermove", this.pointerMoveListener);
-    this.domElement.addEventListener("pointerdown", this.pointerDownListener, false);
+    removeEventListener(this.domElement, ["mousemove", "touchmove"], this.pointerMoveListener, {
+      capture: true
+    });
+    addEventListener(this.domElement, ["mousedown", "touchstart"], this.pointerDownListener, {
+      passive: false,
+      capture: true
+    });
     emitter.emit(EVENTS.DRAG_STOP, { point: this.point, handle: this.activeHandle });
 
     if (
@@ -235,8 +262,14 @@ export default class Raycaster extends THREE.Raycaster {
   public destroy = () => {
     this.activePlane = null;
     this.activeHandle = null;
-    this.domElement.removeEventListener("pointerdown", this.pointerDownListener);
-    this.domElement.removeEventListener("pointermove", this.pointerMoveListener);
-    this.domElement.removeEventListener("pointerup", this.pointerUpListener);
+    removeEventListener(this.domElement, ["mousedown", "touchstart"], this.pointerDownListener, {
+      capture: true
+    });
+    removeEventListener(this.domElement, ["mousemove", "touchmove"], this.pointerMoveListener, {
+      capture: true
+    });
+    removeEventListener(this.domElement, ["mouseup", "touchend"], this.pointerUpListener, {
+      capture: true
+    });
   };
 }
