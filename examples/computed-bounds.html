@@ -58,14 +58,9 @@
   scene.add(controlsManager);
 
   // anchor controls to the box1
-  const controls1 = controlsManager.anchor(box1, {
-    hideOtherHandlesOnDrag: false,
-    hideOtherControlsInstancesOnDrag: false
-  });
+  const controls1 = controlsManager.anchor(box1);
   const controls2 = controlsManager.anchor(box2, {
-    useComputedBounds: true,
-    hideOtherHandlesOnDrag: false,
-    hideOtherControlsInstancesOnDrag: false,
+    useComputedBounds: true
   });
 
   const controls1Label = new SpriteText("default separation", 0.3);

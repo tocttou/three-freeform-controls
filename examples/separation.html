@@ -59,15 +59,11 @@
 
   // anchor controls to the box1
   const controls1 = controlsManager.anchor(box1, {
-    separation: 0.75,
-    hideOtherHandlesOnDrag: false,
-    hideOtherControlsInstancesOnDrag: false
+    separation: 0.75
   });
   const controls2 = controlsManager.anchor(box2, {
     separation: 1,
-    rotationRadiusScale: 3,
-    hideOtherHandlesOnDrag: false,
-    hideOtherControlsInstancesOnDrag: false,
+    rotationRadiusScale: 3
   });
 
   const controls1Label = new SpriteText("separation=0.75", 0.3);
