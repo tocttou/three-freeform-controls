@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>IControlsOptions | three-freeform-controls - v0.1.0</title>
+	<title>IControlsOptions | three-freeform-controls - v0.1.2</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -22,7 +22,7 @@
 						<li class="state loading">Preparing search index...</li>
 						<li class="state failure">The search index is not available</li>
 					</ul>
-					<a href="../index.html" class="title">three-freeform-controls - v0.1.0</a>
+					<a href="../index.html" class="title">three-freeform-controls - v0.1.2</a>
 				</div>
 				<div class="table-cell" id="tsd-widgets">
 					<div id="tsd-filter">
@@ -77,13 +77,17 @@
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="icontrolsoptions.html#eyerotationradiusscale" class="tsd-kind-icon">eye<wbr>Rotation<wbr>Radius<wbr>Scale</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="icontrolsoptions.html#hideothercontrolsinstancesondrag" class="tsd-kind-icon">hide<wbr>Other<wbr>Controls<wbr>Instances<wbr>OnDrag</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="icontrolsoptions.html#hideotherhandlesondrag" class="tsd-kind-icon">hide<wbr>Other<wbr>Handles<wbr>OnDrag</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="icontrolsoptions.html#isdampingenabled" class="tsd-kind-icon">is<wbr>Damping<wbr>Enabled</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="icontrolsoptions.html#mode" class="tsd-kind-icon">mode</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="icontrolsoptions.html#orientation" class="tsd-kind-icon">orientation</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="icontrolsoptions.html#pickplanesizescale" class="tsd-kind-icon">pick<wbr>Plane<wbr>Size<wbr>Scale</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="icontrolsoptions.html#rotationradiusscale" class="tsd-kind-icon">rotation<wbr>Radius<wbr>Scale</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="icontrolsoptions.html#separation" class="tsd-kind-icon">separation</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="icontrolsoptions.html#showhelperplane" class="tsd-kind-icon">show<wbr>Helper<wbr>Plane</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="icontrolsoptions.html#translationdistancescale" class="tsd-kind-icon">translation<wbr>Distance<wbr>Scale</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="icontrolsoptions.html#usecomputedbounds" class="tsd-kind-icon">use<wbr>Computed<wbr>Bounds</a></li>
 							</ul>
 						</section>
@@ -93,12 +97,32 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="eyerotationradiusscale" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> eye<wbr>Rotation<wbr>Radius<wbr>Scale</h3>
+					<div class="tsd-signature tsd-kind-icon">eye<wbr>Rotation<wbr>Radius<wbr>Scale<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/tocttou/three-freeform-controls/blob/c25984e/src/controls/index.ts#L94">src/controls/index.ts:94</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>sets the scaling factor for the radius of rotation handles in eye plane</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>default</dt>
+							<dd><p>1.25</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
 					<a name="hideothercontrolsinstancesondrag" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagOptional">Optional</span> hide<wbr>Other<wbr>Controls<wbr>Instances<wbr>OnDrag</h3>
 					<div class="tsd-signature tsd-kind-icon">hide<wbr>Other<wbr>Controls<wbr>Instances<wbr>OnDrag<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">true</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/tocttou/three-freeform-controls/blob/90cffe6/src/controls/index.ts#L67">src/controls/index.ts:67</a></li>
+							<li>Defined in <a href="https://github.com/tocttou/three-freeform-controls/blob/c25984e/src/controls/index.ts#L73">src/controls/index.ts:73</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -114,7 +138,7 @@
 					<div class="tsd-signature tsd-kind-icon">hide<wbr>Other<wbr>Handles<wbr>OnDrag<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">true</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/tocttou/three-freeform-controls/blob/90cffe6/src/controls/index.ts#L62">src/controls/index.ts:62</a></li>
+							<li>Defined in <a href="https://github.com/tocttou/three-freeform-controls/blob/c25984e/src/controls/index.ts#L68">src/controls/index.ts:68</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -134,7 +158,7 @@
 					<div class="tsd-signature tsd-kind-icon">is<wbr>Damping<wbr>Enabled<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">true</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/tocttou/three-freeform-controls/blob/90cffe6/src/controls/index.ts#L78">src/controls/index.ts:78</a></li>
+							<li>Defined in <a href="https://github.com/tocttou/three-freeform-controls/blob/c25984e/src/controls/index.ts#L84">src/controls/index.ts:84</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -154,7 +178,7 @@
 					<div class="tsd-signature tsd-kind-icon">mode<span class="tsd-signature-symbol">:</span> <a href="../enums/anchor_mode.html" class="tsd-signature-type">ANCHOR_MODE</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/tocttou/three-freeform-controls/blob/90cffe6/src/controls/index.ts#L34">src/controls/index.ts:34</a></li>
+							<li>Defined in <a href="https://github.com/tocttou/three-freeform-controls/blob/c25984e/src/controls/index.ts#L40">src/controls/index.ts:40</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -174,7 +198,7 @@
 					<div class="tsd-signature tsd-kind-icon">orientation<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">object</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/tocttou/three-freeform-controls/blob/90cffe6/src/controls/index.ts#L52">src/controls/index.ts:52</a></li>
+							<li>Defined in <a href="https://github.com/tocttou/three-freeform-controls/blob/c25984e/src/controls/index.ts#L58">src/controls/index.ts:58</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -189,12 +213,52 @@
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="pickplanesizescale" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> pick<wbr>Plane<wbr>Size<wbr>Scale</h3>
+					<div class="tsd-signature tsd-kind-icon">pick<wbr>Plane<wbr>Size<wbr>Scale<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/tocttou/three-freeform-controls/blob/c25984e/src/controls/index.ts#L99">src/controls/index.ts:99</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>sets the width and height scale for the pick plane handles</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>default</dt>
+							<dd><p>0.75</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="rotationradiusscale" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> rotation<wbr>Radius<wbr>Scale</h3>
+					<div class="tsd-signature tsd-kind-icon">rotation<wbr>Radius<wbr>Scale<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/tocttou/three-freeform-controls/blob/c25984e/src/controls/index.ts#L89">src/controls/index.ts:89</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>sets the scaling factor for the radius of rotation handles</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>default</dt>
+							<dd><p>1.0</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
 					<a name="separation" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagOptional">Optional</span> separation</h3>
 					<div class="tsd-signature tsd-kind-icon">separation<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/tocttou/three-freeform-controls/blob/90cffe6/src/controls/index.ts#L41">src/controls/index.ts:41</a></li>
+							<li>Defined in <a href="https://github.com/tocttou/three-freeform-controls/blob/c25984e/src/controls/index.ts#L47">src/controls/index.ts:47</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -216,7 +280,7 @@
 					<div class="tsd-signature tsd-kind-icon">show<wbr>Helper<wbr>Plane<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">true</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/tocttou/three-freeform-controls/blob/90cffe6/src/controls/index.ts#L73">src/controls/index.ts:73</a></li>
+							<li>Defined in <a href="https://github.com/tocttou/three-freeform-controls/blob/c25984e/src/controls/index.ts#L79">src/controls/index.ts:79</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -232,12 +296,33 @@
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="translationdistancescale" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> translation<wbr>Distance<wbr>Scale</h3>
+					<div class="tsd-signature tsd-kind-icon">translation<wbr>Distance<wbr>Scale<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/tocttou/three-freeform-controls/blob/c25984e/src/controls/index.ts#L105">src/controls/index.ts:105</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>sets the scaling for distance between translation handles&#39; start and the
+							center of the controls</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>default</dt>
+							<dd><p>1.0</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
 					<a name="usecomputedbounds" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagOptional">Optional</span> use<wbr>Computed<wbr>Bounds</h3>
 					<div class="tsd-signature tsd-kind-icon">use<wbr>Computed<wbr>Bounds<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">true</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/tocttou/three-freeform-controls/blob/90cffe6/src/controls/index.ts#L47">src/controls/index.ts:47</a></li>
+							<li>Defined in <a href="https://github.com/tocttou/three-freeform-controls/blob/c25984e/src/controls/index.ts#L53">src/controls/index.ts:53</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -312,6 +397,9 @@
 						<a href="icontrolsoptions.html" class="tsd-kind-icon">IControls<wbr>Options</a>
 						<ul>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="icontrolsoptions.html#eyerotationradiusscale" class="tsd-kind-icon">eye<wbr>Rotation<wbr>Radius<wbr>Scale</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
 								<a href="icontrolsoptions.html#hideothercontrolsinstancesondrag" class="tsd-kind-icon">hide<wbr>Other<wbr>Controls<wbr>Instances<wbr>OnDrag</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
@@ -327,10 +415,19 @@
 								<a href="icontrolsoptions.html#orientation" class="tsd-kind-icon">orientation</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="icontrolsoptions.html#pickplanesizescale" class="tsd-kind-icon">pick<wbr>Plane<wbr>Size<wbr>Scale</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="icontrolsoptions.html#rotationradiusscale" class="tsd-kind-icon">rotation<wbr>Radius<wbr>Scale</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
 								<a href="icontrolsoptions.html#separation" class="tsd-kind-icon">separation</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
 								<a href="icontrolsoptions.html#showhelperplane" class="tsd-kind-icon">show<wbr>Helper<wbr>Plane</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="icontrolsoptions.html#translationdistancescale" class="tsd-kind-icon">translation<wbr>Distance<wbr>Scale</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
 								<a href="icontrolsoptions.html#usecomputedbounds" class="tsd-kind-icon">use<wbr>Computed<wbr>Bounds</a>
@@ -341,6 +438,15 @@
 				<ul class="after-current">
 					<li class=" tsd-kind-type-alias">
 						<a href="../index.html#ihandle" class="tsd-kind-icon">IHandle</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="../index.html#addeventlistener" class="tsd-kind-icon">add<wbr>Event<wbr>Listener</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="../index.html#getpointfromevent" class="tsd-kind-icon">get<wbr>Point<wbr>From<wbr>Event</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="../index.html#removeeventlistener" class="tsd-kind-icon">remove<wbr>Event<wbr>Listener</a>
 					</li>
 				</ul>
 			</nav>

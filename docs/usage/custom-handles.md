@@ -120,3 +120,5 @@ The above illustrated example can be accessed below.
 [View example]({{ site.baseurl }}/examples/custom-handles-2){: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 .mr-2 }{:target="_blank"}
 
 Note that the centre of rotation remains the position of the `controls` object, and not the position of the individual handles.
+
+Next section: [API Reference]({{ site.baseurl }}/docs/api)

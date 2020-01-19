@@ -7,7 +7,7 @@ parent: Usage
 
 Handles in controls can be enabled selectively.
 
-## [showAll ![link](https://img.icons8.com/ios/24/000000/external-link.png){: .link-icon }]({{ site.baseurl }}apiref/classes/controls.html#showall){:target="_blank"}
+## [showAll ![link](https://img.icons8.com/ios/24/000000/external-link.png){: .link-icon }]({{ site.baseurl }}/apiref/classes/controls.html#showall){:target="_blank"}
 
 Hiding all handles:
 
@@ -17,7 +17,7 @@ const controls = ControlsManager.anchor(box);
 controls.showAll(false); // or true to make all handles visible
 ```
 
-## [showByNames ![link](https://img.icons8.com/ios/24/000000/external-link.png){: .link-icon }]({{ site.baseurl }}apiref/classes/controls.html#showByNames){:target="_blank"}
+## [showByNames ![link](https://img.icons8.com/ios/24/000000/external-link.png){: .link-icon }]({{ site.baseurl }}/apiref/classes/controls.html#showByNames){:target="_blank"}
 
 Hiding handles selectively:
 
@@ -48,3 +48,5 @@ controls.rotationX.visible = false;
 ```
 
 [View example]({{ site.baseurl }}/examples/partial-controls){:target="_blank"}{: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 .mr-2 }
+
+Next section: [Customize Handles]({{ site.baseurl }}/docs/usage/customize-handles)

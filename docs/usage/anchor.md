@@ -28,13 +28,17 @@ All options accepted by `anchor` are listed below:
 | key                                | default value                | description                                                                                                                                                                                                                                                                                                                                      |
 | :--------------------------------- | :--------------------------- | :-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------                                                       |
 | mode                               | `ANCHOR_MODE.FIXED`          | Controls can be anchored in two modes: 1. `FIXED`: The controls retain their orientation with respect to the world even if the object (or an object up its parent chain) is rotating. 2. `INHERIT`: The controls inherit the orientation of the object the controls object is anchored to.                                                       |
-| separation                         | `0.5                 `       | The distance between the position of the object and the position of the handles (in case of translation handles), or the radius (in case of rotation handles), or the size of the plane (in case of plane handles. [View example]({{ site.baseurl }}/examples/separation.html){:target="_blank"}{: .btn .fs-5 .mb-4 .mb-md-0 .inherit-display }  |
 | orientation                        | `{ x: 0, y: 0, z: 0, w: 1 }` | The initial orientation (in quaternion form) of the controls object.                                                                                                                                                                                                                                                                             |
 | hideOtherHandlesOnDrag             | `true`                       | Hide all other handles of the controls object while being interacted with.                                                                                                                                                                                                                                                                       |
 | hideOtherControlsInstancesOnDrag   | `true`                       | Hide all other controls objects from the scene when being interacted with.                                                                                                                                                                                                                                                                       |
 | isDampingEnabled                   | `true`                       | Enables damping for the controls                                                                                                                                                                                                                                                                                                                 |
 | showHelperPlane                    | `false`                      | Useful for debug. Shows the intersection plane used in raycasting.                                                                                                                                                                                                                                                                               |
-| useComputedBounds                  | `false`                      | Uses `THREE.Mesh.computeBounds` to set the separation; if separation is provided in addition to this option, it is added to the computed bounds. [View example]({{ site.baseurl }}/examples/compute-bounds.html){:target="_blank"}{: .btn .fs-5 .mb-4 .mb-md-0 .inherit-display }                                                                |
+| useComputedBounds                  | `false`                      | Uses `THREE.Mesh.computeBounds` to set the separation; if separation is provided in addition to this option, it is added to the computed bounds. [View example]({{ site.baseurl }}/examples/computed-bounds){:target="_blank"}{: .btn .fs-5 .mb-4 .mb-md-0 .inherit-display }                                                                    |
+| translationDistanceScale           | `1.0`                        | Sets the scaling for distance between translation handles' base and the center of the controls.                                                                                                                                                                                                                                                  |
+| rotationRadiusScale                | `1.0`                        | Sets the scaling factor for the radius of rotation handles.                                                                                                                                                                                                                                                                                      |
+| eyeRotationRadiusScale             | `1.25`                       | Sets the scaling factor for the radius of rotation handles in eye plane.                                                                                                                                                                                                                                                                         |
+| pickPlaneSizeScale                 | `0.75`                       | Sets the width and height scale for the pick plane handles.                                                                                                                                                                                                                                                                                      |
+| separation                         | `0.5                 `       | The distance between the position of the object and the position of the handles (in case of translation handles), or the radius (in case of rotation handles), or the size of the plane (in case of plane handles. [View example]({{ site.baseurl }}/examples/separation){:target="_blank"}{: .btn .fs-5 .mb-4 .mb-md-0 .inherit-display }       |
 
 The options can be specified as:
 
@@ -43,19 +47,15 @@ The options can be specified as:
 import { ANCHOR_MODE } from "three-freeform-controls";
 const controls = controlsManager.anchor(box, {
   mode: ANCHOR_MODE.FIXED, // or ANCHOR_MODE.INHERIT
-  separationT: {
-    x: 1,
-    y: 1,
-    z: 1
-  },
+  separation: 0.5,
   orientation: {
     x: 0,
     y: 0,
     z: 0,
     w: 1
   },
-  hideOtherHandlesOnSelect: true,
-  hideOtherControlsInstancesOnSelect: true,
+  hideOtherHandlesOnDrag: true,
+  hideOtherControlsInstancesOnDrag: true,
   showHelperPlane: false
 });
 ```

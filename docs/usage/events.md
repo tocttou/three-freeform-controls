@@ -65,3 +65,5 @@ controlsManager.removeListen(EVENTS.DRAG, listenerFn);
 An example illustrating these events can be accessed below.
 
 [View example]({{ site.baseurl }}/examples/events.html){:target="_blank"}{: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 .mr-2 }
+
+Next section: [Partial Controls]({{ site.baseurl }}/docs/usage/partial-controls)
