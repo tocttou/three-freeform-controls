@@ -14,5 +14,10 @@ module.exports = {
   suppressImplicitAnyIndexErrors: true,
   module: "es2015",
   readme: "none",
-  exclude: ["src/utils/emmiter.ts", "src/utils/constants.ts", "src/primitives/**"]
+  exclude: [
+    "src/utils/emmiter.ts",
+    "src/utils/constants.ts",
+    "src/primitives/**",
+    "src/utils/helper.ts"
+  ]
 };
