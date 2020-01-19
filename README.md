@@ -41,4 +41,4 @@ This library provides rotation and translation controls for [THREE.JS](https://t
 
 ### Contributing
 
-When contributing to this repository, please first discuss the change you wish to make via an issue on the [Github Repo](https://raw.githubusercontent.com/tocttou/three-freeform-controls/).
+When contributing to this repository, please first discuss the change you wish to make via an issue on the [Github Repo](https://github.com/tocttou/three-freeform-controls/issues/new).
