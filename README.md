@@ -30,6 +30,8 @@ This library provides rotation and translation controls for [THREE.JS](https://t
 ### Todo:
 
 - [ ] snap in Translation controls
+- [ ] axis indicator on hover
+- [ ] A-frame component
 - [ ] tests
 
 ---
