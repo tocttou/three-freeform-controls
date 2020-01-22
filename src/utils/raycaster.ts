@@ -3,11 +3,9 @@ import { emitter } from "./emmiter";
 import Controls from "../controls";
 import PickPlane from "../controls/handles/pick-plane";
 import { PICK_PLANE_OPACITY } from "./constants";
-import { IHandle, PickGroup } from "../controls/handles";
+import { IHandle, PickGroup, RotationGroup, TranslationGroup } from "../controls/handles";
 import RotationEye from "../controls/handles/rotation-eye";
-import Plane from "../primitives/plane";
-import Pick from "../controls/handles/pick";
-import { getPointFromEvent, addEventListener, removeEventListener } from "./helper";
+import { addEventListener, getPointFromEvent, removeEventListener } from "./helper";
 
 export enum EVENTS {
   DRAG_START = "DRAG_START",
@@ -17,6 +15,8 @@ export enum EVENTS {
 
 /**
  * @hidden
+ * The Raycaster listens on the mouse and touch events globally and
+ * dispatches DRAG_START, DRAG, and DRAG_STOP events.
  */
 export default class Raycaster extends THREE.Raycaster {
   private mouse = new THREE.Vector2();
@@ -27,12 +27,12 @@ export default class Raycaster extends THREE.Raycaster {
   private normal = new THREE.Vector3();
   private visibleHandles: THREE.Object3D[] = [];
   private visibleControls: THREE.Object3D[] = [];
-  private helperPlane = new Plane("yellow");
+  private helperPlane: THREE.PlaneHelper | null = null;
   private controlsWorldQuaternion = new THREE.Quaternion();
-  private activeHandleWorldQuaternion = new THREE.Quaternion();
   private clientDiagonalLength = 1;
   private previousScreenPoint = new THREE.Vector2();
   private currentScreenPoint = new THREE.Vector2();
+  private isActivePlaneFlipped = false;
 
   constructor(
     public camera: THREE.Camera,
@@ -40,6 +40,12 @@ export default class Raycaster extends THREE.Raycaster {
     private controls: { [id: string]: Controls }
   ) {
     super();
+    /**
+     * mousedown and touchstart are used instead of pointerdown because
+     * pointermove seems to stop firing after some a few events in chrome mobile
+     * this could be because of some capture/passive setting but couldn't find
+     * anything useful. using touch(*) events works.
+     */
     addEventListener(this.domElement, ["mousedown", "touchstart"], this.pointerDownListener, {
       passive: false,
       capture: true
@@ -52,12 +58,14 @@ export default class Raycaster extends THREE.Raycaster {
 
   private pointerDownListener = (event: MouseEvent | TouchEvent) => {
     const point = getPointFromEvent(event);
+    // touches can be empty
     if (!point) {
       return;
     }
     const { clientX, clientY } = point;
     this.setRayDirection(clientX, clientY);
 
+    // useful for calculating dragRatio (used in dampingFactor calculation)
     this.clientDiagonalLength = Math.sqrt(
       (event.target as HTMLElement).clientWidth ** 2 +
         (event.target as HTMLElement).clientHeight ** 2
@@ -70,21 +78,10 @@ export default class Raycaster extends THREE.Raycaster {
     });
     this.activeHandle = this.resolveHandleGroup(this.intersectObjects(interactiveObjects, true)[0]);
 
-    if (this.activeHandle !== null && this.activeHandle.parent !== null) {
-      this.activePlane = new THREE.Plane();
+    if (this.activeHandle?.parent) {
       const controls = this.activeHandle.parent as Controls;
 
-      controls.getWorldQuaternion(this.controlsWorldQuaternion);
-      this.normal.copy(
-        this.activeHandle instanceof PickGroup
-          ? this.getEyePlaneNormal(this.activeHandle)
-          : this.activeHandle.up
-      );
-
-      if (!(this.activeHandle instanceof RotationEye || this.activeHandle instanceof PickGroup)) {
-        this.normal.applyQuaternion(this.controlsWorldQuaternion);
-      }
-
+      // hiding other controls and handles instances if asked
       if (controls.hideOtherControlsInstancesOnDrag) {
         Object.values(this.controls).forEach(x => {
           if (x.visible) {
@@ -105,22 +102,47 @@ export default class Raycaster extends THREE.Raycaster {
         this.activeHandle.visible = true;
       }
 
-      if (
-        controls.showHelperPlane &&
-        !(this.activeHandle instanceof Pick || this.activeHandle instanceof PickPlane)
-      ) {
-        const scene = controls.parent as THREE.Scene;
-        this.helperPlane.position.copy(controls.position);
-        this.activeHandle.getWorldQuaternion(this.helperPlane.quaternion);
-        scene.add(this.helperPlane);
-      }
-
       if (this.activeHandle instanceof PickPlane) {
         this.setPickPlaneOpacity(PICK_PLANE_OPACITY.ACTIVE);
       }
 
-      this.activePlane.setFromNormalAndCoplanarPoint(this.normal, controls.position);
+      /**
+       * creating the activePlane - the plane on which intersection actions
+       * take place. mouse movements are translated to points on the activePlane
+       */
+      this.activePlane = new THREE.Plane();
+      const eyePlaneNormal = this.getEyePlaneNormal(this.activeHandle);
+      controls.getWorldQuaternion(this.controlsWorldQuaternion);
+      this.normal.copy(
+        this.activeHandle instanceof PickGroup ? eyePlaneNormal : this.activeHandle.up
+      );
+      if (!(this.activeHandle instanceof RotationEye || this.activeHandle instanceof PickGroup)) {
+        this.normal.applyQuaternion(this.controlsWorldQuaternion);
+      }
+      /*
+        if the angle between the eye-normal and the normal to the activePlane is
+        too small, a small mouse movement makes a large projection on the activePlane,
+        causing the object to jump big distances. To avoid this, the activePlane
+        is flipped by 90 degrees about the parallel vector of the handle.
+        This problem only requires mitigation in the TranslationGroup handle case.
+       */
+      if (this.activeHandle instanceof TranslationGroup) {
+        const dot = eyePlaneNormal.dot(this.normal) / eyePlaneNormal.length();
+        // arccos(0.25) ~= 75 degrees
+        // this is the threshold to make the plane normal flip
+        this.isActivePlaneFlipped = Math.abs(dot) < 0.25;
+        if (this.isActivePlaneFlipped) {
+          this.isActivePlaneFlipped = true;
+          this.normal.applyAxisAngle(this.activeHandle.parallel, Math.PI / 2);
+        }
+      }
+      if (this.activeHandle instanceof TranslationGroup) {
+        this.activePlane.setFromNormalAndCoplanarPoint(this.normal, this.activeHandle.position);
+      } else {
+        this.activePlane.setFromNormalAndCoplanarPoint(this.normal, controls.position);
+      }
 
+      // find initial intersection
       const initialIntersectionPoint = new THREE.Vector3();
       if (this.activeHandle instanceof PickGroup) {
         this.activeHandle.getWorldPosition(initialIntersectionPoint);
@@ -128,6 +150,21 @@ export default class Raycaster extends THREE.Raycaster {
         this.ray.intersectPlane(this.activePlane, initialIntersectionPoint);
       }
 
+      // activate the helper plane if asked
+      // available only for TranslationGroup and RotationGroup
+      // (except RotationEye - plane of rotation is obvious)
+      if (
+        controls.showHelperPlane &&
+        (this.activeHandle instanceof TranslationGroup ||
+          this.activeHandle instanceof RotationGroup) &&
+        !(this.activeHandle instanceof RotationEye)
+      ) {
+        const scene = controls.parent as THREE.Scene;
+        this.helperPlane = new THREE.PlaneHelper(this.activePlane, 1);
+        scene.add(this.helperPlane);
+      }
+
+      // switch event listeners and dispatch DRAG_START
       removeEventListener(this.domElement, ["mousedown", "touchstart"], this.pointerDownListener, {
         capture: true
       });
@@ -166,9 +203,6 @@ export default class Raycaster extends THREE.Raycaster {
       return;
     }
     const { clientX, clientY } = point;
-
-    this.activeHandle.getWorldQuaternion(this.activeHandleWorldQuaternion);
-    this.helperPlane.quaternion.copy(this.activeHandleWorldQuaternion);
 
     this.setRayDirection(clientX, clientY);
     this.ray.intersectPlane(this.activePlane, this.point);
@@ -228,7 +262,9 @@ export default class Raycaster extends THREE.Raycaster {
       (this.activeHandle.parent as Controls).showHelperPlane
     ) {
       const scene = this.activeHandle.parent.parent as THREE.Scene;
-      scene.remove(this.helperPlane);
+      if (this.helperPlane) {
+        scene.remove(this.helperPlane);
+      }
     }
 
     this.activeHandle = null;
