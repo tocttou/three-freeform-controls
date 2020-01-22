@@ -17,3 +17,4 @@ Code for the examples can be found [here](https://github.com/tocttou/three-freef
 - [Inverse Kinematics control]({{ site.baseurl }}/examples/ik){:target="_blank"}
 - [Separation]({{ site.baseurl }}/examples/separation){:target="_blank"}
 - [Use computed bounds]({{ site.baseurl }}/examples/computed-bounds){:target="_blank"}
+- [Snap to grid]({{ site.baseurl }}/examples/snap){:target="_blank"}

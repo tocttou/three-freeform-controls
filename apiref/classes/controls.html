@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Controls | three-freeform-controls - v0.1.4</title>
+	<title>Controls | three-freeform-controls - v0.1.6</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -22,7 +22,7 @@
 						<li class="state loading">Preparing search index...</li>
 						<li class="state failure">The search index is not available</li>
 					</ul>
-					<a href="../index.html" class="title">three-freeform-controls - v0.1.4</a>
+					<a href="../index.html" class="title">three-freeform-controls - v0.1.6</a>
 				</div>
 				<div class="table-cell" id="tsd-widgets">
 					<div id="tsd-filter">
@@ -101,6 +101,7 @@
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="controls.html#hideothercontrolsinstancesondrag" class="tsd-kind-icon">hide<wbr>Other<wbr>Controls<wbr>Instances<wbr>OnDrag</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="controls.html#hideotherhandlesondrag" class="tsd-kind-icon">hide<wbr>Other<wbr>Handles<wbr>OnDrag</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="controls.html#highlightaxis" class="tsd-kind-icon">highlight<wbr>Axis</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="controls.html#isdampingenabled" class="tsd-kind-icon">is<wbr>Damping<wbr>Enabled</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="controls.html#object" class="tsd-kind-icon">object</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="controls.html#pick" class="tsd-kind-icon">pick</a></li>
@@ -112,6 +113,7 @@
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="controls.html#rotationy" class="tsd-kind-icon">rotationY</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="controls.html#rotationz" class="tsd-kind-icon">rotationZ</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="controls.html#showhelperplane" class="tsd-kind-icon">show<wbr>Helper<wbr>Plane</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="controls.html#snaptranslation" class="tsd-kind-icon">snap<wbr>Translation</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="controls.html#translationxn" class="tsd-kind-icon">translationXN</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="controls.html#translationxp" class="tsd-kind-icon">translationXP</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="controls.html#translationyn" class="tsd-kind-icon">translationYN</a></li>
@@ -145,7 +147,7 @@
 							<aside class="tsd-sources">
 								<p>Overrides Group.__constructor</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/tocttou/three-freeform-controls/blob/90bed1c/src/controls/index.ts#L226">src/controls/index.ts:226</a></li>
+									<li>Defined in <a href="https://github.com/tocttou/three-freeform-controls/blob/9cdfb0f/src/controls/index.ts#L260">src/controls/index.ts:260</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -189,7 +191,7 @@
 					<div class="tsd-signature tsd-kind-icon">hide<wbr>Other<wbr>Controls<wbr>Instances<wbr>OnDrag<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/tocttou/three-freeform-controls/blob/90bed1c/src/controls/index.ts#L220">src/controls/index.ts:220</a></li>
+							<li>Defined in <a href="https://github.com/tocttou/three-freeform-controls/blob/9cdfb0f/src/controls/index.ts#L237">src/controls/index.ts:237</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -205,7 +207,7 @@
 					<div class="tsd-signature tsd-kind-icon">hide<wbr>Other<wbr>Handles<wbr>OnDrag<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/tocttou/three-freeform-controls/blob/90bed1c/src/controls/index.ts#L215">src/controls/index.ts:215</a></li>
+							<li>Defined in <a href="https://github.com/tocttou/three-freeform-controls/blob/9cdfb0f/src/controls/index.ts#L232">src/controls/index.ts:232</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -220,12 +222,34 @@
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="highlightaxis" class="tsd-anchor"></a>
+					<h3>highlight<wbr>Axis</h3>
+					<div class="tsd-signature tsd-kind-icon">highlight<wbr>Axis<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/tocttou/three-freeform-controls/blob/9cdfb0f/src/controls/index.ts#L250">src/controls/index.ts:250</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>For translation handles: highlights the axis along which the object moves.
+								For rotation handles: highlights the axis of rotation.
+							Not available on other handles.</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>default</dt>
+							<dd><p>true</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
 					<a name="isdampingenabled" class="tsd-anchor"></a>
 					<h3>is<wbr>Damping<wbr>Enabled</h3>
 					<div class="tsd-signature tsd-kind-icon">is<wbr>Damping<wbr>Enabled<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/tocttou/three-freeform-controls/blob/90bed1c/src/controls/index.ts#L210">src/controls/index.ts:210</a></li>
+							<li>Defined in <a href="https://github.com/tocttou/three-freeform-controls/blob/9cdfb0f/src/controls/index.ts#L227">src/controls/index.ts:227</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -245,7 +269,7 @@
 					<div class="tsd-signature tsd-kind-icon">object<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Object3D</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/tocttou/three-freeform-controls/blob/90bed1c/src/controls/index.ts#L235">src/controls/index.ts:235</a></li>
+							<li>Defined in <a href="https://github.com/tocttou/three-freeform-controls/blob/9cdfb0f/src/controls/index.ts#L269">src/controls/index.ts:269</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -260,7 +284,7 @@
 					<div class="tsd-signature tsd-kind-icon">pick<span class="tsd-signature-symbol">:</span> <a href="pick.html" class="tsd-signature-type">Pick</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/tocttou/three-freeform-controls/blob/90bed1c/src/controls/index.ts#L120">src/controls/index.ts:120</a></li>
+							<li>Defined in <a href="https://github.com/tocttou/three-freeform-controls/blob/9cdfb0f/src/controls/index.ts#L137">src/controls/index.ts:137</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -275,7 +299,7 @@
 					<div class="tsd-signature tsd-kind-icon">pick<wbr>PlaneXY<span class="tsd-signature-symbol">:</span> <a href="pickplane.html" class="tsd-signature-type">PickPlane</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/tocttou/three-freeform-controls/blob/90bed1c/src/controls/index.ts#L124">src/controls/index.ts:124</a></li>
+							<li>Defined in <a href="https://github.com/tocttou/three-freeform-controls/blob/9cdfb0f/src/controls/index.ts#L141">src/controls/index.ts:141</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -290,7 +314,7 @@
 					<div class="tsd-signature tsd-kind-icon">pick<wbr>PlaneYZ<span class="tsd-signature-symbol">:</span> <a href="pickplane.html" class="tsd-signature-type">PickPlane</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/tocttou/three-freeform-controls/blob/90bed1c/src/controls/index.ts#L128">src/controls/index.ts:128</a></li>
+							<li>Defined in <a href="https://github.com/tocttou/three-freeform-controls/blob/9cdfb0f/src/controls/index.ts#L145">src/controls/index.ts:145</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -305,7 +329,7 @@
 					<div class="tsd-signature tsd-kind-icon">pick<wbr>PlaneZX<span class="tsd-signature-symbol">:</span> <a href="pickplane.html" class="tsd-signature-type">PickPlane</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/tocttou/three-freeform-controls/blob/90bed1c/src/controls/index.ts#L132">src/controls/index.ts:132</a></li>
+							<li>Defined in <a href="https://github.com/tocttou/three-freeform-controls/blob/9cdfb0f/src/controls/index.ts#L149">src/controls/index.ts:149</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -320,7 +344,7 @@
 					<div class="tsd-signature tsd-kind-icon">rotation<wbr>Eye<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">RotationEye</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/tocttou/three-freeform-controls/blob/90bed1c/src/controls/index.ts#L178">src/controls/index.ts:178</a></li>
+							<li>Defined in <a href="https://github.com/tocttou/three-freeform-controls/blob/9cdfb0f/src/controls/index.ts#L195">src/controls/index.ts:195</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -335,7 +359,7 @@
 					<div class="tsd-signature tsd-kind-icon">rotationX<span class="tsd-signature-symbol">:</span> <a href="rotation.html" class="tsd-signature-type">Rotation</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/tocttou/three-freeform-controls/blob/90bed1c/src/controls/index.ts#L166">src/controls/index.ts:166</a></li>
+							<li>Defined in <a href="https://github.com/tocttou/three-freeform-controls/blob/9cdfb0f/src/controls/index.ts#L183">src/controls/index.ts:183</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -350,7 +374,7 @@
 					<div class="tsd-signature tsd-kind-icon">rotationY<span class="tsd-signature-symbol">:</span> <a href="rotation.html" class="tsd-signature-type">Rotation</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/tocttou/three-freeform-controls/blob/90bed1c/src/controls/index.ts#L170">src/controls/index.ts:170</a></li>
+							<li>Defined in <a href="https://github.com/tocttou/three-freeform-controls/blob/9cdfb0f/src/controls/index.ts#L187">src/controls/index.ts:187</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -365,7 +389,7 @@
 					<div class="tsd-signature tsd-kind-icon">rotationZ<span class="tsd-signature-symbol">:</span> <a href="rotation.html" class="tsd-signature-type">Rotation</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/tocttou/three-freeform-controls/blob/90bed1c/src/controls/index.ts#L174">src/controls/index.ts:174</a></li>
+							<li>Defined in <a href="https://github.com/tocttou/three-freeform-controls/blob/9cdfb0f/src/controls/index.ts#L191">src/controls/index.ts:191</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -380,7 +404,7 @@
 					<div class="tsd-signature tsd-kind-icon">show<wbr>Helper<wbr>Plane<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/tocttou/three-freeform-controls/blob/90bed1c/src/controls/index.ts#L226">src/controls/index.ts:226</a></li>
+							<li>Defined in <a href="https://github.com/tocttou/three-freeform-controls/blob/9cdfb0f/src/controls/index.ts#L243">src/controls/index.ts:243</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -396,12 +420,38 @@
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="snaptranslation" class="tsd-anchor"></a>
+					<h3>snap<wbr>Translation</h3>
+					<div class="tsd-signature tsd-kind-icon">snap<wbr>Translation<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/tocttou/three-freeform-controls/blob/9cdfb0f/src/controls/index.ts#L256">src/controls/index.ts:256</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Enables snap to grid (nearest integer coordinate) for all translation type handles:
+							<a href="translationgroup.html">TranslationGroup</a>, <a href="pickgroup.html">PickGroup</a>, and <a href="pickplanegroup.html">PickPlaneGroup</a></p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>default</dt>
+							<dd><p>{ x: false, y: false, z: false }</p>
+							</dd>
+						</dl>
+					</div>
+					<div class="tsd-type-declaration">
+						<h4>Type declaration</h4>
+						<ul class="tsd-parameters">
+						</ul>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
 					<a name="translationxn" class="tsd-anchor"></a>
 					<h3>translationXN</h3>
 					<div class="tsd-signature tsd-kind-icon">translationXN<span class="tsd-signature-symbol">:</span> <a href="translation.html" class="tsd-signature-type">Translation</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/tocttou/three-freeform-controls/blob/90bed1c/src/controls/index.ts#L152">src/controls/index.ts:152</a></li>
+							<li>Defined in <a href="https://github.com/tocttou/three-freeform-controls/blob/9cdfb0f/src/controls/index.ts#L169">src/controls/index.ts:169</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -417,7 +467,7 @@
 					<div class="tsd-signature tsd-kind-icon">translationXP<span class="tsd-signature-symbol">:</span> <a href="translation.html" class="tsd-signature-type">Translation</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/tocttou/three-freeform-controls/blob/90bed1c/src/controls/index.ts#L137">src/controls/index.ts:137</a></li>
+							<li>Defined in <a href="https://github.com/tocttou/three-freeform-controls/blob/9cdfb0f/src/controls/index.ts#L154">src/controls/index.ts:154</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -433,7 +483,7 @@
 					<div class="tsd-signature tsd-kind-icon">translationYN<span class="tsd-signature-symbol">:</span> <a href="translation.html" class="tsd-signature-type">Translation</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/tocttou/three-freeform-controls/blob/90bed1c/src/controls/index.ts#L157">src/controls/index.ts:157</a></li>
+							<li>Defined in <a href="https://github.com/tocttou/three-freeform-controls/blob/9cdfb0f/src/controls/index.ts#L174">src/controls/index.ts:174</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -449,7 +499,7 @@
 					<div class="tsd-signature tsd-kind-icon">translationYP<span class="tsd-signature-symbol">:</span> <a href="translation.html" class="tsd-signature-type">Translation</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/tocttou/three-freeform-controls/blob/90bed1c/src/controls/index.ts#L142">src/controls/index.ts:142</a></li>
+							<li>Defined in <a href="https://github.com/tocttou/three-freeform-controls/blob/9cdfb0f/src/controls/index.ts#L159">src/controls/index.ts:159</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -465,7 +515,7 @@
 					<div class="tsd-signature tsd-kind-icon">translationZN<span class="tsd-signature-symbol">:</span> <a href="translation.html" class="tsd-signature-type">Translation</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/tocttou/three-freeform-controls/blob/90bed1c/src/controls/index.ts#L162">src/controls/index.ts:162</a></li>
+							<li>Defined in <a href="https://github.com/tocttou/three-freeform-controls/blob/9cdfb0f/src/controls/index.ts#L179">src/controls/index.ts:179</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -481,7 +531,7 @@
 					<div class="tsd-signature tsd-kind-icon">translationZP<span class="tsd-signature-symbol">:</span> <a href="translation.html" class="tsd-signature-type">Translation</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/tocttou/three-freeform-controls/blob/90bed1c/src/controls/index.ts#L147">src/controls/index.ts:147</a></li>
+							<li>Defined in <a href="https://github.com/tocttou/three-freeform-controls/blob/9cdfb0f/src/controls/index.ts#L164">src/controls/index.ts:164</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -504,7 +554,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/tocttou/three-freeform-controls/blob/90bed1c/src/controls/index.ts#L454">src/controls/index.ts:454</a></li>
+									<li>Defined in <a href="https://github.com/tocttou/three-freeform-controls/blob/9cdfb0f/src/controls/index.ts#L514">src/controls/index.ts:514</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -537,7 +587,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/tocttou/three-freeform-controls/blob/90bed1c/src/controls/index.ts#L323">src/controls/index.ts:323</a></li>
+									<li>Defined in <a href="https://github.com/tocttou/three-freeform-controls/blob/9cdfb0f/src/controls/index.ts#L363">src/controls/index.ts:363</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -560,7 +610,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/tocttou/three-freeform-controls/blob/90bed1c/src/controls/index.ts#L559">src/controls/index.ts:559</a></li>
+									<li>Defined in <a href="https://github.com/tocttou/three-freeform-controls/blob/9cdfb0f/src/controls/index.ts#L619">src/controls/index.ts:619</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -592,7 +642,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/tocttou/three-freeform-controls/blob/90bed1c/src/controls/index.ts#L538">src/controls/index.ts:538</a></li>
+									<li>Defined in <a href="https://github.com/tocttou/three-freeform-controls/blob/9cdfb0f/src/controls/index.ts#L598">src/controls/index.ts:598</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -655,6 +705,9 @@
 								<a href="controls.html#hideotherhandlesondrag" class="tsd-kind-icon">hide<wbr>Other<wbr>Handles<wbr>OnDrag</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="controls.html#highlightaxis" class="tsd-kind-icon">highlight<wbr>Axis</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
 								<a href="controls.html#isdampingenabled" class="tsd-kind-icon">is<wbr>Damping<wbr>Enabled</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class">
@@ -686,6 +739,9 @@
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class">
 								<a href="controls.html#showhelperplane" class="tsd-kind-icon">show<wbr>Helper<wbr>Plane</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="controls.html#snaptranslation" class="tsd-kind-icon">snap<wbr>Translation</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class">
 								<a href="controls.html#translationxn" class="tsd-kind-icon">translationXN</a>

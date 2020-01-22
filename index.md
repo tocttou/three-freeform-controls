@@ -35,11 +35,10 @@ This library provides rotation and translation controls for [THREE.JS](https://t
 - [x] enabling partial controls only
 - [x] multiple instances of controls anchored to a single object
 - [x] different instances of controls anchored to a different objects
+- [x] snap to grid
 
 ### Todo:
 
-- [ ] snap in Translation controls
-- [ ] axis indicator on hover
 - [ ] A-frame component
 - [ ] tests
 

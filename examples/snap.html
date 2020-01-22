@@ -1,6 +1,6 @@
 <html lang="en">
 <head>
-  <title>Custom Handles</title>
+  <title>Snap</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/109/three.min.js"></script>
   <script src="https://threejs.org/examples/js/controls/OrbitControls.js"></script>
   <script
@@ -32,7 +32,7 @@
     10000
   );
   const orbitControls = new THREE.OrbitControls(camera, renderer.domElement);
-  camera.position.set(0, 2, 5);
+  camera.position.set(0, 2, 8);
   const gridHelper = new THREE.GridHelper(20, 20, 0x333333, 0x222222);
   gridHelper.position.y -= 0.51;
   scene.add(gridHelper);
@@ -55,44 +55,28 @@
 
   // anchor controls to the box
   const controls = controlsManager.anchor(box, {
-    showHelperPlane: true
-  });
-  controls.showAll(false);
-
-  class CustomRotation extends FreeformControls.RotationGroup {
-    constructor(color) {
-      super();
-      this.ball = new THREE.Mesh(
-        new THREE.SphereGeometry(0.1, 32, 32),
-        new THREE.MeshNormalMaterial()
-      );
-      this.ring = new THREE.Mesh(
-        new THREE.RingGeometry(0.2, 0.3, 8),
-        new THREE.MeshBasicMaterial({color, side: THREE.DoubleSide})
-      );
-      this.add(this.ball);
-      this.add(this.ring);
+    snapTranslation: {
+      x: true,
+      y: false,
+      z: true
     }
+  });
+  controls.showByNames([
+    FreeformControls.DEFAULT_HANDLE_GROUP_NAME.XR,
+    FreeformControls.DEFAULT_HANDLE_GROUP_NAME.YR,
+    FreeformControls.DEFAULT_HANDLE_GROUP_NAME.ZR,
+    FreeformControls.DEFAULT_HANDLE_GROUP_NAME.ER
+  ], false);
 
-    getInteractiveObjects = () => {
-      return [this.ball];
-    };
-
-    setColor = (color) => {
-      this.ring.material.color.set(color);
-    };
-  }
-
-  const customRotationHandle = new CustomRotation("yellow");
-  customRotationHandle.name = "Custom Rotation Handle";
-  customRotationHandle.position.set(0, 1.5, 0);
-  customRotationHandle.up = new THREE.Vector3(0, 0, 1);
-  controls.setupHandle(customRotationHandle);
-
-  // add label
-  const label = new SpriteText("custom rotation handle (only ball is interactive)", 0.2);
-  label.position.set(0, -0.5, 0);
-  customRotationHandle.add(label);
+  const xHandleLabel = new SpriteText("x-axis (snap)", 0.3);
+  const yHandleLabel = new SpriteText("y-axis", 0.3);
+  const zHandleLabel = new SpriteText("z-axis (snap)", 0.3);
+  xHandleLabel.position.x = 3;
+  yHandleLabel.position.y = 3;
+  zHandleLabel.position.z = 3;
+  controls.add(xHandleLabel);
+  controls.add(yHandleLabel);
+  controls.add(zHandleLabel);
 
   // disable orbit controls while the freeform-controls are in use
   controlsManager.listen(FreeformControls.EVENTS.DRAG_START, () => {
