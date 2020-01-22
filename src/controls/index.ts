@@ -104,15 +104,15 @@ export interface IControlsOptions {
    */
   translationDistanceScale?: number;
   /**
-   * For translation handles: highlights the axis along which the object moves
-   * For rotation handles: highlights the axis of rotation
-   * Not available on other handles
+   * For translation handles: highlights the axis along which the object moves.
+   * For rotation handles: highlights the axis of rotation.
+   * Not available on other handles.
    * @default true
    */
   highlightAxis?: boolean;
   /**
    * Enables snap to grid (nearest integer coordinate) for all translation type handles:
-   * TranslationGroup, PickGroup, and PickPlaneGroup
+   * [[TranslationGroup]], [[PickGroup]], and [[PickPlaneGroup]]
    * @default { x: false, y: false, z: false }
    */
   snapTranslation?: {
@@ -242,15 +242,15 @@ export default class Controls extends THREE.Group {
    */
   public showHelperPlane: boolean;
   /**
-   * For translation handles: highlights the axis along which the object moves
-   * For rotation handles: highlights the axis of rotation
-   * Not available on other handles
+   * For translation handles: highlights the axis along which the object moves.
+   * For rotation handles: highlights the axis of rotation.
+   * Not available on other handles.
    * @default true
    */
   public highlightAxis: boolean;
   /**
    * Enables snap to grid (nearest integer coordinate) for all translation type handles:
-   * TranslationGroup, PickGroup, and PickPlaneGroup
+   * [[TranslationGroup]], [[PickGroup]], and [[PickPlaneGroup]]
    * @default { x: false, y: false, z: false }
    */
   public snapTranslation: {
