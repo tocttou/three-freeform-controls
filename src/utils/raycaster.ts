@@ -6,6 +6,7 @@ import { PICK_PLANE_OPACITY } from "./constants";
 import { IHandle, PickGroup, RotationGroup, TranslationGroup } from "../controls/handles";
 import RotationEye from "../controls/handles/rotation-eye";
 import { addEventListener, getPointFromEvent, removeEventListener } from "./helper";
+import Line from "../primitives/line";
 
 export enum EVENTS {
   DRAG_START = "DRAG_START",
@@ -33,6 +34,7 @@ export default class Raycaster extends THREE.Raycaster {
   private previousScreenPoint = new THREE.Vector2();
   private currentScreenPoint = new THREE.Vector2();
   private isActivePlaneFlipped = false;
+  private readonly highlightAxisLine: Line;
 
   constructor(
     public camera: THREE.Camera,
@@ -40,6 +42,7 @@ export default class Raycaster extends THREE.Raycaster {
     private controls: { [id: string]: Controls }
   ) {
     super();
+    this.highlightAxisLine = this.createAxisLine();
     /**
      * mousedown and touchstart are used instead of pointerdown because
      * pointermove seems to stop firing after some a few events in chrome mobile
@@ -55,6 +58,13 @@ export default class Raycaster extends THREE.Raycaster {
       capture: true
     });
   }
+
+  private createAxisLine = () => {
+    const geometry = new THREE.Geometry();
+    geometry.vertices.push(new THREE.Vector3(0, 0, -100));
+    geometry.vertices.push(new THREE.Vector3(0, 0, 100));
+    return new Line("white", geometry);
+  };
 
   private pointerDownListener = (event: MouseEvent | TouchEvent) => {
     const point = getPointFromEvent(event);
@@ -153,15 +163,37 @@ export default class Raycaster extends THREE.Raycaster {
       // activate the helper plane if asked
       // available only for TranslationGroup and RotationGroup
       // (except RotationEye - plane of rotation is obvious)
+      const scene = controls.parent as THREE.Scene;
       if (
         controls.showHelperPlane &&
         (this.activeHandle instanceof TranslationGroup ||
           this.activeHandle instanceof RotationGroup) &&
         !(this.activeHandle instanceof RotationEye)
       ) {
-        const scene = controls.parent as THREE.Scene;
         this.helperPlane = new THREE.PlaneHelper(this.activePlane, 1);
         scene.add(this.helperPlane);
+      }
+
+      /**
+       * activate the highlightAxis if asked
+       * available only for TranslationGroup and RotationGroup
+       * (except RotationEye - plane of rotation is obvious)
+       */
+      if (
+        controls.highlightAxis &&
+        (this.activeHandle instanceof TranslationGroup ||
+          this.activeHandle instanceof RotationGroup) &&
+        !(this.activeHandle instanceof RotationEye)
+      ) {
+        this.activeHandle.getWorldPosition(this.highlightAxisLine.position);
+        const direction = this.highlightAxisLine.position.clone();
+        if (this.activeHandle instanceof TranslationGroup) {
+          direction.add(this.activeHandle.parallel);
+        } else {
+          direction.add(this.activeHandle.up);
+        }
+        this.highlightAxisLine.lookAt(direction);
+        scene.add(this.highlightAxisLine);
       }
 
       // switch event listeners and dispatch DRAG_START
@@ -231,8 +263,7 @@ export default class Raycaster extends THREE.Raycaster {
     emitter.emit(EVENTS.DRAG_STOP, { point: this.point, handle: this.activeHandle });
 
     if (
-      this.activeHandle !== null &&
-      this.activeHandle.parent !== null &&
+      this.activeHandle?.parent &&
       (this.activeHandle.parent as Controls).hideOtherControlsInstancesOnDrag
     ) {
       this.visibleControls.forEach(controls => {
@@ -242,8 +273,7 @@ export default class Raycaster extends THREE.Raycaster {
     }
 
     if (
-      this.activeHandle !== null &&
-      this.activeHandle.parent !== null &&
+      this.activeHandle?.parent &&
       (this.activeHandle.parent as Controls).hideOtherHandlesOnDrag
     ) {
       this.visibleHandles.forEach(handle => {
@@ -256,17 +286,13 @@ export default class Raycaster extends THREE.Raycaster {
       this.setPickPlaneOpacity(PICK_PLANE_OPACITY.INACTIVE);
     }
 
-    if (
-      this.activeHandle !== null &&
-      this.activeHandle.parent !== null &&
-      (this.activeHandle.parent as Controls).showHelperPlane
-    ) {
-      const scene = this.activeHandle.parent.parent as THREE.Scene;
+    const scene = this.activeHandle?.parent?.parent;
+    if (scene) {
       if (this.helperPlane) {
         scene.remove(this.helperPlane);
       }
+      scene.remove(this.highlightAxisLine);
     }
-
     this.activeHandle = null;
     this.activePlane = null;
   };

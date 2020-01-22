@@ -103,6 +103,13 @@ export interface IControlsOptions {
    * @default 1.0
    */
   translationDistanceScale?: number;
+  /**
+   * For translation handles: highlights the axis along which the object moves
+   * For rotation handles: highlights the axis of rotation
+   * Not available on other handles
+   * @default true
+   */
+  highlightAxis?: boolean;
 }
 
 /**
@@ -224,6 +231,13 @@ export default class Controls extends THREE.Group {
    * @default false
    */
   public showHelperPlane: boolean;
+  /**
+   * For translation handles: highlights the axis along which the object moves
+   * For rotation handles: highlights the axis of rotation
+   * Not available on other handles
+   * @default true
+   */
+  public highlightAxis: boolean;
 
   /**
    *
@@ -243,6 +257,7 @@ export default class Controls extends THREE.Group {
     this.hideOtherHandlesOnDrag = this.options?.hideOtherHandlesOnDrag ?? true;
     this.hideOtherControlsInstancesOnDrag = this.options?.hideOtherControlsInstancesOnDrag ?? true;
     this.showHelperPlane = this.options?.showHelperPlane ?? false;
+    this.highlightAxis = this.options?.highlightAxis ?? true;
     this.useComputedBounds = this.options?.useComputedBounds ?? false;
     this.separation = this.options?.separation ?? DEFAULT_CONTROLS_SEPARATION;
     this.isDampingEnabled = this.options?.isDampingEnabled ?? true;
