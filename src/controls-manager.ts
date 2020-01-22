@@ -72,7 +72,7 @@ export default class ControlsManager extends THREE.Object3D {
       if (controls === null) {
         return;
       }
-      controls.processDragEnd();
+      controls.processDragEnd({ handle });
       this.eventListeners[EVENTS.DRAG_STOP].map(callback => {
         callback(controls.object, handle.name);
       });

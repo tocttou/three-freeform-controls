@@ -110,6 +110,16 @@ export interface IControlsOptions {
    * @default true
    */
   highlightAxis?: boolean;
+  /**
+   * Enables snap to grid (nearest integer coordinate) for all translation type handles:
+   * TranslationGroup, PickGroup, and PickPlaneGroup
+   * @default { x: false, y: false, z: false }
+   */
+  snapTranslation?: {
+    x: boolean;
+    y: boolean;
+    z: boolean;
+  };
 }
 
 /**
@@ -238,6 +248,16 @@ export default class Controls extends THREE.Group {
    * @default true
    */
   public highlightAxis: boolean;
+  /**
+   * Enables snap to grid (nearest integer coordinate) for all translation type handles:
+   * TranslationGroup, PickGroup, and PickPlaneGroup
+   * @default { x: false, y: false, z: false }
+   */
+  public snapTranslation: {
+    x: boolean;
+    y: boolean;
+    z: boolean;
+  };
 
   /**
    *
@@ -259,6 +279,11 @@ export default class Controls extends THREE.Group {
     this.showHelperPlane = this.options?.showHelperPlane ?? false;
     this.highlightAxis = this.options?.highlightAxis ?? true;
     this.useComputedBounds = this.options?.useComputedBounds ?? false;
+    this.snapTranslation = this.options?.snapTranslation ?? {
+      x: false,
+      y: false,
+      z: false
+    };
     this.separation = this.options?.separation ?? DEFAULT_CONTROLS_SEPARATION;
     this.isDampingEnabled = this.options?.isDampingEnabled ?? true;
     this.rotationRadiusScale = this.options?.rotationRadiusScale ?? DEFAULT_ROTATION_RADIUS_SCALE;
@@ -457,7 +482,27 @@ export default class Controls extends THREE.Group {
   /**
    * @hidden
    */
-  processDragEnd = () => {
+  processDragEnd = (args: { handle: IHandle }) => {
+    const { handle } = args;
+    const { x: xSnap, y: ySnap, z: zSnap } = this.snapTranslation;
+    const snap = [xSnap, ySnap, zSnap];
+    if (
+      handle instanceof TranslationGroup ||
+      handle instanceof PickPlaneGroup ||
+      handle instanceof PickGroup
+    ) {
+      const xyz = this.object.position.toArray();
+      const floor = xyz.map(Math.floor);
+      const ceil = xyz.map(Math.ceil);
+      const snapFloor = xyz.map((p, index) => ceil[index] - p >= p - floor[index]);
+      const position = xyz.map((p, index) => {
+        if (!snap[index]) {
+          return p;
+        }
+        return snapFloor[index] ? floor[index] : ceil[index];
+      });
+      this.object.position.fromArray(position);
+    }
     this.isBeingDraggedTranslation = false;
     this.isBeingDraggedRotation = false;
   };
