@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Translation | three-freeform-controls - v0.1.7</title>
+	<title>TranslationLimit | three-freeform-controls - v0.1.7</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -52,26 +52,35 @@
 					<a href="../index.html">Globals</a>
 				</li>
 				<li>
-					<a href="translation.html">Translation</a>
+					<a href="translationlimit.html">TranslationLimit</a>
 				</li>
 			</ul>
-			<h1>Class Translation</h1>
+			<h1>Interface TranslationLimit</h1>
 		</div>
 	</div>
 </header>
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>The first number is the unit limit allowed in the -ve direction.
+						The second number is the unit limit allowed in the +ve direction.</p>
+					</div>
+					<p>All calculations are with respect to anchor position which is the object&#39;s
+						position when <a href="../classes/controls.html#settranslationlimit">setTranslationLimit</a> is called.
+						<code>{ x: [-1, 2], y: false, z: false }</code> - sets the translation limit to <code>-1</code> unit
+						in the -x-direction, <code>+2</code> units in the +x-direction, and no limit on the
+					y and z-direction.</p>
+					<p>Setting the limit to <code>false</code> disables the limit in all directions.</p>
+				</div>
+			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<a href="translationgroup.html" class="tsd-signature-type">TranslationGroup</a>
-						<ul class="tsd-hierarchy">
-							<li>
-								<span class="target">Translation</span>
-							</li>
-						</ul>
+						<span class="target">TranslationLimit</span>
 					</li>
 				</ul>
 			</section>
@@ -80,92 +89,47 @@
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
 						<section class="tsd-index-section ">
-							<h3>Constructors</h3>
-							<ul class="tsd-index-list">
-								<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite"><a href="translation.html#constructor" class="tsd-kind-icon">constructor</a></li>
-							</ul>
-						</section>
-						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-overwrite"><a href="translation.html#parallel" class="tsd-kind-icon">parallel</a></li>
-							</ul>
-						</section>
-						<section class="tsd-index-section ">
-							<h3>Methods</h3>
-							<ul class="tsd-index-list">
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite"><a href="translation.html#setcolor" class="tsd-kind-icon">set<wbr>Color</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="translationlimit.html#x" class="tsd-kind-icon">x</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="translationlimit.html#y" class="tsd-kind-icon">y</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="translationlimit.html#z" class="tsd-kind-icon">z</a></li>
 							</ul>
 						</section>
 					</div>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
-				<h2>Constructors</h2>
-				<section class="tsd-panel tsd-member tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite">
-					<a name="constructor" class="tsd-anchor"></a>
-					<h3>constructor</h3>
-					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite">
-						<li class="tsd-signature tsd-kind-icon">new <wbr>Translation<span class="tsd-signature-symbol">(</span>color<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="translation.html" class="tsd-signature-type">Translation</a></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<p>Overrides Group.__constructor</p>
-								<ul>
-									<li>Defined in <a href="https://github.com/tocttou/three-freeform-controls/blob/08c5022/src/controls/handles/translation.ts#L15">src/controls/handles/translation.ts:15</a></li>
-								</ul>
-							</aside>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> color: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;DEFAULT_COLOR_ARROW</span></h5>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="translation.html" class="tsd-signature-type">Translation</a></h4>
-						</li>
-					</ul>
-				</section>
-			</section>
-			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-overwrite">
-					<a name="parallel" class="tsd-anchor"></a>
-					<h3>parallel</h3>
-					<div class="tsd-signature tsd-kind-icon">parallel<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Vector3</span><span class="tsd-signature-symbol"> =&nbsp;new THREE.Vector3(0, 1, 0)</span></div>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="x" class="tsd-anchor"></a>
+					<h3>x</h3>
+					<div class="tsd-signature tsd-kind-icon">x<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span></div>
 					<aside class="tsd-sources">
-						<p>Overrides <a href="translationgroup.html">TranslationGroup</a>.<a href="translationgroup.html#parallel">parallel</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/tocttou/three-freeform-controls/blob/08c5022/src/controls/handles/translation.ts#L15">src/controls/handles/translation.ts:15</a></li>
+							<li>Defined in <a href="https://github.com/tocttou/three-freeform-controls/blob/08c5022/src/controls/index.ts#L48">src/controls/index.ts:48</a></li>
 						</ul>
 					</aside>
 				</section>
-			</section>
-			<section class="tsd-panel-group tsd-member-group ">
-				<h2>Methods</h2>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
-					<a name="setcolor" class="tsd-anchor"></a>
-					<h3>set<wbr>Color</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
-						<li class="tsd-signature tsd-kind-icon">set<wbr>Color<span class="tsd-signature-symbol">(</span>color<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<p>Overrides <a href="handlegroup.html">HandleGroup</a>.<a href="handlegroup.html#setcolor">setColor</a></p>
-								<ul>
-									<li>Defined in <a href="https://github.com/tocttou/three-freeform-controls/blob/08c5022/src/controls/handles/translation.ts#L39">src/controls/handles/translation.ts:39</a></li>
-								</ul>
-							</aside>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>color: <span class="tsd-signature-type">string</span></h5>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
-						</li>
-					</ul>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="y" class="tsd-anchor"></a>
+					<h3>y</h3>
+					<div class="tsd-signature tsd-kind-icon">y<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/tocttou/three-freeform-controls/blob/08c5022/src/controls/index.ts#L49">src/controls/index.ts:49</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="z" class="tsd-anchor"></a>
+					<h3>z</h3>
+					<div class="tsd-signature tsd-kind-icon">z<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/tocttou/three-freeform-controls/blob/08c5022/src/controls/index.ts#L50">src/controls/index.ts:50</a></li>
+						</ul>
+					</aside>
 				</section>
 			</section>
 		</div>
@@ -189,59 +153,59 @@
 						<a href="../enums/events.html" class="tsd-kind-icon">EVENTS</a>
 					</li>
 					<li class=" tsd-kind-class">
-						<a href="controls.html" class="tsd-kind-icon">Controls</a>
+						<a href="../classes/controls.html" class="tsd-kind-icon">Controls</a>
 					</li>
 					<li class=" tsd-kind-class">
-						<a href="controlsmanager.html" class="tsd-kind-icon">Controls<wbr>Manager</a>
+						<a href="../classes/controlsmanager.html" class="tsd-kind-icon">Controls<wbr>Manager</a>
 					</li>
 					<li class=" tsd-kind-class">
-						<a href="handlegroup.html" class="tsd-kind-icon">Handle<wbr>Group</a>
+						<a href="../classes/handlegroup.html" class="tsd-kind-icon">Handle<wbr>Group</a>
 					</li>
 					<li class=" tsd-kind-class">
-						<a href="pick.html" class="tsd-kind-icon">Pick</a>
+						<a href="../classes/pick.html" class="tsd-kind-icon">Pick</a>
 					</li>
 					<li class=" tsd-kind-class">
-						<a href="pickgroup.html" class="tsd-kind-icon">Pick<wbr>Group</a>
+						<a href="../classes/pickgroup.html" class="tsd-kind-icon">Pick<wbr>Group</a>
 					</li>
 					<li class=" tsd-kind-class">
-						<a href="pickplane.html" class="tsd-kind-icon">Pick<wbr>Plane</a>
+						<a href="../classes/pickplane.html" class="tsd-kind-icon">Pick<wbr>Plane</a>
 					</li>
 					<li class=" tsd-kind-class">
-						<a href="pickplanegroup.html" class="tsd-kind-icon">Pick<wbr>Plane<wbr>Group</a>
+						<a href="../classes/pickplanegroup.html" class="tsd-kind-icon">Pick<wbr>Plane<wbr>Group</a>
 					</li>
 					<li class=" tsd-kind-class">
-						<a href="rotation.html" class="tsd-kind-icon">Rotation</a>
+						<a href="../classes/rotation.html" class="tsd-kind-icon">Rotation</a>
 					</li>
 					<li class=" tsd-kind-class">
-						<a href="rotationgroup.html" class="tsd-kind-icon">Rotation<wbr>Group</a>
+						<a href="../classes/rotationgroup.html" class="tsd-kind-icon">Rotation<wbr>Group</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="../classes/translation.html" class="tsd-kind-icon">Translation</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="../classes/translationgroup.html" class="tsd-kind-icon">Translation<wbr>Group</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="icontrolsoptions.html" class="tsd-kind-icon">IControls<wbr>Options</a>
 					</li>
 				</ul>
 				<ul class="current">
-					<li class="current tsd-kind-class">
-						<a href="translation.html" class="tsd-kind-icon">Translation</a>
+					<li class="current tsd-kind-interface">
+						<a href="translationlimit.html" class="tsd-kind-icon">Translation<wbr>Limit</a>
 						<ul>
-							<li class=" tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite">
-								<a href="translation.html#constructor" class="tsd-kind-icon">constructor</a>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="translationlimit.html#x" class="tsd-kind-icon">x</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-overwrite">
-								<a href="translation.html#parallel" class="tsd-kind-icon">parallel</a>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="translationlimit.html#y" class="tsd-kind-icon">y</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
-								<a href="translation.html#setcolor" class="tsd-kind-icon">set<wbr>Color</a>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="translationlimit.html#z" class="tsd-kind-icon">z</a>
 							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
-					<li class=" tsd-kind-class">
-						<a href="translationgroup.html" class="tsd-kind-icon">Translation<wbr>Group</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="../interfaces/icontrolsoptions.html" class="tsd-kind-icon">IControls<wbr>Options</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="../interfaces/translationlimit.html" class="tsd-kind-icon">Translation<wbr>Limit</a>
-					</li>
 					<li class=" tsd-kind-type-alias">
 						<a href="../index.html#ihandle" class="tsd-kind-icon">IHandle</a>
 					</li>

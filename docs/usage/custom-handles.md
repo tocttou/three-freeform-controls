@@ -121,4 +121,4 @@ The above illustrated example can be accessed below.
 
 Note that the centre of rotation remains the position of the `controls` object, and not the position of the individual handles.
 
-Next section: [API Reference]({{ site.baseurl }}/docs/api)
+Next section: [Translation Limit]({{ site.baseurl }}/docs/usage/translation-limit)

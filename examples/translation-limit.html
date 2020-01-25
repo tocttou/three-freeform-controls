@@ -1,10 +1,11 @@
 <html lang="en">
 <head>
-  <title>Custom Handles</title>
+  <title>Translation Limit</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/109/three.min.js"></script>
   <script src="https://threejs.org/examples/js/controls/OrbitControls.js"></script>
   <script
     src="https://cdn.jsdelivr.net/npm/three-freeform-controls@0.1.7/dist/three-freeform-controls.umd.js"></script>
+  <script src="//unpkg.com/three-spritetext"></script>
   <style>
     html,
     body {
@@ -31,11 +32,16 @@
     10000
   );
   const orbitControls = new THREE.OrbitControls(camera, renderer.domElement);
-  camera.position.set(0, 2, 5);
+  camera.position.set(0, 2, 8);
   const gridHelper = new THREE.GridHelper(20, 20, 0x333333, 0x222222);
   gridHelper.position.y -= 0.51;
   scene.add(gridHelper);
   const box = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), new THREE.MeshNormalMaterial());
+  const ball = new THREE.Mesh(new THREE.SphereGeometry(0.1, 32, 32), new THREE.MeshBasicMaterial({
+    color: 'yellow'
+  }));
+  ball.position.y = -0.51;
+  scene.add(ball);
   scene.add(box);
 
   function animate() {
@@ -53,30 +59,34 @@
   scene.add(controlsManager);
 
   // anchor controls to the box
-  const controls = controlsManager.anchor(box);
-  controls.showAll(false);
+  const controls = controlsManager.anchor(box, {
+    snapTranslation: {
+      x: true,
+      y: false,
+      z: true
+    }
+  });
+  controls.setTranslationLimit({
+    x: [-2, 2],
+    y: [-2, 2],
+    z: [-2, 2]
+  });
+  controls.showByNames([
+    FreeformControls.DEFAULT_HANDLE_GROUP_NAME.XR,
+    FreeformControls.DEFAULT_HANDLE_GROUP_NAME.YR,
+    FreeformControls.DEFAULT_HANDLE_GROUP_NAME.ZR,
+    FreeformControls.DEFAULT_HANDLE_GROUP_NAME.ER
+  ], false);
 
-  // create custom handles
-  const translationHandle = new FreeformControls.Translation("cyan");
-  const rotationHandle = new FreeformControls.Rotation("pink");
-
-  translationHandle.name = "TranslationHandle";
-  rotationHandle.name = "RotationHandle";
-
-  // modify the handles
-  translationHandle.rotateZ(-Math.PI / 2);
-
-  // modify the "up" vector to point perpendicular to the desired interaction plane of the object
-  translationHandle.up = new THREE.Vector3(0, 1, 0);
-  rotationHandle.up = new THREE.Vector3(0, 0, 1);
-
-  // only for handles of type "TranslationGroup",
-  // modify the "parallel" vector to point to the direction in which the handle is pointing
-  translationHandle.parallel = new THREE.Vector3(1, 0, 0);
-
-  // setupHandle
-  controls.setupHandle(translationHandle);
-  controls.setupHandle(rotationHandle);
+  const xHandleLabel = new SpriteText("xlimit: [-2, 2]", 0.3);
+  const yHandleLabel = new SpriteText("ylimit: [-2, 2]", 0.3);
+  const zHandleLabel = new SpriteText("zlimit: [-2, 2]", 0.3);
+  xHandleLabel.position.x = 3;
+  yHandleLabel.position.y = 3;
+  zHandleLabel.position.z = 3;
+  controls.add(xHandleLabel);
+  controls.add(yHandleLabel);
+  controls.add(zHandleLabel);
 
   // disable orbit controls while the freeform-controls are in use
   controlsManager.listen(FreeformControls.EVENTS.DRAG_START, () => {

@@ -36,6 +36,7 @@ This library provides rotation and translation controls for [THREE.JS](https://t
 - [x] multiple instances of controls anchored to a single object
 - [x] different instances of controls anchored to a different objects
 - [x] snap to grid
+- [x] translation limits along individual axes 
 
 ### Todo:
 

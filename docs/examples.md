@@ -18,3 +18,4 @@ Code for the examples can be found [here](https://github.com/tocttou/three-freef
 - [Separation]({{ site.baseurl }}/examples/separation){:target="_blank"}
 - [Use computed bounds]({{ site.baseurl }}/examples/computed-bounds){:target="_blank"}
 - [Snap to grid]({{ site.baseurl }}/examples/snap){:target="_blank"}
+- [Translation limit]({{ site.baseurl }}/examples/translation-limit){:target="_blank"}
