@@ -32,6 +32,24 @@ export enum ANCHOR_MODE {
   INHERIT = "inherit"
 }
 
+/**
+ * The first number is the unit limit allowed in the -ve direction.
+ * The second number is the unit limit allowed in the +ve direction.
+ *
+ * All calculations are with respect to anchor position which is the object's
+ * position when [[setTranslationLimit]] is called.
+ * `{ x: [-1, 2], y: false, z: false }` - sets the translation limit to `-1` unit
+ * in the -x-direction, `+2` units in the +x-direction, and no limit on the
+ * y and z-direction.
+ *
+ * Setting the limit to `false` disables the limit in all directions.
+ */
+export interface TranslationLimit {
+  x: [number, number] | false;
+  y: [number, number] | false;
+  z: [number, number] | false;
+}
+
 export interface IControlsOptions {
   /**
    * the anchor mode for the controls
@@ -214,12 +232,17 @@ export default class Controls extends THREE.Group {
   private readonly useComputedBounds: boolean;
   private readonly separation: number;
   private initialSelfQuaternion = new THREE.Quaternion();
+  private readonly minTranslationCache = new THREE.Vector3();
+  private readonly maxTranslationCache = new THREE.Vector3();
   private readonly options: IControlsOptions;
   private readonly mode: ANCHOR_MODE;
   private readonly translationDistanceScale: number;
   private readonly rotationRadiusScale: number;
   private readonly eyeRotationRadiusScale: number;
   private readonly pickPlaneSizeScale: number;
+  private translationLimit?: TranslationLimit | false = false;
+  private translationAnchor: THREE.Vector3 | null = null;
+
   /**
    * enables damping for the controls
    * @default true
@@ -466,6 +489,21 @@ export default class Controls extends THREE.Group {
   };
 
   /**
+   * Puts a limit on the object's translation anchored at the current position.
+   *
+   * `{ x: [-1, 2], y: false, z: false }` - sets the translation limit to `-1` unit
+   * in the -x-direction, `+2` units in the +x-direction, and no limit on the
+   * y and z-direction.
+   *
+   * Setting the limit to `false` disables the limit in all directions.
+   * @param limit
+   */
+  public setTranslationLimit = (limit: TranslationLimit | false) => {
+    this.translationLimit = limit;
+    this.translationAnchor = limit ? this.position.clone() : null;
+  };
+
+  /**
    * @hidden
    */
   processDragStart = (args: { point: THREE.Vector3; handle: IHandle }) => {
@@ -532,14 +570,14 @@ export default class Controls extends THREE.Group {
         .copy(this.normalizedHandleParallelVectorCache)
         .multiplyScalar(this.isDampingEnabled ? k * delta : delta);
 
-      this.position.add(this.deltaPosition);
+      this.position.copy(this.getLimitedTranslation(this.deltaPosition));
     } else if (handle instanceof PickGroup || handle instanceof PickPlaneGroup) {
       this.deltaPosition
         .copy(point)
         .sub(this.dragIncrementalStartPoint)
         .multiplyScalar(this.isDampingEnabled ? k : 1);
 
-      this.position.add(this.deltaPosition);
+      this.position.copy(this.getLimitedTranslation(this.deltaPosition));
     } else {
       this.touch1
         .copy(this.dragIncrementalStartPoint)
@@ -559,6 +597,27 @@ export default class Controls extends THREE.Group {
 
     this.objectTargetQuaternion.premultiply(this.handleTargetQuaternion);
     this.dragIncrementalStartPoint.copy(point);
+  };
+
+  private getLimitedTranslation = (translation: THREE.Vector3) => {
+    const position = translation.add(this.position);
+    if (!this.translationAnchor || !this.translationLimit) {
+      return position;
+    }
+    const { x: xLimit, y: yLimit, z: zLimit } = this.translationLimit;
+    const { x: xAnchor, y: yAnchor, z: zAnchor } = this.translationAnchor;
+    const { x, y, z } = position;
+    this.minTranslationCache.set(
+      xLimit ? xAnchor + xLimit[0] : x,
+      yLimit ? yAnchor + yLimit[0] : y,
+      zLimit ? zAnchor + zLimit[0] : z
+    );
+    this.maxTranslationCache.set(
+      xLimit ? xAnchor + xLimit[1] : x,
+      yLimit ? yAnchor + yLimit[1] : y,
+      zLimit ? zAnchor + zLimit[1] : z
+    );
+    return position.clamp(this.minTranslationCache, this.maxTranslationCache);
   };
 
   private detachObjectUpdatePositionAttach = (
