@@ -31,7 +31,7 @@ OR
 <!-- Import three.js first -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/109/three.min.js"></script>
 <!-- Then import three-freeform-controls -->
-<script src="https://cdn.jsdelivr.net/npm/three-freeform-controls@1.0.7/dist/three-freeform-controls.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three-freeform-controls@1.0.8/dist/three-freeform-controls.umd.js"></script>
 ```
 
 Available as: object `FreeformControls` on the `window` scope.
