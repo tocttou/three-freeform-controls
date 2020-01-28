@@ -677,7 +677,7 @@ export default class Controls extends THREE.Group {
    */
   public showAll = (visibility = true) => {
     this.handles.forEach(handle => {
-      handle!.visible = visibility;
+      handle.visible = visibility;
     });
   };
 
@@ -687,10 +687,10 @@ export default class Controls extends THREE.Group {
   public getInteractiveObjects(): THREE.Object3D[] {
     const interactiveObjects: THREE.Object3D[] = [];
     this.handles.forEach(handle => {
-      if (!handle!.visible) {
+      if (!handle.visible) {
         return;
       }
-      interactiveObjects.push(...handle!.getInteractiveObjects());
+      interactiveObjects.push(...handle.getInteractiveObjects());
     });
     return interactiveObjects;
   }

@@ -18,8 +18,8 @@ export default class RotationEye extends Rotation {
   }
 
   updateMatrixWorld(force?: boolean): void {
-    if (this.camera !== null && this.parent !== null) {
-      this.parent!.matrixWorld.decompose(this._temp1, this.controlsWorldOrientation, this._temp2);
+    if (this.camera !== null) {
+      this.parent?.matrixWorld.decompose(this._temp1, this.controlsWorldOrientation, this._temp2);
       this.matrixWorld.decompose(this.worldPosition, this._temp3, this._temp2);
       this.camera
         .getWorldQuaternion(this.quaternion)
