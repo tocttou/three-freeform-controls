@@ -16,7 +16,7 @@ This library provides rotation and translation controls for [THREE.JS](https://t
 
 - [x] translation controls with 3 degrees of freedom
 - [x] rotation controls with 3 degrees of freedom
-- [x] translation and rotation controls about axes at arbitrary axes
+- [x] translation and rotation controls about axes at arbitrary angles
 - [x] plane controls for translation restricted to an arbitrary plane
 - [x] rotation controls in the eye plane
 - [x] free-pick controls for translation in the eye plane
