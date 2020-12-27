@@ -471,9 +471,8 @@ export default class Controls extends THREE.Group {
       if (this.object.type === "Mesh") {
         const geometry = (this.object as THREE.Mesh).geometry;
         geometry.computeBoundingSphere();
-        const {
-          boundingSphere: { radius }
-        } = geometry;
+        const { boundingSphere } = geometry;
+        const radius = boundingSphere?.radius ?? 0;
         this.boundingSphereRadius = radius / 2 + this.separation;
         return;
       } else {
@@ -550,7 +549,7 @@ export default class Controls extends THREE.Group {
    * @param dampingFactor - value between 0 and 1, acts like a weight on the controls
    */
   public setDampingFactor = (dampingFactor = 0) =>
-    (this.dampingFactor = THREE.Math.clamp(dampingFactor, 0, 1));
+    (this.dampingFactor = THREE.MathUtils.clamp(dampingFactor, 0, 1));
 
   /**
    * @hidden
@@ -710,7 +709,7 @@ export default class Controls extends THREE.Group {
         this.objectParentWorldScale
       );
     }
-    this.objectParentWorldQuaternion.inverse();
+    this.objectParentWorldQuaternion.invert();
     this.objectTargetPosition.copy(this.position);
     this.objectTargetQuaternion.premultiply(this.objectParentWorldQuaternion);
 

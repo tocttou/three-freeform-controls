@@ -49,11 +49,11 @@ export default class Raycaster extends THREE.Raycaster {
      * this could be because of some capture/passive setting but couldn't find
      * anything useful. using touch(*) events works.
      */
-    addEventListener(this.domElement, ["mousedown", "touchstart"], this.pointerDownListener, {
+    addEventListener(this.domElement, ["pointerdown", "touchstart"], this.pointerDownListener, {
       passive: false,
       capture: true
     });
-    addEventListener(this.domElement, ["mouseup", "touchend"], this.pointerUpListener, {
+    addEventListener(this.domElement, ["pointerup", "touchend"], this.pointerUpListener, {
       passive: false,
       capture: true
     });
@@ -197,14 +197,19 @@ export default class Raycaster extends THREE.Raycaster {
       }
 
       // switch event listeners and dispatch DRAG_START
-      removeEventListener(this.domElement, ["mousedown", "touchstart"], this.pointerDownListener, {
-        capture: true
-      });
+      removeEventListener(
+        this.domElement,
+        ["pointerdown", "touchstart"],
+        this.pointerDownListener,
+        {
+          capture: true
+        }
+      );
       emitter.emit(EVENTS.DRAG_START, {
         point: initialIntersectionPoint,
         handle: this.activeHandle
       });
-      addEventListener(this.domElement, ["mousemove", "touchmove"], this.pointerMoveListener, {
+      addEventListener(this.domElement, ["pointermove", "touchmove"], this.pointerMoveListener, {
         passive: false,
         capture: true
       });
@@ -253,10 +258,10 @@ export default class Raycaster extends THREE.Raycaster {
   };
 
   private pointerUpListener = () => {
-    removeEventListener(this.domElement, ["mousemove", "touchmove"], this.pointerMoveListener, {
+    removeEventListener(this.domElement, ["pointermove", "touchmove"], this.pointerMoveListener, {
       capture: true
     });
-    addEventListener(this.domElement, ["mousedown", "touchstart"], this.pointerDownListener, {
+    addEventListener(this.domElement, ["pointerdown", "touchstart"], this.pointerDownListener, {
       passive: false,
       capture: true
     });
@@ -324,13 +329,13 @@ export default class Raycaster extends THREE.Raycaster {
   public destroy = () => {
     this.activePlane = null;
     this.activeHandle = null;
-    removeEventListener(this.domElement, ["mousedown", "touchstart"], this.pointerDownListener, {
+    removeEventListener(this.domElement, ["pointerdown", "touchstart"], this.pointerDownListener, {
       capture: true
     });
-    removeEventListener(this.domElement, ["mousemove", "touchmove"], this.pointerMoveListener, {
+    removeEventListener(this.domElement, ["pointermove", "touchmove"], this.pointerMoveListener, {
       capture: true
     });
-    removeEventListener(this.domElement, ["mouseup", "touchend"], this.pointerUpListener, {
+    removeEventListener(this.domElement, ["pointerup", "touchend"], this.pointerUpListener, {
       capture: true
     });
   };

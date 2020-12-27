@@ -23,7 +23,7 @@ export default class RotationEye extends Rotation {
       this.matrixWorld.decompose(this.worldPosition, this._temp3, this._temp2);
       this.camera
         .getWorldQuaternion(this.quaternion)
-        .premultiply(this.controlsWorldOrientation.inverse());
+        .premultiply(this.controlsWorldOrientation.invert());
       this.camera.getWorldPosition(this.up).sub(this.worldPosition);
     }
     super.updateMatrixWorld(force);

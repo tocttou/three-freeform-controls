@@ -17,7 +17,7 @@ export const getPointFromEvent = (event: MouseEvent | TouchEvent) => {
 export const addEventListener = (
   element: HTMLElement,
   eventNames: Array<
-    "mousedown" | "touchstart" | "mouseup" | "touchend" | "mousemove" | "touchmove"
+    "pointerdown" | "touchstart" | "pointerup" | "touchend" | "pointermove" | "touchmove"
   >,
   callback: (event: MouseEvent | TouchEvent) => void,
   options: { passive?: boolean; capture?: boolean } | boolean = false
@@ -30,7 +30,7 @@ export const addEventListener = (
 export const removeEventListener = (
   element: HTMLElement,
   eventNames: Array<
-    "mousedown" | "touchstart" | "mouseup" | "touchend" | "mousemove" | "touchmove"
+    "pointerdown" | "touchstart" | "pointerup" | "touchend" | "pointermove" | "touchmove"
   >,
   callback: (event: MouseEvent | TouchEvent) => void,
   options: { capture?: boolean } | boolean = false
