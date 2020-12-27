@@ -29,9 +29,9 @@ OR
 
 ```html
 <!-- Import three.js first -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/109/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r123/three.min.js"></script>
 <!-- Then import three-freeform-controls -->
-<script src="https://cdn.jsdelivr.net/npm/three-freeform-controls@1.0.9/dist/three-freeform-controls.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three-freeform-controls@0.1.12/dist/three-freeform-controls.umd.js"></script>
 ```
 
 Available as: object `FreeformControls` on the `window` scope.
