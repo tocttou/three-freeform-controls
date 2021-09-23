@@ -12,6 +12,14 @@ This library provides rotation and translation controls for [THREE.JS](https://t
 
 ---
 
+### Local development:
+- Install dependencies: `npm install`
+- Build and watch the source code: `npm run start`
+
+### Running examples:
+- Make sure to build the source code
+- Run examples: `npm run examples`
+
 ### The following features are currently supported:
 
 - [x] translation controls with 3 degrees of freedom

@@ -1,0 +1,105 @@
+import * as THREE from "three";
+import { IK, IKChain, IKJoint, IKBallConstraint, IKHelper } from 'three-ik/build/three-ik.module.js';
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
+import SpriteText from "three-spritetext";
+
+import * as FreeformControls from "../dist/three-freeform-controls.js";
+// Set up scene, camera, renderer
+const renderer = new THREE.WebGLRenderer({
+  antialias: true
+});
+renderer.setSize(window.innerWidth, window.innerHeight);
+document.body.appendChild(renderer.domElement);
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(
+  45,
+  window.innerWidth / window.innerHeight,
+  1,
+  10000
+);
+const orbitControls = new OrbitControls(camera, renderer.domElement);
+camera.position.set(3.5, 2, 2);
+const gridHelper = new THREE.GridHelper(20, 20, 0x333333, 0x222222);
+gridHelper.position.y -= 0.51;
+scene.add(gridHelper);
+
+const ik = new IK();
+
+const chain = new IKChain();
+const constraints = [new IKBallConstraint(90)];
+const bones = [];
+
+// Create a target that the IK's effector will reach
+// for.
+const movingTarget = new THREE.Mesh(new THREE.SphereGeometry(0.1, 32, 32), new THREE.MeshBasicMaterial({color: 0xff0000}));
+movingTarget.position.z = 0.9;
+
+const connector = new THREE.Group();
+const cylinder = new THREE.Mesh(new THREE.BoxGeometry(0.05, 0.05, 0.2), new THREE.MeshBasicMaterial({color: 0xffff00}));
+const cone = new THREE.Mesh(new THREE.ConeGeometry(0.05, 0.2, 32), new THREE.MeshBasicMaterial({color: 0xff0000}));
+connector.add(cylinder);
+connector.add(cone);
+cone.rotateX(-Math.PI / 2);
+cone.position.z = -0.2;
+connector.position.z = -0.1;
+
+movingTarget.add(connector);
+const pivot = new THREE.Group();
+pivot.position.set(1, 1, 1);
+pivot.add(movingTarget);
+scene.add(pivot);
+
+// add FreeformControls
+const controlsManager = new FreeformControls.ControlsManager(
+  camera,
+  renderer.domElement
+);
+scene.add(controlsManager);
+const controls = controlsManager.anchor(pivot);
+controlsManager.listen("DRAG_START", () => {
+  orbitControls.enabled = false;
+});
+controlsManager.listen("DRAG_STOP", () => {
+  orbitControls.enabled = true
+});
+controls.scale.set(0.2, 0.2, 0.2);
+const fixedLabel = new SpriteText("Target", 0.3);
+fixedLabel.position.y = 0.8;
+fixedLabel.position.z = -1.75;
+controls.add(fixedLabel);
+
+// Create a chain of THREE.Bone's, each wrapped as an IKJoint
+// and added to the IKChain
+for (let i = 0; i < 10; i++) {
+  const bone = new THREE.Bone();
+  bone.position.y = i === 0 ? 0 : 0.5;
+
+  if (bones[i - 1]) {
+    bones[i - 1].add(bone);
+  }
+  bones.push(bone);
+
+  // The last IKJoint must be added with a `target` as an end effector.
+  const target = i === 9 ? movingTarget : null;
+  chain.add(new IKJoint(bone, {constraints}), {target});
+}
+
+// Add the chain to the IK system
+ik.add(chain);
+
+// Ensure the root bone is added somewhere in the scene
+scene.add(ik.getRootBone());
+
+// Create a helper and add to the scene so we can visualize
+// the bones
+const helper = new IKHelper(ik);
+scene.add(helper);
+
+function animate() {
+  requestAnimationFrame(animate);
+  ik.solve();
+  orbitControls.update();
+  renderer.render(scene, camera);
+}
+
+animate()
