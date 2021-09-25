@@ -19,6 +19,7 @@ This library provides rotation and translation controls for [THREE.JS](https://t
 ### Running examples:
 - Make sure to build the source code
 - Run examples: `npm run examples`
+- In the URL that opened, use the filename from `examples/` folder to see different examples in action (like `localhost:10001/basic` or `localhost:10001/transition-limit`)
 
 ### The following features are currently supported:
 
