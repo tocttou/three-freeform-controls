@@ -3,7 +3,7 @@
   "version": "0.1.12",
   "description": "",
   "keywords": [],
-  "main": "dist/three-freeform-controls.umd.js",
+  "main": "dist/three-freeform-controls.js",
   "module": "dist/three-freeform-controls.js",
   "typings": "dist/types/index.d.ts",
   "files": [
