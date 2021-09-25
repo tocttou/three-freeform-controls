@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import { IK, IKChain, IKJoint, IKBallConstraint, IKHelper } from 'three-ik/build/three-ik.module.js';
+import { IK, IKChain, IKJoint, IKBallConstraint, IKHelper } from 'three-ik/src/';
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import SpriteText from "three-spritetext";
 
