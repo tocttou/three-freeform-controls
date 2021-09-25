@@ -22,9 +22,9 @@ import * as FreeformControls from 'three-freeform-controls';
 import { ControlsManager } from 'three-freeform-controls';
 ```
 
-OR
+---
 
-### via including UMD Module on page
+#### For versions <= 0.1.12 (compatible with threejs version r123), the UMD module can be imported as a script
 
 
 ```html
@@ -33,8 +33,7 @@ OR
 <!-- Then import three-freeform-controls -->
 <script src="https://cdn.jsdelivr.net/npm/three-freeform-controls@0.1.12/dist/three-freeform-controls.umd.js"></script>
 ```
-
-Available as: object `FreeformControls` on the `window` scope.
+The UMD module from script tag will be available as object `FreeformControls` on the `window` scope.
 
 ---
 ## Basic Usage
