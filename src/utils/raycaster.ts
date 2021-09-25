@@ -60,9 +60,11 @@ export default class Raycaster extends THREE.Raycaster {
   }
 
   private createAxisLine = () => {
-    const geometry = new THREE.Geometry();
-    geometry.vertices.push(new THREE.Vector3(0, 0, -100));
-    geometry.vertices.push(new THREE.Vector3(0, 0, 100));
+    const geometry = new THREE.BufferGeometry();
+    geometry.setAttribute('position', new THREE.Float32BufferAttribute([
+      0, 0, -100,
+      0, 0, 100
+    ], 3));
     return new Line("white", geometry);
   };
 

@@ -17,9 +17,11 @@ export default class Translation extends TranslationGroup {
   constructor(color = DEFAULT_COLOR_ARROW) {
     super();
     this.cone = new Cone(color);
-    const lineGeometry = new THREE.Geometry();
-    lineGeometry.vertices.push(new THREE.Vector3(0, 0, 0));
-    lineGeometry.vertices.push(new THREE.Vector3(0, DEFAULT_LINE_HEIGHT, 0));
+    const lineGeometry = new THREE.BufferGeometry();
+    lineGeometry.setAttribute( 'position', new THREE.Float32BufferAttribute([
+      0, 0, 0,
+      0, DEFAULT_LINE_HEIGHT, 0
+    ], 3 ));
 
     this.line = new Line(color, lineGeometry);
     this.cone.geometry.scale(DEFAULT_CONE_RADIUS, DEFAULT_CONE_HEIGHT, DEFAULT_CONE_RADIUS);

@@ -32,23 +32,29 @@ export default class PickPlane extends PickPlaneGroup {
     height = DEFAULT_PLANE_HEIGHT
   ) {
     super();
-    const boundaryGeometry = new THREE.Geometry();
-    const crossXGeometry = new THREE.Geometry();
-    const crossYGeometry = new THREE.Geometry();
+    const boundaryGeometry = new THREE.BufferGeometry();
+    const crossXGeometry = new THREE.BufferGeometry();
+    const crossYGeometry = new THREE.BufferGeometry();
 
     const vertexMaxX = width / 2;
     const vertexMaxY = height / 2;
 
-    boundaryGeometry.vertices.push(new THREE.Vector3(vertexMaxX, vertexMaxY, 0));
-    boundaryGeometry.vertices.push(new THREE.Vector3(vertexMaxX, -vertexMaxY, 0));
-    boundaryGeometry.vertices.push(new THREE.Vector3(-vertexMaxX, -vertexMaxY, 0));
-    boundaryGeometry.vertices.push(new THREE.Vector3(-vertexMaxX, vertexMaxY, 0));
+    boundaryGeometry.setAttribute( 'position', new THREE.Float32BufferAttribute([
+      vertexMaxX, vertexMaxY, 0,
+      vertexMaxX, -vertexMaxY, 0,
+      -vertexMaxX, -vertexMaxY, 0,
+      -vertexMaxX, vertexMaxY, 0
+    ], 3 ));
 
-    crossXGeometry.vertices.push(new THREE.Vector3(0, vertexMaxY, 0));
-    crossXGeometry.vertices.push(new THREE.Vector3(0, -vertexMaxY, 0));
+    crossXGeometry.setAttribute( 'position', new THREE.Float32BufferAttribute([
+      0, vertexMaxY, 0,
+      0, -vertexMaxY, 0,
+    ], 3 ));
 
-    crossYGeometry.vertices.push(new THREE.Vector3(-vertexMaxX, 0, 0));
-    crossYGeometry.vertices.push(new THREE.Vector3(vertexMaxX, 0, 0));
+    crossYGeometry.setAttribute( 'position', new THREE.Float32BufferAttribute([
+      -vertexMaxX, 0, 0,
+      vertexMaxX, 0, 0,
+    ], 3 ));
 
     this.boundary = new Line(color, boundaryGeometry);
     this.crossX = new Line("black", crossXGeometry);
