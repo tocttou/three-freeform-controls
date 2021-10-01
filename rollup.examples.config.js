@@ -36,7 +36,7 @@ export default {
     serve({
       open: true,
       contentBase: ["dist"],
-      openPage: "/basic",
+      openPage: "/",
       historyApiFallback: true,
     }),
     livereload(),
