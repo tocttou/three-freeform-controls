@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
-  <title>Basic Example</title>
+  <title>three-freeform-controls examples</title>
   <style>
     html,
     body {
@@ -10,22 +10,105 @@
       height: 100%;
       overflow: hidden;
       margin: unset;
+      font-family: Arial, Helvetica, sans-serif;
     }
+    #body-flex {
+      display: flex;
+      height: 100vh;
+    }
+    #leftbar {
+      border-right: 2px solid #eeeeee;
+    }
+    #leftbar-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    #leftbar-list a {
+      text-decoration: none;
+      display: block;
+      padding: 5px 10px;
+      color: inherit;
+    }
+    #leftbar-list a.selected {
+      text-decoration: none;
+      display: block;
+      padding: 5px 10px;
+      color: #dc1d30;
+    }
+
+    #example-iframe {
+      flex-grow: 1;
+      flex-shrink: 1;
+      border: 0;
+    }
+
   </style>
 </head>
 <body>
+<template id="index-template">
+  <div id="body-flex">
+    <div id="leftbar">
+      <ul id="leftbar-list">
+      </ul>
+    </div>
+    <iframe src="" id="example-iframe"></iframe>
+  </div>
+</template>
 <script>
-  // Load the script corresponding to url path
-  const exampleName = window.location.pathname.replace(/^\/+|\/+$/g, '');
-  const s = document.createElement("script");
-  s.type = "module";
-  s.src = `/examples/${exampleName}.js`;
-  document.body.appendChild(s);
 
-  // Rename page title
-  const sanitizedTitle = exampleName.replaceAll('-', ' ');
-  const title = sanitizedTitle[0].toUpperCase() + sanitizedTitle.substring(1)
-  document.title = `${title} example | three-freeform-controls`;
+  const getTitle = (exampleName) => {
+    const sanitizedTitle = exampleName.replaceAll('-', ' ');
+    return sanitizedTitle[0].toUpperCase() + sanitizedTitle.substring(1)
+  }
+
+  const selectExample = (exampleName) => {
+    document.querySelectorAll("#leftbar-list a").forEach(a => a.classList.remove("selected"));
+    document.querySelector(`[href=${exampleName}]`).classList.add("selected");
+    document.getElementById("example-iframe").src = `/${exampleName}`;
+    document.title = `${getTitle(exampleName)} example | three-freeform-controls`;
+  }
+
+  const onLinkClick = (e) => {
+    e.preventDefault();
+    selectExample(e.target.getAttribute("href"));
+  }
+
+  const exampleList = [
+    "basic",
+    "computed-bounds",
+    "custom-handles-1",
+    "custom-handles-2",
+    "customize-handles",
+    "different-anchors-different-objects",
+    "different-anchors-same-object",
+    "events",
+    "inverse-kinematics",
+    "partial-controls",
+    "separation",
+    "snap",
+    "transition-limit",
+  ];
+  const exampleName = window.location.pathname.replace(/^\/+|\/+$/g, '');
+  if (exampleList.includes(exampleName)) {
+    // Render example page in the iframe with the script corresponding to url path
+    const s = document.createElement("script");
+    s.type = "module";
+    s.src = `/examples/${exampleName}.js`;
+    document.body.appendChild(s);
+
+    // Rename page title
+    document.title = `${getTitle(exampleName)} example | three-freeform-controls`;
+  } else {
+    // Render index page
+    document.body.appendChild(document.querySelector('#index-template').content);
+    const ulTag = document.getElementById("leftbar-list");
+    exampleList.forEach(e => {
+      ulTag.innerHTML += `<li><a href="${e}">${getTitle(e)}</a></li>`
+    });
+    ulTag.addEventListener("click", onLinkClick);
+    selectExample(exampleList[0]);
+  }
 </script>
 </body>
 </html>
