@@ -1,8 +1,8 @@
-import * as THREE from "three";
 import Controls, { IControlsOptions } from "./controls";
 import Raycaster, { EVENTS } from "./utils/raycaster";
 import { emitter, unbindAll } from "./utils/emmiter";
 import { DEFAULT_HANDLE_GROUP_NAME } from "./controls/handles";
+import {Camera, Mesh, Object3D} from "three";
 
 /**
  * The ControlsManager provides helper functions to create Controls instances
@@ -10,12 +10,12 @@ import { DEFAULT_HANDLE_GROUP_NAME } from "./controls/handles";
  * instances).
  * @noInheritDoc
  */
-export default class ControlsManager extends THREE.Object3D {
-  private objects: { [id: number]: THREE.Object3D } = {};
+export default class ControlsManager extends Object3D {
+  private objects: { [id: number]: Object3D } = {};
   private controls: { [id: number]: Controls } = {};
   private eventListeners: {
     [event in EVENTS]: Array<
-      (object: THREE.Object3D | null, handleName: DEFAULT_HANDLE_GROUP_NAME | string) => void
+      (object: Object3D | null, handleName: DEFAULT_HANDLE_GROUP_NAME | string) => void
     >;
   } = {
     [EVENTS.DRAG_START]: [],
@@ -29,7 +29,7 @@ export default class ControlsManager extends THREE.Object3D {
    * @param domElement - the dom element on which THREE.js renderer is attached,
    * generally available as `renderer.domElement`
    */
-  constructor(private camera: THREE.Camera, private domElement: HTMLElement) {
+  constructor(private camera: Camera, private domElement: HTMLElement) {
     super();
     this.rayCaster = new Raycaster(this.camera, this.domElement, this.controls);
     this.listenToEvents();
@@ -85,7 +85,7 @@ export default class ControlsManager extends THREE.Object3D {
    * @param object - the object provided by the user
    * @param options
    */
-  public anchor = (object: THREE.Object3D, options?: IControlsOptions) => {
+  public anchor = (object: Object3D, options?: IControlsOptions) => {
     const controls = this.addControls(object, options);
     this.objects[object.id] = object;
     return controls;
@@ -97,8 +97,8 @@ export default class ControlsManager extends THREE.Object3D {
    * @param object - the object provided by the user
    * @param controls - the controls instance anchored on the object
    */
-  public detach = (object: THREE.Object3D, controls: Controls) => {
-    if (!this.objects.hasOwnProperty(object.id)) {
+  public detach = (object: Object3D, controls: Controls) => {
+    if (!Object.prototype.hasOwnProperty.call(this.objects, object.id)) {
       throw new Error("object should be attached first");
     }
     this.remove(controls);
@@ -108,7 +108,7 @@ export default class ControlsManager extends THREE.Object3D {
     delete this.controls[controls.id];
   };
 
-  private addControls = (object: THREE.Object3D, options?: IControlsOptions) => {
+  private addControls = (object: Object3D, options?: IControlsOptions) => {
     const controls = new Controls(object, this.camera, options);
     this.controls[controls.id] = controls;
     this.add(controls);
@@ -127,7 +127,7 @@ export default class ControlsManager extends THREE.Object3D {
   public listen = (
     event: EVENTS,
     callback: (
-      object: THREE.Object3D | null,
+      object: Object3D | null,
       handleName: DEFAULT_HANDLE_GROUP_NAME | string
     ) => void
   ): void => {
@@ -142,7 +142,7 @@ export default class ControlsManager extends THREE.Object3D {
   public removeListen = (
     event: EVENTS,
     callback: (
-      object: THREE.Object3D | null,
+      object: Object3D | null,
       handleName: DEFAULT_HANDLE_GROUP_NAME | string
     ) => void
   ): void => {
@@ -152,8 +152,8 @@ export default class ControlsManager extends THREE.Object3D {
     }
   };
 
-  private dispose = (object: THREE.Object3D) => {
-    if (object instanceof THREE.Mesh) {
+  private dispose = (object: Object3D) => {
+    if (object instanceof Mesh) {
       object.geometry.dispose();
       if (Array.isArray(object.material)) {
         object.material.map(material => material.dispose());

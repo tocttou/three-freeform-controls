@@ -1,4 +1,7 @@
-import * as THREE from "three";
+import {
+
+MeshBasicMaterial
+} from "three";
 import Octahedron from "../../primitives/octahedron";
 import { PickGroup } from "./index";
 
@@ -19,7 +22,7 @@ export default class Pick extends PickGroup {
   };
 
   public setColor = (color: string) => {
-    const octahedronMaterial = this.octahedron.material as THREE.MeshBasicMaterial;
+    const octahedronMaterial = this.octahedron.material as MeshBasicMaterial;
     octahedronMaterial.color.set(color);
   };
 }

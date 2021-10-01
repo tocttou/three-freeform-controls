@@ -1,4 +1,8 @@
-import * as THREE from "three";
+import {
+  BufferGeometry,
+  Float32BufferAttribute,
+  MeshBasicMaterial,
+} from "three";
 import Plane from "../../primitives/plane";
 import {
   DEFAULT_COLOR_PLANE,
@@ -32,26 +36,26 @@ export default class PickPlane extends PickPlaneGroup {
     height = DEFAULT_PLANE_HEIGHT
   ) {
     super();
-    const boundaryGeometry = new THREE.BufferGeometry();
-    const crossXGeometry = new THREE.BufferGeometry();
-    const crossYGeometry = new THREE.BufferGeometry();
+    const boundaryGeometry = new BufferGeometry();
+    const crossXGeometry = new BufferGeometry();
+    const crossYGeometry = new BufferGeometry();
 
     const vertexMaxX = width / 2;
     const vertexMaxY = height / 2;
 
-    boundaryGeometry.setAttribute( 'position', new THREE.Float32BufferAttribute([
+    boundaryGeometry.setAttribute( 'position', new Float32BufferAttribute([
       vertexMaxX, vertexMaxY, 0,
       vertexMaxX, -vertexMaxY, 0,
       -vertexMaxX, -vertexMaxY, 0,
       -vertexMaxX, vertexMaxY, 0
     ], 3 ));
 
-    crossXGeometry.setAttribute( 'position', new THREE.Float32BufferAttribute([
+    crossXGeometry.setAttribute( 'position', new Float32BufferAttribute([
       0, vertexMaxY, 0,
       0, -vertexMaxY, 0,
     ], 3 ));
 
-    crossYGeometry.setAttribute( 'position', new THREE.Float32BufferAttribute([
+    crossYGeometry.setAttribute( 'position', new Float32BufferAttribute([
       -vertexMaxX, 0, 0,
       vertexMaxX, 0, 0,
     ], 3 ));
@@ -75,8 +79,8 @@ export default class PickPlane extends PickPlaneGroup {
   };
 
   public setColor = (color: string) => {
-    const planeMaterial = this.plane.material as THREE.MeshBasicMaterial;
-    const boundaryMaterial = this.boundary.material as THREE.MeshBasicMaterial;
+    const planeMaterial = this.plane.material as MeshBasicMaterial;
+    const boundaryMaterial = this.boundary.material as MeshBasicMaterial;
     planeMaterial.color.set(color);
     boundaryMaterial.color.set(color);
   };
