@@ -1,4 +1,3 @@
-import * as THREE from "three";
 import { emitter } from "./emmiter";
 import Controls from "../controls";
 import PickPlane from "../controls/handles/pick-plane";
@@ -7,6 +6,18 @@ import { IHandle, PickGroup, RotationGroup, TranslationGroup } from "../controls
 import RotationEye from "../controls/handles/rotation-eye";
 import { addEventListener, getPointFromEvent, removeEventListener } from "./helper";
 import Line from "../primitives/line";
+import {
+  BufferGeometry,
+  Camera,
+  Float32BufferAttribute,
+  Intersection,
+  Object3D, Plane,
+  PlaneHelper,
+  Quaternion, Scene,
+  Vector2,
+  Vector3,
+  Raycaster as ThreeRaycaster
+} from "three";
 
 export enum EVENTS {
   DRAG_START = "DRAG_START",
@@ -19,25 +30,25 @@ export enum EVENTS {
  * The Raycaster listens on the mouse and touch events globally and
  * dispatches DRAG_START, DRAG, and DRAG_STOP events.
  */
-export default class Raycaster extends THREE.Raycaster {
-  private mouse = new THREE.Vector2();
-  private cameraPosition = new THREE.Vector3();
+export default class Raycaster extends ThreeRaycaster {
+  private mouse = new Vector2();
+  private cameraPosition = new Vector3();
   private activeHandle: IHandle | null = null;
-  private activePlane: THREE.Plane | null = null;
-  private point = new THREE.Vector3();
-  private normal = new THREE.Vector3();
-  private visibleHandles: THREE.Object3D[] = [];
-  private visibleControls: THREE.Object3D[] = [];
-  private helperPlane: THREE.PlaneHelper | null = null;
-  private controlsWorldQuaternion = new THREE.Quaternion();
+  private activePlane: Plane | null = null;
+  private point = new Vector3();
+  private normal = new Vector3();
+  private visibleHandles: Object3D[] = [];
+  private visibleControls: Object3D[] = [];
+  private helperPlane: PlaneHelper | null = null;
+  private controlsWorldQuaternion = new Quaternion();
   private clientDiagonalLength = 1;
-  private previousScreenPoint = new THREE.Vector2();
-  private currentScreenPoint = new THREE.Vector2();
+  private previousScreenPoint = new Vector2();
+  private currentScreenPoint = new Vector2();
   private isActivePlaneFlipped = false;
   private readonly highlightAxisLine: Line;
 
   constructor(
-    public camera: THREE.Camera,
+    public camera: Camera,
     private domElement: HTMLElement,
     private controls: { [id: string]: Controls }
   ) {
@@ -60,8 +71,8 @@ export default class Raycaster extends THREE.Raycaster {
   }
 
   private createAxisLine = () => {
-    const geometry = new THREE.BufferGeometry();
-    geometry.setAttribute('position', new THREE.Float32BufferAttribute([
+    const geometry = new BufferGeometry();
+    geometry.setAttribute('position', new Float32BufferAttribute([
       0, 0, -100,
       0, 0, 100
     ], 3));
@@ -84,7 +95,7 @@ export default class Raycaster extends THREE.Raycaster {
     );
     this.previousScreenPoint.set(clientX, clientY);
 
-    const interactiveObjects: THREE.Object3D[] = [];
+    const interactiveObjects: Object3D[] = [];
     Object.values(this.controls).map(controls => {
       interactiveObjects.push(...controls.getInteractiveObjects());
     });
@@ -122,7 +133,7 @@ export default class Raycaster extends THREE.Raycaster {
        * creating the activePlane - the plane on which intersection actions
        * take place. mouse movements are translated to points on the activePlane
        */
-      this.activePlane = new THREE.Plane();
+      this.activePlane = new Plane();
       const eyePlaneNormal = this.getEyePlaneNormal(this.activeHandle);
       controls.getWorldQuaternion(this.controlsWorldQuaternion);
       this.normal.copy(
@@ -155,7 +166,7 @@ export default class Raycaster extends THREE.Raycaster {
       }
 
       // find initial intersection
-      const initialIntersectionPoint = new THREE.Vector3();
+      const initialIntersectionPoint = new Vector3();
       if (this.activeHandle instanceof PickGroup) {
         this.activeHandle.getWorldPosition(initialIntersectionPoint);
       } else {
@@ -165,14 +176,14 @@ export default class Raycaster extends THREE.Raycaster {
       // activate the helper plane if asked
       // available only for TranslationGroup and RotationGroup
       // (except RotationEye - plane of rotation is obvious)
-      const scene = controls.parent as THREE.Scene;
+      const scene = controls.parent as Scene;
       if (
         controls.showHelperPlane &&
         (this.activeHandle instanceof TranslationGroup ||
           this.activeHandle instanceof RotationGroup) &&
         !(this.activeHandle instanceof RotationEye)
       ) {
-        this.helperPlane = new THREE.PlaneHelper(this.activePlane, 1);
+        this.helperPlane = new PlaneHelper(this.activePlane, 1);
         scene.add(this.helperPlane);
       }
 
@@ -220,7 +231,7 @@ export default class Raycaster extends THREE.Raycaster {
     }
   };
 
-  private getEyePlaneNormal = (object: THREE.Object3D) => {
+  private getEyePlaneNormal = (object: Object3D) => {
     this.cameraPosition.copy(this.camera.position);
     return this.cameraPosition.sub(object.position);
   };
@@ -320,7 +331,7 @@ export default class Raycaster extends THREE.Raycaster {
     }
   }
 
-  private resolveHandleGroup = (intersectedObject: THREE.Intersection | undefined) => {
+  private resolveHandleGroup = (intersectedObject: Intersection | undefined) => {
     if (intersectedObject === undefined) {
       return null;
     }

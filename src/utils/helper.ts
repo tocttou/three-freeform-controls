@@ -1,6 +1,6 @@
 export const getPointFromEvent = (event: MouseEvent | TouchEvent) => {
-  let clientX: number = 0;
-  let clientY: number = 0;
+  let clientX = 0;
+  let clientY = 0;
   if (event instanceof MouseEvent) {
     clientX = event.clientX;
     clientY = event.clientY;

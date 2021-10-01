@@ -1,4 +1,6 @@
-import * as THREE from "three";
+import {
+ Group, Mesh, Vector3
+} from "three";
 
 /**
  * Names for default handles
@@ -66,12 +68,12 @@ export enum DEFAULT_HANDLE_GROUP_NAME {
  * Base class for all handles
  * @noInheritDoc
  */
-export abstract class HandleGroup extends THREE.Group {
+export abstract class HandleGroup extends Group {
   /**
    * returns an array of all the interactive objects that form a handle;
    * note that a handle can have non-interactive objects as well.
    */
-  public abstract getInteractiveObjects(): THREE.Mesh[];
+  public abstract getInteractiveObjects(): Mesh[];
 
   /**
    * sets the color for the handle; this may involve setting colors for multiple
@@ -91,13 +93,13 @@ export abstract class TranslationGroup extends HandleGroup {
    * For example, in case of [[Controls.translationXP]], it is
    * `THREE.Vector3(1,0,0)` (along the x-axis).
    */
-  public abstract parallel: THREE.Vector3;
+  public abstract parallel: Vector3;
   /**
    * This is a unit vector that runs perpendicular to the direction of the translation handles.
    * For example, in case of [[Controls.translationXP]], it is
    * `THREE.Vector3(0,1,0)` (along the y-axis).
    */
-  public up = new THREE.Vector3();
+  public up = new Vector3();
 }
 
 /**
@@ -110,7 +112,7 @@ export abstract class RotationGroup extends HandleGroup {
    * For example, in case of [[Controls.rotationX]], it is
    * `THREE.Vector3(1,0,0)` (along the x-axis).
    */
-  public up = new THREE.Vector3();
+  public up = new Vector3();
 }
 
 /**
@@ -128,7 +130,7 @@ export abstract class PickPlaneGroup extends HandleGroup {
    * For example, in case of [[Controls.pickPlaneXY]], it is
    * `THREE.Vector3(0,0,1)` (along the z-axis).
    */
-  public up = new THREE.Vector3();
+  public up = new Vector3();
 }
 
 export type IHandle = RotationGroup | TranslationGroup | PickGroup | PickPlaneGroup;

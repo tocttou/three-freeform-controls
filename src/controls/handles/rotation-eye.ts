@@ -1,4 +1,8 @@
-import * as THREE from "three";
+import {
+  Camera,
+  Quaternion,
+  Vector3
+} from "three";
 import Rotation from "./rotation";
 import { DEFAULT_COLOR_RING, DEFAULT_RING_RADIUS } from "../../utils/constants";
 
@@ -6,12 +10,12 @@ import { DEFAULT_COLOR_RING, DEFAULT_RING_RADIUS } from "../../utils/constants";
  * @hidden
  */
 export default class RotationEye extends Rotation {
-  public camera: THREE.Camera | null = null;
-  private controlsWorldOrientation = new THREE.Quaternion();
-  private _temp1 = new THREE.Vector3();
-  private _temp2 = new THREE.Vector3();
-  private _temp3 = new THREE.Quaternion();
-  private worldPosition = new THREE.Vector3();
+  public camera: Camera | null = null;
+  private controlsWorldOrientation = new Quaternion();
+  private _temp1 = new Vector3();
+  private _temp2 = new Vector3();
+  private _temp3 = new Quaternion();
+  private worldPosition = new Vector3();
 
   constructor(color = DEFAULT_COLOR_RING, radius = DEFAULT_RING_RADIUS) {
     super(color, radius);

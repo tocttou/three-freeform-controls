@@ -1,15 +1,15 @@
-import * as THREE from "three";
 import { DEFAULT_OCTAHEDRON_RADIUS } from "../utils/constants";
+import {DoubleSide, Mesh, MeshBasicMaterial, OctahedronBufferGeometry} from "three";
 
-export default class Octahedron extends THREE.Mesh {
+export default class Octahedron extends Mesh {
   constructor(color: string) {
     super();
-    this.geometry = new THREE.OctahedronBufferGeometry(DEFAULT_OCTAHEDRON_RADIUS, 0);
-    this.material = new THREE.MeshBasicMaterial({
+    this.geometry = new OctahedronBufferGeometry(DEFAULT_OCTAHEDRON_RADIUS, 0);
+    this.material = new MeshBasicMaterial({
       color,
       depthTest: false,
       transparent: true,
-      side: THREE.DoubleSide
+      side: DoubleSide
     });
   }
 }

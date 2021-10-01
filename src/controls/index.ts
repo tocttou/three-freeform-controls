@@ -1,4 +1,3 @@
-import * as THREE from "three";
 import {
   DEFAULT_CONTROLS_SEPARATION,
   DEFAULT_EYE_ROTATION_SCALE,
@@ -19,6 +18,7 @@ import {
   TranslationGroup
 } from "./handles";
 import RotationEye from "./handles/rotation-eye";
+import {Camera, Group, MathUtils, Mesh, Object3D, Quaternion, Vector3} from "three";
 
 export enum ANCHOR_MODE {
   /**
@@ -148,7 +148,7 @@ export interface IControlsOptions {
  * All translations and rotations are setup with respect to the global coordinate system.
  * @noInheritDoc
  */
-export default class Controls extends THREE.Group {
+export default class Controls extends Group {
   /**
    * handle which translates the object in the eye-plane
    */
@@ -211,29 +211,29 @@ export default class Controls extends THREE.Group {
    * handle which rotates the object in the eye-plane
    */
   public readonly rotationEye: RotationEye;
-  private handleTargetQuaternion = new THREE.Quaternion();
-  private objectWorldPosition = new THREE.Vector3();
-  private objectTargetPosition = new THREE.Vector3();
-  private objectTargetQuaternion = new THREE.Quaternion();
-  private objectParentWorldPosition = new THREE.Vector3();
-  private objectParentWorldQuaternion = new THREE.Quaternion();
-  private objectParentWorldScale = new THREE.Vector3();
-  private deltaPosition = new THREE.Vector3();
-  private normalizedHandleParallelVectorCache = new THREE.Vector3();
-  private touch1 = new THREE.Vector3();
-  private touch2 = new THREE.Vector3();
+  private handleTargetQuaternion = new Quaternion();
+  private objectWorldPosition = new Vector3();
+  private objectTargetPosition = new Vector3();
+  private objectTargetQuaternion = new Quaternion();
+  private objectParentWorldPosition = new Vector3();
+  private objectParentWorldQuaternion = new Quaternion();
+  private objectParentWorldScale = new Vector3();
+  private deltaPosition = new Vector3();
+  private normalizedHandleParallelVectorCache = new Vector3();
+  private touch1 = new Vector3();
+  private touch2 = new Vector3();
   private boundingSphereRadius = 0;
-  private dragStartPoint = new THREE.Vector3();
-  private dragIncrementalStartPoint = new THREE.Vector3();
+  private dragStartPoint = new Vector3();
+  private dragIncrementalStartPoint = new Vector3();
   private handles: Set<IHandle> = new Set();
   private isBeingDraggedTranslation = false;
   private isBeingDraggedRotation = false;
   private dampingFactor = 0.8;
   private readonly useComputedBounds: boolean;
   private readonly separation: number;
-  private initialSelfQuaternion = new THREE.Quaternion();
-  private readonly minTranslationCache = new THREE.Vector3();
-  private readonly maxTranslationCache = new THREE.Vector3();
+  private initialSelfQuaternion = new Quaternion();
+  private readonly minTranslationCache = new Vector3();
+  private readonly maxTranslationCache = new Vector3();
   private readonly options: IControlsOptions;
   private readonly mode: ANCHOR_MODE;
   private readonly translationDistanceScale: number;
@@ -241,7 +241,7 @@ export default class Controls extends THREE.Group {
   private readonly eyeRotationRadiusScale: number;
   private readonly pickPlaneSizeScale: number;
   private translationLimit?: TranslationLimit | false = false;
-  private translationAnchor: THREE.Vector3 | null = null;
+  private translationAnchor: Vector3 | null = null;
 
   /**
    * enables damping for the controls
@@ -289,8 +289,8 @@ export default class Controls extends THREE.Group {
    * @param options
    */
   constructor(
-    public object: THREE.Object3D,
-    private camera: THREE.Camera,
+    public object: Object3D,
+    private camera: Camera,
     options?: IControlsOptions
   ) {
     super();
@@ -371,9 +371,9 @@ export default class Controls extends THREE.Group {
     this.pickPlaneYZ.name = DEFAULT_HANDLE_GROUP_NAME.PICK_PLANE_YZ;
     this.pickPlaneZX.name = DEFAULT_HANDLE_GROUP_NAME.PICK_PLANE_ZX;
 
-    this.pickPlaneYZ.up = new THREE.Vector3(1, 0, 0);
-    this.pickPlaneZX.up = new THREE.Vector3(0, 1, 0);
-    this.pickPlaneXY.up = new THREE.Vector3(0, 0, 1);
+    this.pickPlaneYZ.up = new Vector3(1, 0, 0);
+    this.pickPlaneZX.up = new Vector3(0, 1, 0);
+    this.pickPlaneXY.up = new Vector3(0, 0, 1);
 
     this.pickPlaneYZ.rotateY(Math.PI / 2);
     this.pickPlaneZX.rotateX(Math.PI / 2);
@@ -423,21 +423,21 @@ export default class Controls extends THREE.Group {
     this.translationYN.rotateX(Math.PI);
     this.translationZN.rotateX(-Math.PI / 2);
 
-    this.translationXP.up = new THREE.Vector3(0, 1, 0);
-    this.translationYP.up = new THREE.Vector3(0, 0, 1);
-    this.translationZP.up = new THREE.Vector3(0, 1, 0);
+    this.translationXP.up = new Vector3(0, 1, 0);
+    this.translationYP.up = new Vector3(0, 0, 1);
+    this.translationZP.up = new Vector3(0, 1, 0);
 
-    this.translationXN.up = new THREE.Vector3(0, -1, 0);
-    this.translationYN.up = new THREE.Vector3(0, 0, -1);
-    this.translationZN.up = new THREE.Vector3(0, -1, 0);
+    this.translationXN.up = new Vector3(0, -1, 0);
+    this.translationYN.up = new Vector3(0, 0, -1);
+    this.translationZN.up = new Vector3(0, -1, 0);
 
-    this.translationXP.parallel = new THREE.Vector3(1, 0, 0);
-    this.translationYP.parallel = new THREE.Vector3(0, 1, 0);
-    this.translationZP.parallel = new THREE.Vector3(0, 0, 1);
+    this.translationXP.parallel = new Vector3(1, 0, 0);
+    this.translationYP.parallel = new Vector3(0, 1, 0);
+    this.translationZP.parallel = new Vector3(0, 0, 1);
 
-    this.translationXN.parallel = new THREE.Vector3(-1, 0, 0);
-    this.translationYN.parallel = new THREE.Vector3(0, -1, 0);
-    this.translationZN.parallel = new THREE.Vector3(0, 0, -1);
+    this.translationXN.parallel = new Vector3(-1, 0, 0);
+    this.translationYN.parallel = new Vector3(0, -1, 0);
+    this.translationZN.parallel = new Vector3(0, 0, -1);
 
     this.setupHandle(this.translationXP);
     this.setupHandle(this.translationYP);
@@ -453,9 +453,9 @@ export default class Controls extends THREE.Group {
     this.rotationY.name = DEFAULT_HANDLE_GROUP_NAME.YR;
     this.rotationZ.name = DEFAULT_HANDLE_GROUP_NAME.ZR;
 
-    this.rotationX.up = new THREE.Vector3(1, 0, 0);
-    this.rotationY.up = new THREE.Vector3(0, 1, 0);
-    this.rotationZ.up = new THREE.Vector3(0, 0, 1);
+    this.rotationX.up = new Vector3(1, 0, 0);
+    this.rotationY.up = new Vector3(0, 1, 0);
+    this.rotationZ.up = new Vector3(0, 0, 1);
 
     this.rotationY.rotateX(Math.PI / 2);
     this.rotationX.rotateY(Math.PI / 2);
@@ -469,7 +469,7 @@ export default class Controls extends THREE.Group {
   private computeObjectBounds = () => {
     if (this.useComputedBounds) {
       if (this.object.type === "Mesh") {
-        const geometry = (this.object as THREE.Mesh).geometry;
+        const geometry = (this.object as Mesh).geometry;
         geometry.computeBoundingSphere();
         const { boundingSphere } = geometry;
         const radius = boundingSphere?.radius ?? 0;
@@ -505,7 +505,7 @@ export default class Controls extends THREE.Group {
   /**
    * @hidden
    */
-  processDragStart = (args: { point: THREE.Vector3; handle: IHandle }) => {
+  processDragStart = (args: { point: Vector3; handle: IHandle }) => {
     const { point, handle } = args;
     this.dragStartPoint.copy(point);
     this.dragIncrementalStartPoint.copy(point);
@@ -549,12 +549,12 @@ export default class Controls extends THREE.Group {
    * @param dampingFactor - value between 0 and 1, acts like a weight on the controls
    */
   public setDampingFactor = (dampingFactor = 0) =>
-    (this.dampingFactor = THREE.MathUtils.clamp(dampingFactor, 0, 1));
+    (this.dampingFactor = MathUtils.clamp(dampingFactor, 0, 1));
 
   /**
    * @hidden
    */
-  processDrag = (args: { point: THREE.Vector3; handle: IHandle; dragRatio?: number }) => {
+  processDrag = (args: { point: Vector3; handle: IHandle; dragRatio?: number }) => {
     const { point, handle, dragRatio = 1 } = args;
     const k = Math.exp(-this.dampingFactor * Math.abs(dragRatio ** 3));
 
@@ -598,7 +598,7 @@ export default class Controls extends THREE.Group {
     this.dragIncrementalStartPoint.copy(point);
   };
 
-  private getLimitedTranslation = (translation: THREE.Vector3) => {
+  private getLimitedTranslation = (translation: Vector3) => {
     const position = translation.add(this.position);
     if (!this.translationAnchor || !this.translationLimit) {
       return position;
@@ -620,8 +620,8 @@ export default class Controls extends THREE.Group {
   };
 
   private detachObjectUpdatePositionAttach = (
-    parent: THREE.Object3D | null,
-    object: THREE.Object3D
+    parent: Object3D | null,
+    object: Object3D
   ) => {
     if (parent !== null && this.parent !== null && this.parent.parent !== null) {
       const scene = this.parent.parent;
@@ -634,7 +634,7 @@ export default class Controls extends THREE.Group {
     }
   };
 
-  private detachHandleUpdateQuaternionAttach = (handle: IHandle, quaternion: THREE.Quaternion) => {
+  private detachHandleUpdateQuaternionAttach = (handle: IHandle, quaternion: Quaternion) => {
     if (this.parent !== null && this.parent.parent) {
       const scene = this.parent.parent;
       if (scene.type !== "Scene") {
@@ -683,8 +683,8 @@ export default class Controls extends THREE.Group {
   /**
    * @hidden
    */
-  public getInteractiveObjects(): THREE.Object3D[] {
-    const interactiveObjects: THREE.Object3D[] = [];
+  public getInteractiveObjects(): Object3D[] {
+    const interactiveObjects: Object3D[] = [];
     this.handles.forEach(handle => {
       if (!handle.visible) {
         return;
