@@ -133,6 +133,13 @@ export interface IControlsOptions {
    * [[TranslationGroup]], [[PickGroup]], and [[PickPlaneGroup]]
    * @default { x: false, y: false, z: false }
    */
+  rotationsCenter?: Vector3;
+   /**
+    * Enables changind the center point for all rotation // todo: split?
+    * Affected handles
+    * [rotationX, rotationY, rotationZ]
+    * @default { null }
+    */
   snapTranslation?: {
     x: boolean;
     y: boolean;
@@ -276,6 +283,15 @@ export default class Controls extends Group {
    * [[TranslationGroup]], [[PickGroup]], and [[PickPlaneGroup]]
    * @default { x: false, y: false, z: false }
    */
+  public rotationsCenter: Vector3;
+  /**
+    * Enables changind the center point for all rotation // todo: split?
+    * Affected handles
+    * [rotationX, rotationY, rotationZ]
+    * @default { null }
+    */
+
+
   public snapTranslation: {
     x: boolean;
     y: boolean;
@@ -301,6 +317,7 @@ export default class Controls extends Group {
     this.hideOtherControlsInstancesOnDrag = this.options?.hideOtherControlsInstancesOnDrag ?? true;
     this.showHelperPlane = this.options?.showHelperPlane ?? false;
     this.highlightAxis = this.options?.highlightAxis ?? true;
+    this.rotationsCenter = this.options?.rotationsCenter ?? new Vector3();
     this.useComputedBounds = this.options?.useComputedBounds ?? false;
     this.snapTranslation = this.options?.snapTranslation ?? {
       x: false,
@@ -581,11 +598,13 @@ export default class Controls extends Group {
       this.touch1
         .copy(this.dragIncrementalStartPoint)
         .sub(this.objectWorldPosition)
+        .sub(this.rotationsCenter)
         .normalize();
 
       this.touch2
         .copy(point)
         .sub(this.objectWorldPosition)
+        .sub(this.rotationsCenter)
         .normalize();
 
       this.handleTargetQuaternion.setFromUnitVectors(this.touch1, this.touch2);
