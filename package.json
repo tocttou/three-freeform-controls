@@ -118,7 +118,7 @@
     "rollup-plugin-terser": "^7.0.2",
     "rollup-plugin-typescript2": "^0.29.0",
     "shelljs": "^0.8.4",
-    "three": "^0.132.2",
+    "three": "^0.137.0",
     "three-ik": "^0.1.0",
     "three-spritetext": "^1.6.2",
     "travis-deploy-once": "^5.0.11",
