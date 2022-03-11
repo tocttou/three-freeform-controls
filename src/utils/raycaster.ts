@@ -11,18 +11,20 @@ import {
   Camera,
   Float32BufferAttribute,
   Intersection,
-  Object3D, Plane,
+  Object3D,
+  Plane,
   PlaneHelper,
-  Quaternion, Scene,
+  Quaternion,
+  Scene,
   Vector2,
   Vector3,
-  Raycaster as ThreeRaycaster
+  Raycaster as ThreeRaycaster,
 } from "three";
 
 export enum EVENTS {
   DRAG_START = "DRAG_START",
   DRAG = "DRAG",
-  DRAG_STOP = "DRAG_STOP"
+  DRAG_STOP = "DRAG_STOP",
 }
 
 /**
@@ -62,20 +64,17 @@ export default class Raycaster extends ThreeRaycaster {
      */
     addEventListener(this.domElement, ["pointerdown", "touchstart"], this.pointerDownListener, {
       passive: false,
-      capture: true
+      capture: true,
     });
     addEventListener(this.domElement, ["pointerup", "touchend"], this.pointerUpListener, {
       passive: false,
-      capture: true
+      capture: true,
     });
   }
 
   private createAxisLine = () => {
     const geometry = new BufferGeometry();
-    geometry.setAttribute('position', new Float32BufferAttribute([
-      0, 0, -100,
-      0, 0, 100
-    ], 3));
+    geometry.setAttribute("position", new Float32BufferAttribute([0, 0, -100, 0, 0, 100], 3));
     return new Line("white", geometry);
   };
 
@@ -96,7 +95,7 @@ export default class Raycaster extends ThreeRaycaster {
     this.previousScreenPoint.set(clientX, clientY);
 
     const interactiveObjects: Object3D[] = [];
-    Object.values(this.controls).map(controls => {
+    Object.values(this.controls).map((controls) => {
       interactiveObjects.push(...controls.getInteractiveObjects());
     });
     this.activeHandle = this.resolveHandleGroup(this.intersectObjects(interactiveObjects, true)[0]);
@@ -106,7 +105,7 @@ export default class Raycaster extends ThreeRaycaster {
 
       // hiding other controls and handles instances if asked
       if (controls.hideOtherControlsInstancesOnDrag) {
-        Object.values(this.controls).forEach(x => {
+        Object.values(this.controls).forEach((x) => {
           if (x.visible) {
             this.visibleControls.push(x);
           }
@@ -116,7 +115,7 @@ export default class Raycaster extends ThreeRaycaster {
       }
 
       if (controls.hideOtherHandlesOnDrag) {
-        controls.children.map(handle => {
+        controls.children.map((handle) => {
           if (handle.visible) {
             this.visibleHandles.push(handle);
           }
@@ -198,14 +197,18 @@ export default class Raycaster extends ThreeRaycaster {
           this.activeHandle instanceof RotationGroup) &&
         !(this.activeHandle instanceof RotationEye)
       ) {
-        this.activeHandle.getWorldPosition(this.highlightAxisLine.position);
-        const direction = this.highlightAxisLine.position.clone();
+        // The highlighted axis always passes through the center of the parent object.
+        this.activeHandle.parent.getWorldPosition(this.highlightAxisLine.position);
+
         if (this.activeHandle instanceof TranslationGroup) {
-          direction.add(this.activeHandle.parallel);
+          // Look in the direction of the axis.
+          const handlePosition = new Vector3();
+          this.activeHandle.getWorldPosition(handlePosition);
+          this.highlightAxisLine.lookAt(handlePosition);
         } else {
-          direction.add(this.activeHandle.up);
+          this.activeHandle.getWorldQuaternion(this.highlightAxisLine.quaternion);
         }
-        this.highlightAxisLine.lookAt(direction);
+
         scene.add(this.highlightAxisLine);
       }
 
@@ -215,16 +218,16 @@ export default class Raycaster extends ThreeRaycaster {
         ["pointerdown", "touchstart"],
         this.pointerDownListener,
         {
-          capture: true
+          capture: true,
         }
       );
       emitter.emit(EVENTS.DRAG_START, {
         point: initialIntersectionPoint,
-        handle: this.activeHandle
+        handle: this.activeHandle,
       });
       addEventListener(this.domElement, ["pointermove", "touchmove"], this.pointerMoveListener, {
         passive: false,
-        capture: true
+        capture: true,
       });
     } else {
       this.activePlane = null;
@@ -264,7 +267,7 @@ export default class Raycaster extends ThreeRaycaster {
     emitter.emit(EVENTS.DRAG, {
       point: this.point,
       handle: this.activeHandle,
-      dragRatio
+      dragRatio,
     });
 
     this.previousScreenPoint.set(clientX, clientY);
@@ -272,11 +275,11 @@ export default class Raycaster extends ThreeRaycaster {
 
   private pointerUpListener = () => {
     removeEventListener(this.domElement, ["pointermove", "touchmove"], this.pointerMoveListener, {
-      capture: true
+      capture: true,
     });
     addEventListener(this.domElement, ["pointerdown", "touchstart"], this.pointerDownListener, {
       passive: false,
-      capture: true
+      capture: true,
     });
     emitter.emit(EVENTS.DRAG_STOP, { point: this.point, handle: this.activeHandle });
 
@@ -284,7 +287,7 @@ export default class Raycaster extends ThreeRaycaster {
       this.activeHandle?.parent &&
       (this.activeHandle.parent as Controls).hideOtherControlsInstancesOnDrag
     ) {
-      this.visibleControls.forEach(controls => {
+      this.visibleControls.forEach((controls) => {
         controls.visible = true;
       });
       this.visibleControls = [];
@@ -294,7 +297,7 @@ export default class Raycaster extends ThreeRaycaster {
       this.activeHandle?.parent &&
       (this.activeHandle.parent as Controls).hideOtherHandlesOnDrag
     ) {
-      this.visibleHandles.forEach(handle => {
+      this.visibleHandles.forEach((handle) => {
         handle.visible = true;
       });
       this.visibleHandles = [];
@@ -321,7 +324,7 @@ export default class Raycaster extends ThreeRaycaster {
     }
     const material = this.activeHandle.plane.material;
     if (Array.isArray(material)) {
-      material.map(m => {
+      material.map((m) => {
         m.opacity = opacity;
         m.needsUpdate = true;
       });
@@ -343,13 +346,13 @@ export default class Raycaster extends ThreeRaycaster {
     this.activePlane = null;
     this.activeHandle = null;
     removeEventListener(this.domElement, ["pointerdown", "touchstart"], this.pointerDownListener, {
-      capture: true
+      capture: true,
     });
     removeEventListener(this.domElement, ["pointermove", "touchmove"], this.pointerMoveListener, {
-      capture: true
+      capture: true,
     });
     removeEventListener(this.domElement, ["pointerup", "touchend"], this.pointerUpListener, {
-      capture: true
+      capture: true,
     });
   };
 }
