@@ -14,7 +14,7 @@ export default {
     format: "esm",
   },
   watch: {
-    include: "examples/**"
+    include: "*/**"
   },
   plugins: [
     multiInput(),
