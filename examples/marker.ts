@@ -99,28 +99,27 @@ export class Arrow extends THREE.Group {
     const cylinder = new THREE.Mesh(cylinderGeometry, cylimnderMaterial);
     this.add(cylinder);
 
-    const coneGeometry = new THREE.ConeGeometry(
-      arrowScale * radius,
-      arrowScale * radius,
-      radialSegments
-    );
+    const coneHeight = arrowScale * radius;
+
+    const coneGeometry = new THREE.ConeGeometry(coneHeight, coneHeight, radialSegments);
     const coneMaterial = new THREE.MeshStandardMaterial({ color: this.color });
 
     const cone = new THREE.Mesh(coneGeometry, coneMaterial);
-    cone.translateOnAxis(new THREE.Vector3(0, 1, 0), length / 2);
+    cone.translateOnAxis(new THREE.Vector3(0, 1, 0), length / 2 + coneHeight / 2);
     this.add(cone);
   }
 }
 
 export class Marker extends THREE.Group {
-  constructor() {
+  constructor(
+    private minRingRadius: number,
+    private ringSize: number,
+    private arrowRadius: number,
+    private arrowLength: number
+  ) {
     super();
 
-    const minRingRadius = 1.4;
-    const maxRingRadius = 2;
-
-    const arrowRadius = 0.2;
-    const arrowLength = 3 * (maxRingRadius - minRingRadius);
+    const maxRingRadius = minRingRadius + ringSize;
 
     const xRing = new Ring(minRingRadius, maxRingRadius, { color: 0xff0000 });
     this.add(xRing);
