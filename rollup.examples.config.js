@@ -4,17 +4,17 @@ import sourceMaps from "rollup-plugin-sourcemaps";
 import replace from "@rollup/plugin-replace";
 import typescript from "rollup-plugin-typescript2";
 import serve from "rollup-plugin-serve";
-import livereload from 'rollup-plugin-livereload';
-import multiInput from 'rollup-plugin-multi-input';
+import livereload from "rollup-plugin-livereload";
+import multiInput from "rollup-plugin-multi-input";
 
 export default {
-  input: ["examples/*.js"],
+  input: ["examples/*.js", "examples/*.ts"],
   output: {
-    dir: 'dist',
+    dir: "dist",
     format: "esm",
   },
   watch: {
-    include: "*/**"
+    include: "*/**",
   },
   plugins: [
     multiInput(),
@@ -22,7 +22,7 @@ export default {
       useTsconfigDeclarationDir: true,
       tsconfigOverride: {
         compilerOptions: {
-          target: "ES6"
+          target: "ES6",
         },
       },
     }),
@@ -31,7 +31,7 @@ export default {
     sourceMaps(),
     // peerDepsExternal(),
     replace({
-      "process.env.NODE_ENV": JSON.stringify("development")
+      "process.env.NODE_ENV": JSON.stringify("development"),
     }),
     serve({
       open: true,
@@ -40,5 +40,5 @@ export default {
       historyApiFallback: true,
     }),
     livereload(),
-  ]
+  ],
 };
