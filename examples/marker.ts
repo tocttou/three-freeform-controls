@@ -32,7 +32,7 @@ export class Marker extends FreeformControls.ControlsManager {
     const controls = this.anchor(object, {
       hideOtherHandlesOnDrag: true,
       hideOtherControlsInstancesOnDrag: false,
-      highlightAxis: false,
+      highlightAxis: true,
       mode: FreeformControls.ANCHOR_MODE.INHERIT,
     });
 
