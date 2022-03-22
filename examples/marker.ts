@@ -14,12 +14,11 @@ export class Marker extends FreeformControls.ControlsManager {
   }
 
   public link = (object: THREE.Object3D): THREE.Group => {
-    const controls = this.anchor(object, {
-      hideOtherHandlesOnDrag: true,
-      hideOtherControlsInstancesOnDrag: false,
-      highlightAxis: false,
-      mode: FreeformControls.ANCHOR_MODE.INHERIT,
-    });
+    const controls = this.anchor(object, {});
+    controls.hideOtherHandlesOnDrag = true;
+    controls.hideOtherControlsInstancesOnDrag = false;
+    controls.highlightAxis = false;
+    controls.mode = FreeformControls.ANCHOR_MODE.INHERIT;
     controls.showAll(false);
     controls.setupHandle(new XTranslation(this.minRingRadius, this.arrowRadius, this.arrowLength));
     controls.setupHandle(new YTranslation(this.minRingRadius, this.arrowRadius, this.arrowLength));
