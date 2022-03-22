@@ -61,7 +61,7 @@ scene.add(box2);
 
 const marker2 = new Marker(camera, renderer.domElement, 0.7, 0.6, 0.2, 2);
 marker2.link(box2);
-marker1.listen(FreeformControls.EVENTS.DRAG_START, () => {
+marker2.listen(FreeformControls.EVENTS.DRAG_START, () => {
   orbitControls.enabled = false;
 });
 marker2.listen(FreeformControls.EVENTS.DRAG_STOP, () => {

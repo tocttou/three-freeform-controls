@@ -1,6 +1,21 @@
 import * as THREE from "three";
 import * as FreeformControls from "../dist/three-freeform-controls";
 
+/**
+ * This is a 3D marker to move and rotate an object in the scene.
+ *
+ * @example
+ * import { Marker, MarkerEvents } from "./marker";
+ * const marker = new Marker(this.camera, this.renderer.domElement, 1.4, 0.6, 0.2, 1.2);
+ * this.marker.link(sphere);
+ * marker.listen(MarkerEvents.EVENTS.DRAG_START, () => {
+ *   this.orbit.enabled = false;
+ * });
+ * marker.listen(MarkerEvents.EVENTS.DRAG_STOP, () => {
+ *   this.orbit.enabled = true;
+ * });
+ * this.scene.add(marker);
+ */
 export class Marker extends FreeformControls.ControlsManager {
   constructor(
     camera: THREE.Camera,
@@ -14,11 +29,13 @@ export class Marker extends FreeformControls.ControlsManager {
   }
 
   public link = (object: THREE.Object3D): THREE.Group => {
-    const controls = this.anchor(object, {});
-    controls.hideOtherHandlesOnDrag = true;
-    controls.hideOtherControlsInstancesOnDrag = false;
-    controls.highlightAxis = false;
-    controls.mode = FreeformControls.ANCHOR_MODE.INHERIT;
+    const controls = this.anchor(object, {
+      hideOtherHandlesOnDrag: true,
+      hideOtherControlsInstancesOnDrag: false,
+      highlightAxis: false,
+      mode: FreeformControls.ANCHOR_MODE.INHERIT,
+    });
+
     controls.showAll(false);
     controls.setupHandle(new XTranslation(this.minRingRadius, this.arrowRadius, this.arrowLength));
     controls.setupHandle(new YTranslation(this.minRingRadius, this.arrowRadius, this.arrowLength));
@@ -39,7 +56,7 @@ class RingFactory {
     const sectors = 40;
     const geometry = new THREE.RingBufferGeometry(minRadius, maxRadius, sectors);
 
-    // Assing an index to each face, either 0 or 1, used to select a materials.
+    // Assign an index to each face, either 0 or 1, used to select a materials.
     const pattern = [0, 1, 1, 0];
     for (let i = 0; i < 2 * sectors; i++) {
       geometry.addGroup(3 * i, 3, pattern[i % 4]);
@@ -112,14 +129,18 @@ class XRotation extends FreeformControls.RotationGroup {
     this.up = new THREE.Vector3(1, 0, 0);
     this.meshes = [];
     const ring = RingFactory.createRing(minRingRadius, minRingRadius + ringSize, 0xff0000);
-    ring.map((mesh) => {
+    ring.forEach((mesh) => {
       mesh.rotateOnAxis(new THREE.Vector3(0, 1, 0), Math.PI / 2);
     });
     this.meshes.push(...ring);
     this.add(...ring);
   }
 
-  getInteractiveObjects = (): THREE.Object3D[] => {
+  setColor(color: string): void {
+    throw new Error("Method not implemented.");
+  }
+
+  getInteractiveObjects = (): THREE.Mesh[] => {
     return [...this.meshes];
   };
 }
@@ -134,14 +155,18 @@ class YRotation extends FreeformControls.RotationGroup {
     this.up = new THREE.Vector3(0, 1, 0);
     this.meshes = [];
     const ring = RingFactory.createRing(minRingRadius, minRingRadius + ringSize, 0x00ff00);
-    ring.map((mesh) => {
+    ring.forEach((mesh) => {
       mesh.rotateOnAxis(new THREE.Vector3(1, 0, 0), Math.PI / 2);
     });
     this.meshes.push(...ring);
     this.add(...ring);
   }
 
-  getInteractiveObjects = (): THREE.Object3D[] => {
+  setColor(color: string): void {
+    throw new Error("Method not implemented.");
+  }
+
+  getInteractiveObjects = (): THREE.Mesh[] => {
     return [...this.meshes];
   };
 }
@@ -160,7 +185,11 @@ class ZRotation extends FreeformControls.RotationGroup {
     this.add(...ring);
   }
 
-  getInteractiveObjects = (): THREE.Object3D[] => {
+  setColor(color: string): void {
+    throw new Error("Method not implemented.");
+  }
+
+  getInteractiveObjects = (): THREE.Mesh[] => {
     return [...this.meshes];
   };
 }
@@ -182,7 +211,7 @@ class XTranslation extends FreeformControls.TranslationGroup {
 
     this.meshes = [];
     const positiveArrow = ArrowFactory.createArrow(arrowRadius, arrowRadius, arrowLength, 0xff0000);
-    positiveArrow.map((mesh) => {
+    positiveArrow.forEach((mesh) => {
       mesh.rotateOnAxis(new THREE.Vector3(0, 0, 1), -Math.PI / 2);
       mesh.translateOnAxis(new THREE.Vector3(0, 1, 0), minRingRadius);
     });
@@ -190,7 +219,7 @@ class XTranslation extends FreeformControls.TranslationGroup {
     this.add(...positiveArrow);
 
     const negativeArrow = ArrowFactory.createArrow(arrowRadius, arrowRadius, arrowLength, 0xff0000);
-    negativeArrow.map((mesh) => {
+    negativeArrow.forEach((mesh) => {
       mesh.rotateOnAxis(new THREE.Vector3(0, 0, 1), Math.PI / 2);
       mesh.translateOnAxis(new THREE.Vector3(0, 1, 0), minRingRadius);
     });
@@ -198,7 +227,11 @@ class XTranslation extends FreeformControls.TranslationGroup {
     this.add(...negativeArrow);
   }
 
-  getInteractiveObjects = (): THREE.Object3D[] => {
+  setColor(color: string): void {
+    throw new Error("Method not implemented.");
+  }
+
+  getInteractiveObjects = (): THREE.Mesh[] => {
     return [...this.meshes];
   };
 }
@@ -220,14 +253,14 @@ class YTranslation extends FreeformControls.TranslationGroup {
 
     this.meshes = [];
     const positiveArrow = ArrowFactory.createArrow(arrowRadius, arrowRadius, arrowLength, 0x00ff00);
-    positiveArrow.map((mesh) => {
+    positiveArrow.forEach((mesh) => {
       mesh.translateOnAxis(new THREE.Vector3(0, 1, 0), minRingRadius);
     });
     this.meshes.push(...positiveArrow);
     this.add(...positiveArrow);
 
     const negativeArrow = ArrowFactory.createArrow(arrowRadius, arrowRadius, arrowLength, 0x00ff00);
-    negativeArrow.map((mesh) => {
+    negativeArrow.forEach((mesh) => {
       mesh.rotateOnAxis(new THREE.Vector3(0, 0, 1), Math.PI);
       mesh.translateOnAxis(new THREE.Vector3(0, 1, 0), minRingRadius);
     });
@@ -235,7 +268,11 @@ class YTranslation extends FreeformControls.TranslationGroup {
     this.add(...negativeArrow);
   }
 
-  getInteractiveObjects = (): THREE.Object3D[] => {
+  setColor(color: string): void {
+    throw new Error("Method not implemented.");
+  }
+
+  getInteractiveObjects = (): THREE.Mesh[] => {
     return [...this.meshes];
   };
 }
@@ -257,7 +294,7 @@ class ZTranslation extends FreeformControls.TranslationGroup {
 
     this.meshes = [];
     const positiveArrow = ArrowFactory.createArrow(arrowRadius, arrowRadius, arrowLength, 0x0000ff);
-    positiveArrow.map((mesh) => {
+    positiveArrow.forEach((mesh) => {
       mesh.rotateOnAxis(new THREE.Vector3(1, 0, 0), Math.PI / 2);
       mesh.translateOnAxis(new THREE.Vector3(0, 1, 0), minRingRadius);
     });
@@ -265,7 +302,7 @@ class ZTranslation extends FreeformControls.TranslationGroup {
     this.add(...positiveArrow);
 
     const negativeArrow = ArrowFactory.createArrow(arrowRadius, arrowRadius, arrowLength, 0x0000ff);
-    negativeArrow.map((mesh) => {
+    negativeArrow.forEach((mesh) => {
       mesh.rotateOnAxis(new THREE.Vector3(1, 0, 0), -Math.PI / 2);
       mesh.translateOnAxis(new THREE.Vector3(0, 1, 0), minRingRadius);
     });
@@ -273,7 +310,11 @@ class ZTranslation extends FreeformControls.TranslationGroup {
     this.add(...negativeArrow);
   }
 
-  getInteractiveObjects = (): THREE.Object3D[] => {
+  setColor(color: string): void {
+    throw new Error("Method not implemented.");
+  }
+
+  getInteractiveObjects = (): THREE.Mesh[] => {
     return [...this.meshes];
   };
 }
