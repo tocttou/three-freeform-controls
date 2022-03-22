@@ -197,17 +197,24 @@ export default class Raycaster extends ThreeRaycaster {
           this.activeHandle instanceof RotationGroup) &&
         !(this.activeHandle instanceof RotationEye)
       ) {
-        // The highlighted axis always passes through the center of the parent object.
+        //The highlighted axis always passes through the center of the parent object.
         this.activeHandle.parent.getWorldPosition(this.highlightAxisLine.position);
 
+        // Find the direction vector of the selected handler, either parallel or up.
+        // Rotate this vector by the parent component world quaternion.
+        // Place the vector at the center of the parent component and calculate
+        // the second point of the highlighted axis.
+        const quaternion = new Quaternion();
+        this.activeHandle.parent.getWorldQuaternion(quaternion);
+        let direction: Vector3;
         if (this.activeHandle instanceof TranslationGroup) {
-          // Look in the direction of the axis.
-          const handlePosition = new Vector3();
-          this.activeHandle.getWorldPosition(handlePosition);
-          this.highlightAxisLine.lookAt(handlePosition);
+          direction = this.activeHandle.parallel.clone();
         } else {
-          this.activeHandle.getWorldQuaternion(this.highlightAxisLine.quaternion);
+          direction = this.activeHandle.up.clone();
         }
+        direction.applyQuaternion(quaternion);
+        const point = this.highlightAxisLine.position.clone().add(direction);
+        this.highlightAxisLine.lookAt(point);
 
         scene.add(this.highlightAxisLine);
       }
