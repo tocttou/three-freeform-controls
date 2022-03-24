@@ -19,6 +19,7 @@ import {
   Vector2,
   Vector3,
   Raycaster as ThreeRaycaster,
+  Ray,
 } from "three";
 
 export enum EVENTS {
@@ -38,11 +39,11 @@ export default class Raycaster extends ThreeRaycaster {
   private activeHandle: IHandle | null = null;
   private activePlane: Plane | null = null;
   private point = new Vector3();
-  private normal = new Vector3();
+  //private normal = new Vector3();
   private visibleHandles: Object3D[] = [];
   private visibleControls: Object3D[] = [];
   private helperPlane: PlaneHelper | null = null;
-  private controlsWorldQuaternion = new Quaternion();
+  //private controlsWorldQuaternion = new Quaternion();
   private clientDiagonalLength = 1;
   private previousScreenPoint = new Vector2();
   private currentScreenPoint = new Vector2();
@@ -78,32 +79,58 @@ export default class Raycaster extends ThreeRaycaster {
     return new Line("white", geometry);
   };
 
-  private pointerDownListener = (event: MouseEvent | TouchEvent) => {
-    const point = getPointFromEvent(event);
-    // touches can be empty
-    if (!point) {
-      return;
-    }
-    const { clientX, clientY } = point;
-    this.setRayDirection(clientX, clientY);
-
-    // useful for calculating dragRatio (used in dampingFactor calculation)
-    this.clientDiagonalLength = Math.sqrt(
-      (event.target as HTMLElement).clientWidth ** 2 +
-        (event.target as HTMLElement).clientHeight ** 2
-    );
-    this.previousScreenPoint.set(clientX, clientY);
-
+  /**
+   * Find the handle the user is clicking.
+   */
+  private findActiveHandle = (): IHandle | null => {
     const interactiveObjects: Object3D[] = [];
     Object.values(this.controls).map((controls) => {
       interactiveObjects.push(...controls.getInteractiveObjects());
     });
-    this.activeHandle = this.resolveHandleGroup(this.intersectObjects(interactiveObjects, true)[0]);
+    return this.resolveHandleGroup(this.intersectObjects(interactiveObjects, true)[0]);
+  };
 
-    if (this.activeHandle?.parent) {
-      const controls = this.activeHandle.parent as Controls;
+  /**
+   * Find the closest points between two rays.
+   */
+  private findClosestPoints(rayA: Ray, rayB: Ray): [Vector3, Vector3] {
+    // https://stackoverflow.com/questions/58151978/threejs-how-to-calculate-the-closest-point-on-a-three-ray-to-another-three-ray
+    // Raycaster ray.
 
-      // hiding other controls and handles instances if asked
+    // The line which is formed by the 2 points which are closest to each
+    // another, is normal to the 2 rays.
+    // The first step is to find the direction vector of the line which is
+    // formed by the 2 closest points. Since the vector is normal to both
+    // rays, this can be done by the cross product.
+    const Nv = rayA.direction.clone().cross(rayB.direction);
+    // The next step is to find a plane for eache ray, which includes the
+    // ray and the closest point on the other ray. A plane is formed by 2
+    // vectors, in this case the direction vector of the plane and nv.
+    // We need a different representation of the plane, by a point and a
+    // normal vector. The point is the origin of the ray. The normal vector
+    // again can be get by the cross product. For the further calculations,
+    // this vectors have to be unit vectors (length is 1), so they are
+    // normalized:
+    const Na = rayA.direction.clone().cross(Nv).normalize();
+    const Nb = rayB.direction.clone().cross(Nv).normalize();
+    // Now the issue is the intersection of a ray and plane. ptA and ptB
+    // are Vector3 objects and the closest points on the ray:
+    const Da = rayA.direction.clone().normalize();
+    const Db = rayB.direction.clone().normalize();
+    const da = rayB.origin.clone().sub(rayA.origin).dot(Nb) / Da.dot(Nb);
+    const db = rayA.origin.clone().sub(rayB.origin).dot(Na) / Db.dot(Na);
+    const pointA = rayA.origin.clone().add(Da.multiplyScalar(da));
+    const pointB = rayB.origin.clone().add(Db.multiplyScalar(db));
+
+    return [pointA, pointB];
+  }
+
+  /**
+   * Hide other control instances on drag is asked.
+   */
+  private hideOtherControlsInstancesOnDrag = (activeHandle: IHandle) => {
+    if (activeHandle?.parent) {
+      const controls = activeHandle.parent as Controls;
       if (controls.hideOtherControlsInstancesOnDrag) {
         Object.values(this.controls).forEach((x) => {
           if (x.visible) {
@@ -113,7 +140,15 @@ export default class Raycaster extends ThreeRaycaster {
         });
         controls.visible = true;
       }
+    }
+  };
 
+  /**
+   * Hide other handles on drag if asked.
+   */
+  private hideOtherHandlesOnDrag = (activeHandle: IHandle) => {
+    if (activeHandle?.parent) {
+      const controls = activeHandle.parent as Controls;
       if (controls.hideOtherHandlesOnDrag) {
         controls.children.map((handle) => {
           if (handle.visible) {
@@ -121,60 +156,19 @@ export default class Raycaster extends ThreeRaycaster {
           }
           handle.visible = false;
         });
-        this.activeHandle.visible = true;
+        activeHandle.visible = true;
       }
+    }
+  };
 
-      if (this.activeHandle instanceof PickPlane) {
-        this.setPickPlaneOpacity(PICK_PLANE_OPACITY.ACTIVE);
-      }
+  /**
+   * Show the active plane if asked. Available only for TranslationGroup and
+   * RotationGroup  (except RotationEye where plane of rotation is obvious).
+   */
+  private showHelperPlane = (activeHandle: IHandle, activePlane: Plane) => {
+    if (activeHandle?.parent) {
+      const controls = activeHandle.parent as Controls;
 
-      /**
-       * creating the activePlane - the plane on which intersection actions
-       * take place. mouse movements are translated to points on the activePlane
-       */
-      this.activePlane = new Plane();
-      const eyePlaneNormal = this.getEyePlaneNormal(this.activeHandle);
-      controls.getWorldQuaternion(this.controlsWorldQuaternion);
-      this.normal.copy(
-        this.activeHandle instanceof PickGroup ? eyePlaneNormal : this.activeHandle.up
-      );
-      if (!(this.activeHandle instanceof RotationEye || this.activeHandle instanceof PickGroup)) {
-        this.normal.applyQuaternion(this.controlsWorldQuaternion);
-      }
-      /*
-        if the angle between the eye-normal and the normal to the activePlane is
-        too small, a small mouse movement makes a large projection on the activePlane,
-        causing the object to jump big distances. To avoid this, the activePlane
-        is flipped by 90 degrees about the parallel vector of the handle.
-        This problem only requires mitigation in the TranslationGroup handle case.
-       */
-      if (this.activeHandle instanceof TranslationGroup) {
-        const dot = eyePlaneNormal.dot(this.normal) / eyePlaneNormal.length();
-        // arccos(0.25) ~= 75 degrees
-        // this is the threshold to make the plane normal flip
-        this.isActivePlaneFlipped = Math.abs(dot) < 0.25;
-        if (this.isActivePlaneFlipped) {
-          this.isActivePlaneFlipped = true;
-          this.normal.applyAxisAngle(this.activeHandle.parallel, Math.PI / 2);
-        }
-      }
-      if (this.activeHandle instanceof TranslationGroup) {
-        this.activePlane.setFromNormalAndCoplanarPoint(this.normal, this.activeHandle.position);
-      } else {
-        this.activePlane.setFromNormalAndCoplanarPoint(this.normal, controls.position);
-      }
-
-      // find initial intersection
-      const initialIntersectionPoint = new Vector3();
-      if (this.activeHandle instanceof PickGroup) {
-        this.activeHandle.getWorldPosition(initialIntersectionPoint);
-      } else {
-        this.ray.intersectPlane(this.activePlane, initialIntersectionPoint);
-      }
-
-      // activate the helper plane if asked
-      // available only for TranslationGroup and RotationGroup
-      // (except RotationEye - plane of rotation is obvious)
       const scene = controls.parent as Scene;
       if (
         controls.showHelperPlane &&
@@ -182,15 +176,19 @@ export default class Raycaster extends ThreeRaycaster {
           this.activeHandle instanceof RotationGroup) &&
         !(this.activeHandle instanceof RotationEye)
       ) {
-        this.helperPlane = new PlaneHelper(this.activePlane, 1);
+        this.helperPlane = new PlaneHelper(activePlane, 1);
         scene.add(this.helperPlane);
       }
+    }
+  };
 
-      /**
-       * activate the highlightAxis if asked
-       * available only for TranslationGroup and RotationGroup
-       * (except RotationEye - plane of rotation is obvious)
-       */
+  /**
+   * Show the operation axis if asked. Available only for TranslationGroup
+   * and RotationGroup (except RotationEye where plane of rotation is obvious).
+   */
+  private showAxis = (activeHandle: IHandle) => {
+    if (activeHandle?.parent) {
+      const controls = activeHandle.parent as Controls;
       if (
         controls.highlightAxis &&
         (this.activeHandle instanceof TranslationGroup ||
@@ -198,14 +196,14 @@ export default class Raycaster extends ThreeRaycaster {
         !(this.activeHandle instanceof RotationEye)
       ) {
         //The highlighted axis always passes through the center of the parent object.
-        this.activeHandle.parent.getWorldPosition(this.highlightAxisLine.position);
+        activeHandle.parent.getWorldPosition(this.highlightAxisLine.position);
 
         // Find the direction vector of the selected handler, either parallel or up.
         // Rotate this vector by the parent component world quaternion.
         // Place the vector at the center of the parent component and calculate
         // the second point of the highlighted axis.
         const quaternion = new Quaternion();
-        this.activeHandle.parent.getWorldQuaternion(quaternion);
+        activeHandle.parent.getWorldQuaternion(quaternion);
         let direction: Vector3;
         if (this.activeHandle instanceof TranslationGroup) {
           direction = this.activeHandle.parallel.clone();
@@ -216,8 +214,99 @@ export default class Raycaster extends ThreeRaycaster {
         const point = this.highlightAxisLine.position.clone().add(direction);
         this.highlightAxisLine.lookAt(point);
 
+        const scene = controls.parent as Scene;
         scene.add(this.highlightAxisLine);
       }
+    }
+  };
+
+  /**
+   * Determine the Active Plane i.e. the plane on which intersection actions
+   * take place. Mouse movements are translated to points on the Active Plane.
+   */
+  private calculateActivePlane = (activeHandle: IHandle): Plane => {
+    const activePlane = new Plane();
+    if (activeHandle?.parent) {
+      const controls = activeHandle.parent as Controls;
+
+      const eyePlaneNormal = this.getEyePlaneNormal(activeHandle);
+      const normal = new Vector3();
+      normal.copy(activeHandle instanceof PickGroup ? eyePlaneNormal : activeHandle.up);
+      if (!(activeHandle instanceof RotationEye || activeHandle instanceof PickGroup)) {
+        const quaternion = new Quaternion();
+        controls.getWorldQuaternion(quaternion);
+        normal.applyQuaternion(quaternion);
+      }
+
+      if (activeHandle instanceof TranslationGroup) {
+        activePlane.setFromNormalAndCoplanarPoint(normal, activeHandle.position);
+      } else {
+        activePlane.setFromNormalAndCoplanarPoint(normal, controls.position);
+      }
+    }
+    return activePlane;
+  };
+
+  /**
+   * This method is executed when the mouse is pressed.
+   */
+  private pointerDownListener = (event: MouseEvent | TouchEvent) => {
+    const point = getPointFromEvent(event);
+
+    // Touches can be empty.
+    if (!point) {
+      return;
+    }
+    const { clientX, clientY } = point;
+    this.setRayDirection(clientX, clientY);
+
+    // Useful for calculating dragRatio (used in dampingFactor calculation).
+    this.clientDiagonalLength = Math.sqrt(
+      (event.target as HTMLElement).clientWidth ** 2 +
+        (event.target as HTMLElement).clientHeight ** 2
+    );
+    this.previousScreenPoint.set(clientX, clientY);
+
+    this.activeHandle = this.findActiveHandle();
+    if (this.activeHandle?.parent) {
+      this.hideOtherControlsInstancesOnDrag(this.activeHandle);
+      this.hideOtherHandlesOnDrag(this.activeHandle);
+
+      if (this.activeHandle instanceof PickPlane) {
+        this.setPickPlaneOpacity(PICK_PLANE_OPACITY.ACTIVE);
+      }
+
+      this.activePlane = this.calculateActivePlane(this.activeHandle);
+
+      // Find the initial point representing the translation, either by intersecting
+      // the view ray with the current active plane, or by calculating the closest
+      // point on the translation axis to the view ray.
+
+      const initialIntersectionPoint = new Vector3();
+      if (this.activeHandle instanceof PickGroup) {
+        this.activeHandle.getWorldPosition(initialIntersectionPoint);
+      } else {
+        this.ray.intersectPlane(this.activePlane, initialIntersectionPoint);
+      }
+
+      if (this.activeHandle instanceof TranslationGroup) {
+        // Find the closest point on the translation axis to the viewing ray .
+        // https://stackoverflow.com/questions/58151978/threejs-how-to-calculate-the-closest-point-on-a-three-ray-to-another-three-ray
+
+        // Translation ray.
+        const axisOrigin = new Vector3();
+        this.activeHandle.parent.getWorldPosition(axisOrigin);
+        const worldQuaternion = new Quaternion();
+        this.activeHandle.parent.getWorldQuaternion(worldQuaternion);
+        const axisDirection = this.activeHandle.parallel.clone().applyQuaternion(worldQuaternion);
+        const axisRay = new Ray(axisOrigin, axisDirection);
+
+        const point = this.findClosestPoints(this.ray, axisRay)[0];
+        //initialIntersectionPoint.copy(point);
+      }
+
+      this.showHelperPlane(this.activeHandle, this.activePlane);
+      this.showAxis(this.activeHandle);
 
       // switch event listeners and dispatch DRAG_START
       removeEventListener(
@@ -241,6 +330,10 @@ export default class Raycaster extends ThreeRaycaster {
     }
   };
 
+  /**
+   * Return the normal of the plane perpendicular to the view direction and
+   * passing by the given object.
+   */
   private getEyePlaneNormal = (object: Object3D) => {
     this.cameraPosition.copy(this.camera.position);
     return this.cameraPosition.sub(object.position);
