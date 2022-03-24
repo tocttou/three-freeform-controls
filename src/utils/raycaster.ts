@@ -94,8 +94,8 @@ export default class Raycaster extends ThreeRaycaster {
    * Find the closest points between two rays.
    */
   private findClosestPoints(rayA: Ray, rayB: Ray): [Vector3, Vector3] {
+    // For accurate description on how to calculate these points see
     // https://stackoverflow.com/questions/58151978/threejs-how-to-calculate-the-closest-point-on-a-three-ray-to-another-three-ray
-    // Raycaster ray.
 
     // The line which is formed by the 2 points which are closest to each
     // another, is normal to the 2 rays.
@@ -157,27 +157,6 @@ export default class Raycaster extends ThreeRaycaster {
           handle.visible = false;
         });
         activeHandle.visible = true;
-      }
-    }
-  };
-
-  /**
-   * Show the active plane if asked. Available only for TranslationGroup and
-   * RotationGroup  (except RotationEye where plane of rotation is obvious).
-   */
-  private showHelperPlane = (activeHandle: IHandle, activePlane: Plane) => {
-    if (activeHandle?.parent) {
-      const controls = activeHandle.parent as Controls;
-
-      const scene = controls.parent as Scene;
-      if (
-        controls.showHelperPlane &&
-        (this.activeHandle instanceof TranslationGroup ||
-          this.activeHandle instanceof RotationGroup) &&
-        !(this.activeHandle instanceof RotationEye)
-      ) {
-        this.helperPlane = new PlaneHelper(activePlane, 1);
-        scene.add(this.helperPlane);
       }
     }
   };
@@ -248,6 +227,35 @@ export default class Raycaster extends ThreeRaycaster {
   };
 
   /**
+   * Find the initial point representing the translation, either by intersecting
+   * the view ray with the current active plane, or by calculating the closest
+   * point on the translation axis to the view ray.
+   */
+  private calculateManipulationPoint = (): Vector3 => {
+    const manipulationPoint = new Vector3();
+    if (this.activeHandle instanceof PickGroup) {
+      this.activeHandle.getWorldPosition(manipulationPoint);
+    } else if (this.activeHandle instanceof TranslationGroup) {
+      if (this.activeHandle?.parent) {
+        // Translation ray.
+        const axisOrigin = new Vector3();
+        this.activeHandle.parent.getWorldPosition(axisOrigin);
+        const quaternion = new Quaternion();
+        this.activeHandle.parent.getWorldQuaternion(quaternion);
+        const axisDirection = this.activeHandle.parallel.clone().applyQuaternion(quaternion);
+        const axisRay = new Ray(axisOrigin, axisDirection);
+        const point = this.findClosestPoints(this.ray, axisRay)[0];
+        manipulationPoint.copy(point);
+      }
+    } else {
+      if (this.activePlane) {
+        this.ray.intersectPlane(this.activePlane, manipulationPoint);
+      }
+    }
+    return manipulationPoint;
+  };
+
+  /**
    * This method is executed when the mouse is pressed.
    */
   private pointerDownListener = (event: MouseEvent | TouchEvent) => {
@@ -278,34 +286,6 @@ export default class Raycaster extends ThreeRaycaster {
 
       this.activePlane = this.calculateActivePlane(this.activeHandle);
 
-      // Find the initial point representing the translation, either by intersecting
-      // the view ray with the current active plane, or by calculating the closest
-      // point on the translation axis to the view ray.
-
-      const initialIntersectionPoint = new Vector3();
-      if (this.activeHandle instanceof PickGroup) {
-        this.activeHandle.getWorldPosition(initialIntersectionPoint);
-      } else {
-        this.ray.intersectPlane(this.activePlane, initialIntersectionPoint);
-      }
-
-      if (this.activeHandle instanceof TranslationGroup) {
-        // Find the closest point on the translation axis to the viewing ray .
-        // https://stackoverflow.com/questions/58151978/threejs-how-to-calculate-the-closest-point-on-a-three-ray-to-another-three-ray
-
-        // Translation ray.
-        const axisOrigin = new Vector3();
-        this.activeHandle.parent.getWorldPosition(axisOrigin);
-        const worldQuaternion = new Quaternion();
-        this.activeHandle.parent.getWorldQuaternion(worldQuaternion);
-        const axisDirection = this.activeHandle.parallel.clone().applyQuaternion(worldQuaternion);
-        const axisRay = new Ray(axisOrigin, axisDirection);
-
-        const point = this.findClosestPoints(this.ray, axisRay)[0];
-        //initialIntersectionPoint.copy(point);
-      }
-
-      this.showHelperPlane(this.activeHandle, this.activePlane);
       this.showAxis(this.activeHandle);
 
       // switch event listeners and dispatch DRAG_START
@@ -317,6 +297,8 @@ export default class Raycaster extends ThreeRaycaster {
           capture: true,
         }
       );
+
+      const initialIntersectionPoint = this.calculateManipulationPoint();
       emitter.emit(EVENTS.DRAG_START, {
         point: initialIntersectionPoint,
         handle: this.activeHandle,
@@ -358,7 +340,8 @@ export default class Raycaster extends ThreeRaycaster {
     const { clientX, clientY } = point;
 
     this.setRayDirection(clientX, clientY);
-    this.ray.intersectPlane(this.activePlane, this.point);
+
+    this.point = this.calculateManipulationPoint();
 
     this.currentScreenPoint.set(clientX, clientY);
     const distance = this.currentScreenPoint.distanceTo(this.previousScreenPoint);
