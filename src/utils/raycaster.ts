@@ -6,21 +6,7 @@ import { IHandle, PickGroup, RotationGroup, TranslationGroup } from "../controls
 import RotationEye from "../controls/handles/rotation-eye";
 import { addEventListener, getPointFromEvent, removeEventListener } from "./helper";
 import Line from "../primitives/line";
-import {
-  BufferGeometry,
-  Camera,
-  Float32BufferAttribute,
-  Intersection,
-  Object3D,
-  Plane,
-  PlaneHelper,
-  Quaternion,
-  Scene,
-  Vector2,
-  Vector3,
-  Raycaster as ThreeRaycaster,
-  Ray,
-} from "three";
+import * as THREE from "three";
 
 export enum EVENTS {
   DRAG_START = "DRAG_START",
@@ -33,25 +19,20 @@ export enum EVENTS {
  * The Raycaster listens on the mouse and touch events globally and
  * dispatches DRAG_START, DRAG, and DRAG_STOP events.
  */
-export default class Raycaster extends ThreeRaycaster {
-  private mouse = new Vector2();
-  private cameraPosition = new Vector3();
+export default class Raycaster extends THREE.Raycaster {
+  private mouse = new THREE.Vector2();
+  private cameraPosition = new THREE.Vector3();
   private activeHandle: IHandle | null = null;
-  private activePlane: Plane | null = null;
-  private point = new Vector3();
-  //private normal = new Vector3();
-  private visibleHandles: Object3D[] = [];
-  private visibleControls: Object3D[] = [];
-  private helperPlane: PlaneHelper | null = null;
-  //private controlsWorldQuaternion = new Quaternion();
+  private point = new THREE.Vector3();
+  private visibleHandles: THREE.Object3D[] = [];
+  private visibleControls: THREE.Object3D[] = [];
   private clientDiagonalLength = 1;
-  private previousScreenPoint = new Vector2();
-  private currentScreenPoint = new Vector2();
-  private isActivePlaneFlipped = false;
+  private previousScreenPoint = new THREE.Vector2();
+  private currentScreenPoint = new THREE.Vector2();
   private readonly highlightAxisLine: Line;
 
   constructor(
-    public camera: Camera,
+    public camera: THREE.Camera,
     private domElement: HTMLElement,
     private controls: { [id: string]: Controls }
   ) {
@@ -74,26 +55,26 @@ export default class Raycaster extends ThreeRaycaster {
   }
 
   private createAxisLine = () => {
-    const geometry = new BufferGeometry();
-    geometry.setAttribute("position", new Float32BufferAttribute([0, 0, -100, 0, 0, 100], 3));
+    const geometry = new THREE.BufferGeometry();
+    geometry.setAttribute("position", new THREE.Float32BufferAttribute([0, 0, -100, 0, 0, 100], 3));
     return new Line("white", geometry);
   };
 
   /**
-   * Find the handle the user is clicking.
+   * Find the handle the user clicked on.
    */
   private findActiveHandle = (): IHandle | null => {
-    const interactiveObjects: Object3D[] = [];
+    const interactiveObjects: THREE.Object3D[] = [];
     Object.values(this.controls).map((controls) => {
       interactiveObjects.push(...controls.getInteractiveObjects());
     });
-    return this.resolveHandleGroup(this.intersectObjects(interactiveObjects, true)[0]);
+    return this.resolveHandleGroup(super.intersectObjects(interactiveObjects, true)[0]);
   };
 
   /**
    * Find the closest points between two rays.
    */
-  private findClosestPoints(rayA: Ray, rayB: Ray): [Vector3, Vector3] {
+  private findClosestPoints(rayA: THREE.Ray, rayB: THREE.Ray): [THREE.Vector3, THREE.Vector3] {
     // For accurate description on how to calculate these points see
     // https://stackoverflow.com/questions/58151978/threejs-how-to-calculate-the-closest-point-on-a-three-ray-to-another-three-ray
 
@@ -126,7 +107,7 @@ export default class Raycaster extends ThreeRaycaster {
   }
 
   /**
-   * Hide other control instances on drag is asked.
+   * Hide other control instances on drag if asked.
    */
   private hideOtherControlsInstancesOnDrag = (activeHandle: IHandle) => {
     if (activeHandle?.parent) {
@@ -181,9 +162,9 @@ export default class Raycaster extends ThreeRaycaster {
         // Rotate this vector by the parent component world quaternion.
         // Place the vector at the center of the parent component and calculate
         // the second point of the highlighted axis.
-        const quaternion = new Quaternion();
+        const quaternion = new THREE.Quaternion();
         activeHandle.parent.getWorldQuaternion(quaternion);
-        let direction: Vector3;
+        let direction: THREE.Vector3;
         if (this.activeHandle instanceof TranslationGroup) {
           direction = this.activeHandle.parallel.clone();
         } else {
@@ -193,7 +174,7 @@ export default class Raycaster extends ThreeRaycaster {
         const point = this.highlightAxisLine.position.clone().add(direction);
         this.highlightAxisLine.lookAt(point);
 
-        const scene = controls.parent as Scene;
+        const scene = controls.parent as THREE.Scene;
         scene.add(this.highlightAxisLine);
       }
     }
@@ -201,22 +182,21 @@ export default class Raycaster extends ThreeRaycaster {
 
   /**
    * Determine the Active Plane i.e. the plane on which intersection actions
-   * take place. Mouse movements are translated to points on the Active Plane.
+   * take place. An Active Plane is used during rotation operations.
+   * Mouse movements are translated to points on the Active Plane.
    */
-  private calculateActivePlane = (activeHandle: IHandle): Plane => {
-    const activePlane = new Plane();
+  private calculateActivePlane = (activeHandle: IHandle): THREE.Plane => {
+    const activePlane = new THREE.Plane();
     if (activeHandle?.parent) {
       const controls = activeHandle.parent as Controls;
-
       const eyePlaneNormal = this.getEyePlaneNormal(activeHandle);
-      const normal = new Vector3();
+      const normal = new THREE.Vector3();
       normal.copy(activeHandle instanceof PickGroup ? eyePlaneNormal : activeHandle.up);
       if (!(activeHandle instanceof RotationEye || activeHandle instanceof PickGroup)) {
-        const quaternion = new Quaternion();
+        const quaternion = new THREE.Quaternion();
         controls.getWorldQuaternion(quaternion);
         normal.applyQuaternion(quaternion);
       }
-
       if (activeHandle instanceof TranslationGroup) {
         activePlane.setFromNormalAndCoplanarPoint(normal, activeHandle.position);
       } else {
@@ -231,25 +211,26 @@ export default class Raycaster extends ThreeRaycaster {
    * the view ray with the current active plane, or by calculating the closest
    * point on the translation axis to the view ray.
    */
-  private calculateManipulationPoint = (): Vector3 => {
-    const manipulationPoint = new Vector3();
-    if (this.activeHandle instanceof PickGroup) {
-      this.activeHandle.getWorldPosition(manipulationPoint);
-    } else if (this.activeHandle instanceof TranslationGroup) {
-      if (this.activeHandle?.parent) {
+  private calculateManipulationPoint = (): THREE.Vector3 => {
+    const manipulationPoint = new THREE.Vector3();
+    if (this.activeHandle?.parent) {
+      if (this.activeHandle instanceof PickGroup) {
+        this.activeHandle.getWorldPosition(manipulationPoint);
+      } else if (this.activeHandle instanceof TranslationGroup) {
         // Translation ray.
-        const axisOrigin = new Vector3();
+        const axisOrigin = new THREE.Vector3();
         this.activeHandle.parent.getWorldPosition(axisOrigin);
-        const quaternion = new Quaternion();
+        const quaternion = new THREE.Quaternion();
         this.activeHandle.parent.getWorldQuaternion(quaternion);
         const axisDirection = this.activeHandle.parallel.clone().applyQuaternion(quaternion);
-        const axisRay = new Ray(axisOrigin, axisDirection);
+        const axisRay = new THREE.Ray(axisOrigin, axisDirection);
         const point = this.findClosestPoints(this.ray, axisRay)[0];
         manipulationPoint.copy(point);
-      }
-    } else {
-      if (this.activePlane) {
-        this.ray.intersectPlane(this.activePlane, manipulationPoint);
+      } else {
+        const activePlane = this.calculateActivePlane(this.activeHandle);
+        if (activePlane) {
+          this.ray.intersectPlane(activePlane, manipulationPoint);
+        }
       }
     }
     return manipulationPoint;
@@ -284,8 +265,6 @@ export default class Raycaster extends ThreeRaycaster {
         this.setPickPlaneOpacity(PICK_PLANE_OPACITY.ACTIVE);
       }
 
-      this.activePlane = this.calculateActivePlane(this.activeHandle);
-
       this.showAxis(this.activeHandle);
 
       // switch event listeners and dispatch DRAG_START
@@ -307,8 +286,6 @@ export default class Raycaster extends ThreeRaycaster {
         passive: false,
         capture: true,
       });
-    } else {
-      this.activePlane = null;
     }
   };
 
@@ -316,7 +293,7 @@ export default class Raycaster extends ThreeRaycaster {
    * Return the normal of the plane perpendicular to the view direction and
    * passing by the given object.
    */
-  private getEyePlaneNormal = (object: Object3D) => {
+  private getEyePlaneNormal = (object: THREE.Object3D) => {
     this.cameraPosition.copy(this.camera.position);
     return this.cameraPosition.sub(object.position);
   };
@@ -330,7 +307,7 @@ export default class Raycaster extends ThreeRaycaster {
   };
 
   private pointerMoveListener = (event: MouseEvent | TouchEvent) => {
-    if (this.activeHandle === null || this.activePlane === null) {
+    if (this.activeHandle === null) {
       return;
     }
     const point = getPointFromEvent(event);
@@ -392,13 +369,9 @@ export default class Raycaster extends ThreeRaycaster {
 
     const scene = this.activeHandle?.parent?.parent;
     if (scene) {
-      if (this.helperPlane) {
-        scene.remove(this.helperPlane);
-      }
       scene.remove(this.highlightAxisLine);
     }
     this.activeHandle = null;
-    this.activePlane = null;
   };
 
   private setPickPlaneOpacity(opacity: number) {
@@ -417,7 +390,7 @@ export default class Raycaster extends ThreeRaycaster {
     }
   }
 
-  private resolveHandleGroup = (intersectedObject: Intersection | undefined) => {
+  private resolveHandleGroup = (intersectedObject: THREE.Intersection | undefined) => {
     if (intersectedObject === undefined) {
       return null;
     }
@@ -426,7 +399,6 @@ export default class Raycaster extends ThreeRaycaster {
   };
 
   public destroy = () => {
-    this.activePlane = null;
     this.activeHandle = null;
     removeEventListener(this.domElement, ["pointerdown", "touchstart"], this.pointerDownListener, {
       capture: true,
