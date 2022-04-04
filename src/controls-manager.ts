@@ -2,7 +2,8 @@ import Controls, { IControlsOptions } from "./controls";
 import Raycaster, { EVENTS } from "./utils/raycaster";
 import { emitter, unbindAll } from "./utils/emmiter";
 import { DEFAULT_HANDLE_GROUP_NAME } from "./controls/handles";
-import {Camera, Mesh, Object3D} from "three";
+import {Camera, Mesh, Object3D, WebXRController} from "three";
+import XRRaycaster from "./utils/xr-raycaster";
 
 /**
  * The ControlsManager provides helper functions to create Controls instances
@@ -23,15 +24,20 @@ export default class ControlsManager extends Object3D {
     [EVENTS.DRAG_STOP]: []
   };
   private rayCaster: Raycaster;
+  private xrRaycaster: XRRaycaster | null = null;
 
   /**
    * @param camera - the THREE.Camera instance used in the scene
    * @param domElement - the dom element on which THREE.js renderer is attached,
+   * @param xrControllers - WebXR Controllers to attach events to,
    * generally available as `renderer.domElement`
    */
-  constructor(private camera: Camera, private domElement: HTMLElement) {
+  constructor(private camera: Camera, private domElement: HTMLElement, private xrControllers: WebXRController[] = []) {
     super();
     this.rayCaster = new Raycaster(this.camera, this.domElement, this.controls);
+    if(xrControllers.length) {
+      this.xrRaycaster = new XRRaycaster(xrControllers, this.controls)
+    }
     this.listenToEvents();
   }
 
@@ -89,6 +95,16 @@ export default class ControlsManager extends Object3D {
     const controls = this.addControls(object, options);
     this.objects[object.id] = object;
     return controls;
+  };
+
+  /**
+   * Function to handle movements on WebXR controllers. Since unlike mouse and touch events, there's no move event for webxr controllers
+   *
+   */
+  public update = () => {
+    if(this.xrRaycaster) {
+      this.xrRaycaster.update();
+    }
   };
 
   /**

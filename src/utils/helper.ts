@@ -1,3 +1,5 @@
+import {Group, WebXRController} from "three";
+
 export const getPointFromEvent = (event: MouseEvent | TouchEvent) => {
   let clientX = 0;
   let clientY = 0;
@@ -15,27 +17,27 @@ export const getPointFromEvent = (event: MouseEvent | TouchEvent) => {
 };
 
 export const addEventListener = (
-  element: HTMLElement,
+  element: HTMLElement | WebXRController,
   eventNames: Array<
-    "pointerdown" | "touchstart" | "pointerup" | "touchend" | "pointermove" | "touchmove"
+    "pointerdown" | "touchstart" | "pointerup" | "touchend" | "pointermove" | "touchmove" | "selectstart" | "selectend"
   >,
   callback: (event: MouseEvent | TouchEvent) => void,
   options: { passive?: boolean; capture?: boolean } | boolean = false
 ) => {
   eventNames.forEach(name => {
-    element.addEventListener(name, callback, options);
+    (element as any).addEventListener(name, callback, options);
   });
 };
 
 export const removeEventListener = (
-  element: HTMLElement,
+  element: HTMLElement | WebXRController,
   eventNames: Array<
-    "pointerdown" | "touchstart" | "pointerup" | "touchend" | "pointermove" | "touchmove"
+    "pointerdown" | "touchstart" | "pointerup" | "touchend" | "pointermove" | "touchmove" | "selectstart" | "selectend"
   >,
   callback: (event: MouseEvent | TouchEvent) => void,
   options: { capture?: boolean } | boolean = false
 ) => {
   eventNames.forEach(name => {
-    element.removeEventListener(name, callback, options);
+    (element as any).removeEventListener(name, callback, options);
   });
 };
