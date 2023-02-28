@@ -2,9 +2,9 @@ import {
   DEFAULT_CONE_HEIGHT,
   DEFAULT_CONE_RADIUS,
   DEFAULT_CONTROLS_OPACITY,
-  DEFAULT_RADIAL_SEGMENTS
+  DEFAULT_RADIAL_SEGMENTS,
 } from "../utils/constants";
-import {ConeGeometry, Mesh, MeshBasicMaterial} from "three";
+import { ConeGeometry, Mesh, MeshBasicMaterial } from "three";
 
 export default class Cone extends Mesh {
   constructor(color: string) {

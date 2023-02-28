@@ -1,8 +1,4 @@
-import {
-  Camera,
-  Quaternion,
-  Vector3
-} from "three";
+import { Camera, Quaternion, Vector3 } from "three";
 import Rotation from "./rotation";
 import { DEFAULT_COLOR_RING, DEFAULT_RING_RADIUS } from "../../utils/constants";
 

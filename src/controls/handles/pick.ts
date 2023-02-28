@@ -1,7 +1,4 @@
-import {
-
-MeshBasicMaterial
-} from "three";
+import { MeshBasicMaterial } from "three";
 import Octahedron from "../../primitives/octahedron";
 import { PickGroup } from "./index";
 

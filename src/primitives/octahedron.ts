@@ -1,5 +1,5 @@
 import { DEFAULT_OCTAHEDRON_RADIUS } from "../utils/constants";
-import {DoubleSide, Mesh, MeshBasicMaterial, OctahedronBufferGeometry} from "three";
+import { DoubleSide, Mesh, MeshBasicMaterial, OctahedronBufferGeometry } from "three";
 
 export default class Octahedron extends Mesh {
   constructor(color: string) {
@@ -9,7 +9,7 @@ export default class Octahedron extends Mesh {
       color,
       depthTest: false,
       transparent: true,
-      side: DoubleSide
+      side: DoubleSide,
     });
   }
 }
