@@ -18,5 +18,6 @@ ga_tracking: UA-67838485-3
 # Build settings
 markdown: kramdown
 theme: just-the-docs
+remote_theme: tocttou/just-the-docs
 plugins:
   - jekyll-feed
