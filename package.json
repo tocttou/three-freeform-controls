@@ -23,7 +23,7 @@
     "prebuild": "rimraf dist",
     "build": "NODE_ENV=production rollup -c rollup.config.mjs",
     "start": "NODE_ENV=development rollup -c rollup.config.mjs -w",
-    "examples": "cpy examples/template.html dist --rename=index.html && rollup -c rollup.examples.config.mjs -w",
+    "examples": "cpy examples/template.html dist --rename=index.html --flat && rollup -c rollup.examples.config.mjs -w",
     "test": "jest",
     "test:watch": "jest --coverage --watch",
     "test:prod": "npm run lint && npm run test -- --no-cache",
