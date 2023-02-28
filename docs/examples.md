@@ -4,7 +4,7 @@ title: Examples
 nav_order: 5
 ---
 
-Code for the examples can be found [here](https://github.com/tocttou/three-freeform-controls/tree/gh-pages/examples){:target="_blank"}.
+Code for the examples can be found [here](https://github.com/tocttou/three-freeform-controls/tree/master/examples){:target="_blank"}.
 
 - [Basic example with all controls visible]({{ site.baseurl }}/examples/?example=basic){:target="_blank"}
 - [Events]({{ site.baseurl }}/examples/?example=events){:target="_blank"}
