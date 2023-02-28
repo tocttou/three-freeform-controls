@@ -3,7 +3,7 @@ import { IK, IKChain, IKJoint, IKBallConstraint, IKHelper } from 'three-ik/src/'
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import SpriteText from "three-spritetext";
 
-import * as FreeformControls from "../dist/three-freeform-controls.js";
+import * as FreeformControls from "../";
 // Set up scene, camera, renderer
 const renderer = new THREE.WebGLRenderer({
   antialias: true

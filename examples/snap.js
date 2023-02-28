@@ -2,7 +2,7 @@ import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import SpriteText from "three-spritetext";
 
-import * as FreeformControls from "../dist/three-freeform-controls.js";
+import * as FreeformControls from "../";
 // setup the scene
 const renderer = new THREE.WebGLRenderer({
   antialias: true
