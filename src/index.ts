@@ -4,7 +4,7 @@ import {
   DEFAULT_HANDLE_GROUP_NAME,
   PickPlaneGroup,
   RotationGroup,
-  TranslationGroup
+  TranslationGroup,
 } from "./controls/handles";
 import Translation from "./controls/handles/translation";
 import Rotation from "./controls/handles/rotation";
@@ -23,5 +23,5 @@ export {
   PickPlaneGroup,
   RotationGroup,
   TranslationGroup,
-  ControlsManager
+  ControlsManager,
 };

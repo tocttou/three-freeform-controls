@@ -1,6 +1,4 @@
-import {
- Group, Mesh, Vector3
-} from "three";
+import { Group, Mesh, Vector3 } from "three";
 
 /**
  * Names for default handles
@@ -61,7 +59,7 @@ export enum DEFAULT_HANDLE_GROUP_NAME {
   /**
    * name for default translation handle in the zx plane
    */
-  PICK_PLANE_ZX = "pick_plane_zx_handle"
+  PICK_PLANE_ZX = "pick_plane_zx_handle",
 }
 
 /**

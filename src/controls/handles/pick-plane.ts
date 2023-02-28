@@ -1,13 +1,9 @@
-import {
-  BufferGeometry,
-  Float32BufferAttribute,
-  MeshBasicMaterial,
-} from "three";
+import { BufferGeometry, Float32BufferAttribute, MeshBasicMaterial } from "three";
 import Plane from "../../primitives/plane";
 import {
   DEFAULT_COLOR_PLANE,
   DEFAULT_PLANE_HEIGHT,
-  DEFAULT_PLANE_WIDTH
+  DEFAULT_PLANE_WIDTH,
 } from "../../utils/constants";
 import Line from "../../primitives/line";
 import { PickPlaneGroup } from "./index";
@@ -43,22 +39,36 @@ export default class PickPlane extends PickPlaneGroup {
     const vertexMaxX = width / 2;
     const vertexMaxY = height / 2;
 
-    boundaryGeometry.setAttribute( 'position', new Float32BufferAttribute([
-      vertexMaxX, vertexMaxY, 0,
-      vertexMaxX, -vertexMaxY, 0,
-      -vertexMaxX, -vertexMaxY, 0,
-      -vertexMaxX, vertexMaxY, 0
-    ], 3 ));
+    boundaryGeometry.setAttribute(
+      "position",
+      new Float32BufferAttribute(
+        [
+          vertexMaxX,
+          vertexMaxY,
+          0,
+          vertexMaxX,
+          -vertexMaxY,
+          0,
+          -vertexMaxX,
+          -vertexMaxY,
+          0,
+          -vertexMaxX,
+          vertexMaxY,
+          0,
+        ],
+        3
+      )
+    );
 
-    crossXGeometry.setAttribute( 'position', new Float32BufferAttribute([
-      0, vertexMaxY, 0,
-      0, -vertexMaxY, 0,
-    ], 3 ));
+    crossXGeometry.setAttribute(
+      "position",
+      new Float32BufferAttribute([0, vertexMaxY, 0, 0, -vertexMaxY, 0], 3)
+    );
 
-    crossYGeometry.setAttribute( 'position', new Float32BufferAttribute([
-      -vertexMaxX, 0, 0,
-      vertexMaxX, 0, 0,
-    ], 3 ));
+    crossYGeometry.setAttribute(
+      "position",
+      new Float32BufferAttribute([-vertexMaxX, 0, 0, vertexMaxX, 0, 0], 3)
+    );
 
     this.boundary = new Line(color, boundaryGeometry);
     this.crossX = new Line("black", crossXGeometry);

@@ -3,9 +3,9 @@ import {
   DEFAULT_PLANE_HEIGHT,
   DEFAULT_PLANE_SEGMENTS,
   DEFAULT_PLANE_WIDTH,
-  PICK_PLANE_OPACITY
+  PICK_PLANE_OPACITY,
 } from "../utils/constants";
-import {DoubleSide, Mesh, MeshBasicMaterial, PlaneGeometry} from "three";
+import { DoubleSide, Mesh, MeshBasicMaterial, PlaneGeometry } from "three";
 
 export default class Plane extends Mesh {
   constructor(
@@ -19,7 +19,7 @@ export default class Plane extends Mesh {
       color,
       depthTest: false,
       side: DoubleSide,
-      transparent: true
+      transparent: true,
     });
     this.material.opacity = PICK_PLANE_OPACITY.INACTIVE;
   }

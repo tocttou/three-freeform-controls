@@ -15,7 +15,7 @@ export const DEFAULT_RING_RADIUS = 1;
 
 export enum PICK_PLANE_OPACITY {
   ACTIVE = 0.75,
-  INACTIVE = 0.3
+  INACTIVE = 0.3,
 }
 
 export const DEFAULT_CONTROLS_SEPARATION = 1;

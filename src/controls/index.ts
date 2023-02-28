@@ -3,7 +3,7 @@ import {
   DEFAULT_EYE_ROTATION_SCALE,
   DEFAULT_PLANE_SIZE_SCALE,
   DEFAULT_ROTATION_RADIUS_SCALE,
-  DEFAULT_TRANSLATION_DISTANCE_SCALE
+  DEFAULT_TRANSLATION_DISTANCE_SCALE,
 } from "../utils/constants";
 import Translation from "./handles/translation";
 import Rotation from "./handles/rotation";
@@ -15,10 +15,10 @@ import {
   PickGroup,
   PickPlaneGroup,
   RotationGroup,
-  TranslationGroup
+  TranslationGroup,
 } from "./handles";
 import RotationEye from "./handles/rotation-eye";
-import {Camera, Group, MathUtils, Mesh, Object3D, Quaternion, Vector3} from "three";
+import { Camera, Group, MathUtils, Mesh, Object3D, Quaternion, Vector3 } from "three";
 
 export enum ANCHOR_MODE {
   /**
@@ -29,7 +29,7 @@ export enum ANCHOR_MODE {
   /**
    * In this mode the Controls rotate as the object is rotated.
    */
-  INHERIT = "inherit"
+  INHERIT = "inherit",
 }
 
 /**
@@ -288,11 +288,7 @@ export default class Controls extends Group {
    * @param camera - the THREE.Camera instance used in the scene
    * @param options
    */
-  constructor(
-    public object: Object3D,
-    private camera: Camera,
-    options?: IControlsOptions
-  ) {
+  constructor(public object: Object3D, private camera: Camera, options?: IControlsOptions) {
     super();
 
     this.options = options || {};
@@ -305,7 +301,7 @@ export default class Controls extends Group {
     this.snapTranslation = this.options?.snapTranslation ?? {
       x: false,
       y: false,
-      z: false
+      z: false,
     };
     this.separation = this.options?.separation ?? DEFAULT_CONTROLS_SEPARATION;
     this.isDampingEnabled = this.options?.isDampingEnabled ?? true;
@@ -578,15 +574,9 @@ export default class Controls extends Group {
 
       this.position.copy(this.getLimitedTranslation(this.deltaPosition));
     } else {
-      this.touch1
-        .copy(this.dragIncrementalStartPoint)
-        .sub(this.objectWorldPosition)
-        .normalize();
+      this.touch1.copy(this.dragIncrementalStartPoint).sub(this.objectWorldPosition).normalize();
 
-      this.touch2
-        .copy(point)
-        .sub(this.objectWorldPosition)
-        .normalize();
+      this.touch2.copy(point).sub(this.objectWorldPosition).normalize();
 
       this.handleTargetQuaternion.setFromUnitVectors(this.touch1, this.touch2);
       if (this.mode === ANCHOR_MODE.FIXED) {
@@ -619,10 +609,7 @@ export default class Controls extends Group {
     return position.clamp(this.minTranslationCache, this.maxTranslationCache);
   };
 
-  private detachObjectUpdatePositionAttach = (
-    parent: Object3D | null,
-    object: Object3D
-  ) => {
+  private detachObjectUpdatePositionAttach = (parent: Object3D | null, object: Object3D) => {
     if (parent !== null && this.parent !== null && this.parent.parent !== null) {
       const scene = this.parent.parent;
       if (scene.type !== "Scene") {
@@ -658,10 +645,10 @@ export default class Controls extends Group {
     visibility = true
   ) => {
     const handleNamesMap: { [name: string]: IHandle | undefined } = {};
-    this.handles.forEach(handle => {
+    this.handles.forEach((handle) => {
       handleNamesMap[handle.name] = handle;
     });
-    handleNames.map(handleName => {
+    handleNames.map((handleName) => {
       const handle = handleNamesMap[handleName];
       if (handle === undefined) {
         throw new Error(`handle: ${handleName} not found`);
@@ -675,7 +662,7 @@ export default class Controls extends Group {
    * @param visibility
    */
   public showAll = (visibility = true) => {
-    this.handles.forEach(handle => {
+    this.handles.forEach((handle) => {
       handle.visible = visibility;
     });
   };
@@ -685,7 +672,7 @@ export default class Controls extends Group {
    */
   public getInteractiveObjects(): Object3D[] {
     const interactiveObjects: Object3D[] = [];
-    this.handles.forEach(handle => {
+    this.handles.forEach((handle) => {
       if (!handle.visible) {
         return;
       }

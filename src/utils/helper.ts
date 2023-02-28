@@ -22,7 +22,7 @@ export const addEventListener = (
   callback: (event: MouseEvent | TouchEvent) => void,
   options: { passive?: boolean; capture?: boolean } | boolean = false
 ) => {
-  eventNames.forEach(name => {
+  eventNames.forEach((name) => {
     element.addEventListener(name, callback, options);
   });
 };
@@ -35,7 +35,7 @@ export const removeEventListener = (
   callback: (event: MouseEvent | TouchEvent) => void,
   options: { capture?: boolean } | boolean = false
 ) => {
-  eventNames.forEach(name => {
+  eventNames.forEach((name) => {
     element.removeEventListener(name, callback, options);
   });
 };
