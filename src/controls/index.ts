@@ -499,7 +499,7 @@ export default class Controls extends Group {
   };
 
   /**
-   * @hidden
+   * @internal
    */
   processDragStart = (args: { point: Vector3; handle: IHandle }) => {
     const { point, handle } = args;
@@ -513,7 +513,7 @@ export default class Controls extends Group {
   };
 
   /**
-   * @hidden
+   * @internal
    */
   processDragEnd = (args: { handle: IHandle }) => {
     const { handle } = args;
@@ -548,7 +548,7 @@ export default class Controls extends Group {
     (this.dampingFactor = MathUtils.clamp(dampingFactor, 0, 1));
 
   /**
-   * @hidden
+   * @internal
    */
   processDrag = (args: { point: Vector3; handle: IHandle; dragRatio?: number }) => {
     const { point, handle, dragRatio = 1 } = args;
@@ -668,7 +668,7 @@ export default class Controls extends Group {
   };
 
   /**
-   * @hidden
+   * @internal
    */
   public getInteractiveObjects(): Object3D[] {
     const interactiveObjects: Object3D[] = [];
@@ -682,7 +682,7 @@ export default class Controls extends Group {
   }
 
   /**
-   * @hidden
+   * @internal
    */
   updateMatrixWorld = (force?: boolean) => {
     this.object.updateMatrixWorld(force);

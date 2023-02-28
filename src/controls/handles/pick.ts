@@ -12,7 +12,7 @@ export default class Pick extends PickGroup {
   }
 
   /**
-   * @hidden
+   * @internal
    */
   public getInteractiveObjects = () => {
     return [this.octahedron];

@@ -10,19 +10,19 @@ import { PickPlaneGroup } from "./index";
 
 export default class PickPlane extends PickPlaneGroup {
   /**
-   * @hidden
+   * @internal
    */
   public readonly plane: Plane;
   /**
-   * @hidden
+   * @internal
    */
   public readonly boundary: Line;
   /**
-   * @hidden
+   * @internal
    */
   public readonly crossX: Line;
   /**
-   * @hidden
+   * @internal
    */
   public readonly crossY: Line;
 
@@ -82,7 +82,7 @@ export default class PickPlane extends PickPlaneGroup {
   }
 
   /**
-   * @hidden
+   * @internal
    */
   public getInteractiveObjects = () => {
     return [this.plane];

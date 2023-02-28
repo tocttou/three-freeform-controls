@@ -10,7 +10,7 @@ import * as THREE from "three";
 import { EVENTS } from "./events";
 
 /**
- * @hidden
+ * @internal
  * The Raycaster listens on the mouse and touch events globally and
  * dispatches DRAG_START, DRAG, and DRAG_STOP events.
  */

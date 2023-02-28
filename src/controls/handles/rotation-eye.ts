@@ -3,7 +3,7 @@ import Rotation from "./rotation";
 import { DEFAULT_COLOR_RING, DEFAULT_RING_RADIUS } from "../../utils/constants";
 
 /**
- * @hidden
+ * @internal
  */
 export default class RotationEye extends Rotation {
   public camera: Camera | null = null;
