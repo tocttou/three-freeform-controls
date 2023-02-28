@@ -5,9 +5,8 @@ import replace from "@rollup/plugin-replace";
 import typescript from "rollup-plugin-typescript2";
 import peerDepsExternal from "rollup-plugin-peer-deps-external";
 import json from "@rollup/plugin-json";
-import { terser } from "rollup-plugin-terser";
-
-const pkg = require("./package.json");
+import terser from "@rollup/plugin-terser";
+import pkg from './load-package.cjs'
 
 const nodeEnv = process.env.NODE_ENV || "development";
 const isProduction = nodeEnv === "production";
@@ -15,7 +14,7 @@ const isProduction = nodeEnv === "production";
 export default {
   input: `src/index.ts`,
   output: [
-    { file: pkg.module, format: "es", sourcemap: true, exports: "named" }
+    { file: pkg.module, format: "cjs", sourcemap: true, exports: "named" }
   ],
   external: [],
   watch: {

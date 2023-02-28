@@ -5,7 +5,7 @@ import replace from "@rollup/plugin-replace";
 import typescript from "rollup-plugin-typescript2";
 import serve from "rollup-plugin-serve";
 import livereload from "rollup-plugin-livereload";
-import multiInput from "rollup-plugin-multi-input";
+import multi from '@rollup/plugin-multi-entry';
 
 export default {
   input: ["examples/*.js", "examples/*.ts"],
@@ -17,7 +17,7 @@ export default {
     include: "*/**",
   },
   plugins: [
-    multiInput(),
+    multi(),
     typescript({
       useTsconfigDeclarationDir: true,
       tsconfigOverride: {
