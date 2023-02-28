@@ -1,5 +1,4 @@
 import { ANCHOR_MODE } from "./controls";
-import { EVENTS } from "./utils/raycaster";
 import {
   DEFAULT_HANDLE_GROUP_NAME,
   PickPlaneGroup,
@@ -11,6 +10,7 @@ import Rotation from "./controls/handles/rotation";
 import Pick from "./controls/handles/pick";
 import PickPlane from "./controls/handles/pick-plane";
 import ControlsManager from "./controls-manager";
+import { EVENTS } from "./utils/events";
 
 export {
   EVENTS,

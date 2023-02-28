@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import * as FreeformControls from "../dist/three-freeform-controls";
+import * as FreeformControls from "../";
 
 /**
  * This is a 3D marker to move and rotate an object in the scene.
@@ -54,7 +54,7 @@ class RingFactory {
     color: number
   ): THREE.Mesh[] => {
     const sectors = 40;
-    const geometry = new THREE.RingBufferGeometry(minRadius, maxRadius, sectors);
+    const geometry = new THREE.RingGeometry(minRadius, maxRadius, sectors);
 
     // Assign an index to each face, either 0 or 1, used to select a materials.
     const pattern = [0, 1, 1, 0];

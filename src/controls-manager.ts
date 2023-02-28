@@ -1,8 +1,9 @@
 import Controls, { IControlsOptions } from "./controls";
-import Raycaster, { EVENTS } from "./utils/raycaster";
+import Raycaster  from "./utils/raycaster";
 import { emitter, unbindAll } from "./utils/emmiter";
 import { DEFAULT_HANDLE_GROUP_NAME } from "./controls/handles";
 import { Camera, Mesh, Object3D } from "three";
+import { EVENTS } from "./utils/events";
 
 /**
  * The ControlsManager provides helper functions to create Controls instances

@@ -7,12 +7,7 @@ import RotationEye from "../controls/handles/rotation-eye";
 import { addEventListener, getPointFromEvent, removeEventListener } from "./helper";
 import Line from "../primitives/line";
 import * as THREE from "three";
-
-export enum EVENTS {
-  DRAG_START = "DRAG_START",
-  DRAG = "DRAG",
-  DRAG_STOP = "DRAG_STOP",
-}
+import { EVENTS } from "./events";
 
 /**
  * @hidden

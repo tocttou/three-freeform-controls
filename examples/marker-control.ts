@@ -2,7 +2,7 @@ import * as THREE from "three";
 import { Vector3 } from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 
-import * as FreeformControls from "../dist/three-freeform-controls.js";
+import * as FreeformControls from "../";
 
 import { Marker } from "./marker";
 
