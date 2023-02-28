@@ -62,7 +62,7 @@
       const selectExample = (exampleName) => {
         document.querySelectorAll("#leftbar-list a").forEach((a) => a.classList.remove("selected"));
         document.querySelector(`[href=${exampleName}]`).classList.add("selected");
-        document.getElementById("example-iframe").src = `/${exampleName}`;
+        document.getElementById("example-iframe").src = `/?example=${exampleName}`;
         document.title = `${getTitle(exampleName)} example | three-freeform-controls`;
       };
 
@@ -87,7 +87,7 @@
         "transition-limit",
         "marker-control",
       ];
-      const exampleName = window.location.pathname.replace(/^\/+|\/+$/g, "");
+      const exampleName = new URLSearchParams(document.location.search).get("example");
       if (exampleList.includes(exampleName)) {
         // Render example page in the iframe with the script corresponding to url path
         const s = document.createElement("script");
