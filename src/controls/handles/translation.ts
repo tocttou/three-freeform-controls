@@ -32,7 +32,7 @@ export default class Translation extends TranslationGroup {
   }
 
   /**
-   * @hidden
+   * @internal
    */
   public getInteractiveObjects = () => {
     return [this.cone];

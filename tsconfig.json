@@ -20,5 +20,5 @@
       "rollup-plugin-peer-deps-external": [".sink.d.ts"]
     }
   },
-  "include": ["src"]
+  "include": ["src"],
 }

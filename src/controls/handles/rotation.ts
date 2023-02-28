@@ -30,7 +30,7 @@ export default class Rotation extends RotationGroup {
   }
 
   /**
-   * @hidden
+   * @internal
    */
   public getInteractiveObjects = () => {
     return [this.handlebar];
