@@ -5,7 +5,7 @@ import replace from "@rollup/plugin-replace";
 import typescript from "rollup-plugin-typescript2";
 import serve from "rollup-plugin-serve";
 import livereload from "rollup-plugin-livereload";
-import multi from '@rollup/plugin-multi-entry';
+import multiInput from 'rollup-plugin-multi-input';
 
 export default {
   input: ["examples/*.js", "examples/*.ts"],
@@ -17,7 +17,7 @@ export default {
     include: "*/**",
   },
   plugins: [
-    multi(),
+    multiInput.default(),
     typescript({
       useTsconfigDeclarationDir: true,
       tsconfigOverride: {
@@ -32,6 +32,7 @@ export default {
     // peerDepsExternal(),
     replace({
       "process.env.NODE_ENV": JSON.stringify("development"),
+      preventAssignment: true,
     }),
     serve({
       open: true,

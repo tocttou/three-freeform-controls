@@ -36,6 +36,7 @@ export default {
     peerDepsExternal(),
     replace({
       "process.env.NODE_ENV": JSON.stringify(nodeEnv),
+      preventAssignment: true
     }),
     ...(
       isProduction ? [
