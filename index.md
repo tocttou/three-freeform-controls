@@ -16,7 +16,7 @@ permalink: /
 This library provides rotation and translation controls for [THREE.JS](https://threejs.org/) objects.
 
 [Get started now]({{ site.baseurl }}/docs/getting-started.html){: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 .mr-2 }
-[See basic example]({{ site.baseurl }}/examples/basic){: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 .mr-2 }{:target="_blank"}
+[See basic example]({{ site.baseurl }}/examples/?example=basic){: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 .mr-2 }{:target="_blank"}
 [View it on GitHub](http://github.com/tocttou/three-freeform-controls){: .btn .fs-5 .mb-4 .mb-md-0 }{:target="_blank"}
 
 ---

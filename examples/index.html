@@ -62,7 +62,7 @@
       const selectExample = (exampleName) => {
         document.querySelectorAll("#leftbar-list a").forEach((a) => a.classList.remove("selected"));
         document.querySelector(`[href=${exampleName}]`).classList.add("selected");
-        document.getElementById("example-iframe").src = `/?example=${exampleName}`;
+        document.getElementById("example-iframe").src = `/three-freeform-controls/examples/?example=${exampleName}`;
         document.title = `${getTitle(exampleName)} example | three-freeform-controls`;
       };
 
@@ -92,7 +92,7 @@
         // Render example page in the iframe with the script corresponding to url path
         const s = document.createElement("script");
         s.type = "module";
-        s.src = `/examples/${exampleName}.js`;
+        s.src = `/three-freeform-controls/examples/examples/${exampleName}.js`;
         document.body.appendChild(s);
 
         // Rename page title
