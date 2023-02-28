@@ -12,6 +12,13 @@ This library provides rotation and translation controls for [THREE.JS](https://t
 
 ---
 
+### Changelog
+
+#### v0.3.0 [March 1, 2023]
+- Rework the rotation and translation maths; thanks to @kineticsystem
+- Update peer dependencies to `"three": ">=0.150.1"`
+- Update dev dependencies and examples
+
 ### Local development:
 - Install dependencies: `npm install`
 - Build and watch the source code: `npm run start`
@@ -19,7 +26,7 @@ This library provides rotation and translation controls for [THREE.JS](https://t
 ### Running examples:
 - Make sure to build the source code
 - Run examples: `npm run examples`
-- To see a specific example in fullscreen, use the filename from `examples/` folder(like `localhost:10001/basic` or `localhost:10001/transition-limit`)
+- To see a specific example in fullscreen, use the filename from `examples/` folder(like `localhost:10001/?example=basic` or `localhost:10001/?example=transition-limit`)
 
 ### The following features are currently supported:
 
