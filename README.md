@@ -15,7 +15,7 @@ This library provides rotation and translation controls for [THREE.JS](https://t
 ### Changelog
 
 #### v0.3.0 [March 1, 2023]
-- Rework the rotation and translation maths; thanks to @kineticsystem
+- Rework the rotation and translation maths; thanks to [@kineticsystem](https://github.com/kineticsystem)
 - Update peer dependencies to `"three": ">=0.150.1"`
 - Update dev dependencies and examples
 
