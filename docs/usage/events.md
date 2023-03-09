@@ -5,7 +5,7 @@ nav_order: 3
 parent: Usage
 ---
 
-## [listen ![link](https://img.icons8.com/ios/24/000000/external-link.png){: .link-icon }]({{ site.baseurl }}/apiref/classes/controlsmanager.html#listen){:target="_blank"}
+## [listen ![link](https://img.icons8.com/ios/24/000000/external-link.png){: .link-icon }]({{ site.baseurl }}/apiref/classes/ControlsManager.html#listen){:target="_blank"}
 
 The `FreeformControls.ControlsManager` instance allows listening to the following events on controls:
 
@@ -54,7 +54,7 @@ Here the `object` is the object to which the controls were anchored to and `hand
 that was involved in the interaction - it can be one of the [default names]({{ site.baseurl }}/apiref/enums/default_handle_group_name.html){:target="_blank"}
 or the corresponding string for custom handles.
 
-## [removeListen ![link](https://img.icons8.com/ios/24/000000/external-link.png){: .link-icon }]({{ site.baseurl }}/apiref/classes/controlsmanager.html#removelisten){:target="_blank"}
+## [removeListen ![link](https://img.icons8.com/ios/24/000000/external-link.png){: .link-icon }]({{ site.baseurl }}/apiref/classes/ControlsManager.html#removeListen){:target="_blank"}
 
 An attached listener function can be removed like this:
 

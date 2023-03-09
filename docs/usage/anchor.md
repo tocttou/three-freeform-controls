@@ -12,7 +12,7 @@ const controlsManager = new FreeformControls.ControlsManager(camera, renderer.do
 scene.add(controlsManager);
 ```
 
-## [anchor ![link](https://img.icons8.com/ios/24/000000/external-link.png){: .link-icon }]({{ site.baseurl }}/apiref/classes/controlsmanager.html#anchor){:target="_blank"}
+## [anchor ![link](https://img.icons8.com/ios/24/000000/external-link.png){: .link-icon }]({{ site.baseurl }}/apiref/classes/ControlsManager.html#anchor){:target="_blank"}
 
 Then calling `anchor` on the `controlsManager` gives access to the controls object:
 
@@ -78,7 +78,7 @@ An example illustrating different anchor modes for multiple partial controls on 
 
 [View example]({{ site.baseurl }}/examples/?example=different-anchors-same-object){:target="_blank"}{: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 .mr-2 }
 
-## [detach ![link](https://img.icons8.com/ios/24/000000/external-link.png){: .link-icon }]({{ site.baseurl }}/apiref/classes/controlsmanager.html#detach){:target="_blank"}
+## [detach ![link](https://img.icons8.com/ios/24/000000/external-link.png){: .link-icon }]({{ site.baseurl }}/apiref/classes/ControlsManager.html#detach){:target="_blank"}
 
 The anchored controls can be detached like this:
 
@@ -86,7 +86,7 @@ The anchored controls can be detached like this:
 controlsManager.detach(object, controls);
 ```
 
-## [destroy ![link](https://img.icons8.com/ios/24/000000/external-link.png){: .link-icon }]({{ site.baseurl }}/apiref/classes/controlsmanager.html#destroy){:target="_blank"}
+## [destroy ![link](https://img.icons8.com/ios/24/000000/external-link.png){: .link-icon }]({{ site.baseurl }}/apiref/classes/ControlsManager.html#destroy){:target="_blank"}
 
 All anchored controls instances can be removed like this:
 
