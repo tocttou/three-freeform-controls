@@ -84,6 +84,6 @@ controls.rotationY.setColor("pink");
 
 An example illustrating rotation, translation, and color change for default handles can be accessed below.
 
-[View example]({{ site.baseurl }}/examples/customize-handles){: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 .mr-2 }{:target="_blank"}
+[View example]({{ site.baseurl }}/examples/?example=customize-handles){:target="_blank"}{: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 .mr-2 }
 
 Next section: [Custom Handles]({{ site.baseurl }}/docs/usage/custom-handles)

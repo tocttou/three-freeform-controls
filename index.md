@@ -40,7 +40,6 @@ This library provides rotation and translation controls for [THREE.JS](https://t
 
 ### Todo:
 
-- [ ] A-frame component
 - [ ] tests
 
 ---

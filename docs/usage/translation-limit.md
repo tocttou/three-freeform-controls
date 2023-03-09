@@ -30,6 +30,6 @@ controls.setTranslationLimit(false);
 
 An example showing translation limits can be seen below.
 
-[View example]({{ site.baseurl }}/examples/translation-limit){: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 .mr-2 }{:target="_blank"}
+[View example]({{ site.baseurl }}/examples/?example=translation-limit){:target="_blank"}{: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 .mr-2 }
 
 Next section: [API Reference]({{ site.baseurl }}/docs/api)

@@ -47,7 +47,7 @@ controls.setupHandle(rotationHandle);
 
 An example of the above snippet can be accessed below.
 
-[View example]({{ site.baseurl }}/examples/custom-handles-1){: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 .mr-2 }{:target="_blank"}
+[View example]({{ site.baseurl }}/examples/?example=custom-handles-1){:target="_blank"}{: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 .mr-2 }
 
 ## Custom handles by extending handles groups
 
@@ -117,7 +117,7 @@ controls.setupHandle(customRotationHandle);
 
 The above illustrated example can be accessed below.
 
-[View example]({{ site.baseurl }}/examples/custom-handles-2){: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 .mr-2 }{:target="_blank"}
+[View example]({{ site.baseurl }}/examples/?example=custom-handles-2){:target="_blank"}{: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 .mr-2 }
 
 Note that the centre of rotation remains the position of the `controls` object, and not the position of the individual handles.
 

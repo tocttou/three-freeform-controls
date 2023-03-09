@@ -56,7 +56,7 @@ Now anchoring the controls on a three.js object:
 const controls = controlsManager.anchor(box);
 ```
 
-[View example]({{ site.baseurl }}/examples/basic.html){:target="_blank"}{: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 .mr-2 }
+[View example]({{ site.baseurl }}/examples/?example=basic){:target="_blank"}{: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 .mr-2 }
 
 ![screenshot](https://i.imgur.com/b1cxpHs.png)
 

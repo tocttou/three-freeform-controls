@@ -47,6 +47,6 @@ const controls = ControlsManager.anchor(box);
 controls.rotationX.visible = false;
 ```
 
-[View example]({{ site.baseurl }}/examples/partial-controls){:target="_blank"}{: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 .mr-2 }
+[View example]({{ site.baseurl }}/examples/?example=partial-controls){:target="_blank"}{: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 .mr-2 }
 
 Next section: [Customize Handles]({{ site.baseurl }}/docs/usage/customize-handles)
