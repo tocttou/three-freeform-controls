@@ -5,6 +5,8 @@
 
 This library provides rotation and translation controls for [THREE.JS](https://threejs.org/) objects.
 
+### [Basic example](https://ashishchaudhary.in/three-freeform-controls/examples/?example=basic)
+
 ### [Documentation](https://ashishchaudhary.in/three-freeform-controls)
 
 ![screenshot](https://i.imgur.com/cTJTG9o.png)
